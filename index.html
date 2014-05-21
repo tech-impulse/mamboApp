@@ -1,0 +1,2247 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <title>Mambo App</title>
+    <link rel="stylesheet"  href="css/jquery.mobile-1.4.0.css" type="text/css">
+    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico"/>
+    <meta http-equiv="Content-Type" content="text/html" charset="utf-8" /><!--utf-8 para acentos-->
+    <link rel="stylesheet" type="text/css" href="css/progressbar.css">
+    <link rel="stylesheet" type="text/css" href="css/skins/default/progressbar.css">
+    <link rel="stylesheet" type="text/css" href="css/menu_inicial.css">
+    <link href="loginStyle.css" rel="stylesheet" type="text/css">
+
+    <!-- LIBRERIAS PARA KENDOUI --------------------------------------------------->
+    <script type="text/javascript" src="js/KendoJS/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/Kendostyles/kendo.common.min.css">
+    <link rel="stylesheet" type="text/css" href="css/Kendostyles/kendo.default.min.css">
+    <link rel="stylesheet" type="text/css" href="css/Kendostyles/kendo.dataviz.min.css">
+    
+    <script src="js/KendoJS/kendo.all.min.js"></script>
+    
+    <script type="text/javascript" src="js/KendoJS/kendo.web.min.js"></script>
+
+    <script type="text/javascript" src="js/KendoJS/kendo.listview.min.js"></script>
+
+    <!-- Ini MPE* -->
+    <!-- link rel="stylesheet" href="latest.css" / -->
+
+    <!--
+    <style type="text/css">
+        /* misc */
+        * { font-family: "Open Sans",Arial; font-size: 16px; }
+        h1,h2,h3,h4, .ui-btn-inner{ font-weight: 400; }
+
+<!--      Cambiamos el tamaño del calendario   ------------------------------------>
+<style>
+	
+.ui-page { -webkit-backface-visibility: hidden; }
+
+				.k-calendar-container {
+					width:400px;
+				}
+				.k-calendar{
+				  width: 400px;	
+				}
+				
+				#pGridPedidos tbody tr{
+				    background: #ffffff;
+				}
+				
+				.k-grid tr td{
+				    border-width: 0;
+				    border-bottom: 1px solid #bfc0c3;
+				}
+				
+				.k-widget.k-datepicker.k-header {
+					width: 100%;
+				}
+				.k-widget.k-datepicker {
+					width: 100%;
+				}
+				
+
+				.k-grid-header th a{
+				    overflow: hidden;
+				    white-space:nowrap;
+				    text-overflow: ellipsis;
+				}
+			
+				td {
+				    overflow: hidden;
+				    white-space:nowrap;
+				    text-overflow: ellipsis;
+				}
+
+				.k-window-titlebar.k-header{
+        			min-height: 40px;
+				}
+				
+				.k-grid .ra
+				{
+				    text-align: right;
+				}
+				
+				input[type=number]::-webkit-outer-spin-button { 
+				  -webkit-appearance: none; 
+				  margin: 0; 
+				}
+				
+				.ui-slider-label.ui-slider-label-a.ui-btn-active{
+					background-color: rgb(252, 184, 20);
+					
+				}
+
+				[contenteditable="true"].single-line {
+        white-space: nowrap;
+        width:200px;
+        overflow: hidden;
+    } 
+    [contenteditable="true"].single-line br {
+        display:none;
+
+    }
+    [contenteditable="true"].single-line * {
+        display:inline;
+        white-space:nowrap;
+    }
+	
+	div.k-popup .k-item
+{
+    font: 20px/1.8em bold;
+}
+   
+    
+    .k-grid-content
+{
+ min-width: 5%;
+}
+
+.k-grid td{
+   text-overflow: ellipsis;
+}
+
+.k-grid table {
+   table-layout: fixed;
+}
+    
+    
+</style>
+
+<style>
+
+/*.k-dropdown {
+    background-color: transparent !important;
+}
+.k-dropdown .k-dropdown-wrap, .k-dropdown.k-state-border-down .k-dropdown-wrap.k-state-border-down {
+    padding: 5px !important;
+    border: 1px solid #959694 !important;
+    border-radius: 20px 20px 20px 20px !important;
+}*/
+.k-dropdown .k-dropdown-wrap .k-select, .k-ie .k-dropdown .k-dropdown-wrap .k-select, .k-ff .k-dropdown .k-dropdown-wrap .k-select {
+    background-color: #FFFFFF !important;
+   /* padding: 8px !important;
+    border-left: solid #959694 thin !important;
+    border-right: solid #959694 thin !important;
+    border-radius: 0 20px 20px 20px !important;*/
+}
+/*
+[data-role="popup"] {
+    background-color: #fff !important;
+    border-radius: 1px !important;
+}*/
+[data-role="popup"] ul li[class="k-item k-state-hover"], [data-role="popup"] ul li[class="k-item k-state-selected k-state-focused"] {
+    border-radius: 0px;
+    background-color: #FFFFFF !important;
+    border: 1px solid #FFFFFF !important;
+    color: #2E2E2E !important,
+}
+
+.k-input,.k-item.k-state-selected.k-state-focused {
+    background-color: #FFFFFF !important;
+    color: #2E2E2E !important;
+    
+}
+
+.k-list-container.k-popup.k-group k-reset{
+	background-color: #FFFFFF !important;
+	color: #2E2E2E !important;
+}
+.k-state-selected{
+	background-color: #FFFFFF !important;
+	color: #2E2E2E !important;
+}
+.k-alt{
+	background-color: #FFFFFF !important;
+}	
+}
+
+</style>
+
+<!-- Modulo PEDIDOS -->
+<script type="text/javascript" src="js/pedidos/pedidos_traduccion.js"> </script>
+<script type="text/javascript" src="js/pedidos/pedidos_eventos.js"> </script>
+<script type="text/javascript" src="js/pedidos/pedidos_restJSON.js"> </script>
+<script type="text/javascript" src="js/pedidos/pedidos_bd.js"> </script>
+<script type="text/javascript" src="js/pedidos/nuevo_pedido.js"> </script>
+<script type="text/javascript" src="js/pedidos/alta_pedido.js"> </script>
+<script type="text/javascript" src="js/pedidos/display_pedidos.js"> </script>
+<script type="text/javascript" src="js/pedidos/pedidos_familias.js"> </script>
+<script type="text/javascript" src="js/pedidos/pedidos_plantillas.js"> </script>
+<script type="text/javascript" src="js/pedidos/pedidos_put.js"> </script>
+<script type="text/javascript" src="js/pedidos/pedidos_borradores.js"> </script>
+<script type="text/javascript" src="js/pedidos/pedidos_notificaciones.js"> </script>
+
+<script type="text/javascript" src="js/pedidos/pedidos_cron.js"> </script>
+<script type="text/javascript" src="js/pedidos/pedidos_cambios_estado.js"> </script>
+<script type="text/javascript" src="js/pedidos/pedidos_global_escaner.js"> </script>
+
+<script src="js/md5.js"></script>
+
+
+<!-- COMUNES -->
+<script type="text/javascript" src="js/funcionesComunes.js"> </script>
+<script type="text/javascript" src="js/inicializaciones.js"> </script>
+<script type="text/javascript" src="js/parameters.js"></script>
+<script type="text/javascript" src="js/pedidosemitidos.js"></script> <!-- Inicializacion y control de botones -->
+<script type="text/javascript" src="js/database.js"> </script>
+<script type="text/javascript" src="js/Base64.js"> </script>
+<script type="text/javascript" src="js/restJSON.js"> </script>
+<script type="text/javascript" src="js/login.js"> </script>
+<script type="text/javascript" src="js/incidencia.js"> </script>
+<script type="text/javascript" src="js/rest_querysv1.js"> </script>  <!-- Autenticacion -->
+<script type="text/javascript" src="js/menu.js"> </script>  <!-- GESTION DE CABECERA Y PIE DE PAGINA -->
+<script type="text/javascript" src="js/traduccion.js"> </script>  <!-- TRADUCCION -->
+<script type="text/javascript" src="js/ajustesPantalla.js"> </script>  <!-- TRADUCCION -->
+<script src="js/jquery.mobile-1.4.0.min.js"></script>
+
+
+
+
+<style>
+	
+.ui-dialog  .ui-header .ui-btn-icon-notext	{ 
+	display:none;
+} 
+	
+.body {
+	background-color:#FFF;
+	margin-left: 40px;
+	margin-right:40px;
+	margin-top:40px;
+	margin-bottom:20px;
+	font-family:century;
+	overflow-y:hidden;
+}
+/*
+.cabecera {
+	border-bottom-width:1px; 
+	border-bottom-style:solid; 
+	border-bottom-color:#FAAB00;
+	background-color:#FFF;
+}
+	*/
+
+.ui-panel-inner {
+	padding-left: 0px;
+	padding-right: 0px;
+}	
+
+.ui-btn.ui-btn-b {
+	background: #fcb814; 
+	border-color: #fcb814
+	
+}
+
+.ui-bar.ui-header.ui-header-fixed.slidedown.ui-bar-inherit{
+	padding-bottom: 0px;
+}
+
+
+.ui-input-text.ui-body-inherit.ui-corner-all.ui-shadow-inset{
+padding: 0px;
+margin: 0px
+}
+
+.k-widget.k-dropdown.k-header{
+	width: 100%;
+	
+	
+}
+
+.k-window-title{
+	text-align: center;
+	font-size: x-large;
+}
+
+.k-window-titlebar.k-header{
+	min-height: 40px;
+	
+}   
+
+/* BOTON tipo A Color GRIS --------------------------------------------------------------------------------------- */
+html head + body .ui-btn.ui-btn-a {
+    background: #443D3D;
+    border-color: #443D3D;
+    color: #FFFFFF;  
+    text-shadow: 0 0 0; 
+    font-size: 16px; 
+    margin-top: 10px;
+    
+}	
+
+html head + body .ui-btn.ui-btn-a:hover {
+    background: #443D3D;
+    border-color: #443D3D;
+    color: #FFFFFF; 
+} 
+
+/* BOTON Tipo B Color TRansparente -------------------------------------------------------------------------------- */
+html head + body .ui-btn.ui-btn-b {
+    background: transparent;
+    border-color: transparent;
+    color: #000000;  
+    text-shadow: 0 0 0; 
+    font-size: 16px; 
+    margin-top: 10px;
+    
+    -webkit-box-shadow: initial;
+    box-shadow: initial;
+    
+    webkit-box-shadow: none;
+    
+    
+}	
+
+html head + body .ui-btn.ui-btn-b:hover {
+     background: transparent;
+    border-color: transparent;
+    color: black;  
+    text-shadow: 0 0 0; 
+    font-size: 16px; 
+    margin-top: 10px;
+    
+    -webkit-box-shadow: initial;
+    box-shadow: initial;
+    
+    webkit-box-shadow: none;
+}
+
+
+/* Estilo Android en los input ------------------------------------------------------------------------------------ */
+input[type='text'], input[type='password'], input[type='number'], input[type='number']  {
+    /* You can set width to whatever you like */
+    width: 100%;
+    font-family: "Roboto", "Droid Sans", sans-serif;
+    font-size: 16px;
+    margin: 0;
+    padding: 8px 8px 6px 8px;
+    position: relative;
+    display: block;
+    outline: none;
+    border: none;
+    background: bottom left linear-gradient(#a9a9a9, #a9a9a9) no-repeat, bottom center linear-gradient(#a9a9a9, #a9a9a9) repeat-x, bottom right linear-gradient(#a9a9a9, #a9a9a9) no-repeat;
+    background-size: 1px 6px, 1px 1px, 1px 6px;
+}
+input[type='text']:hover, input[type='password']:hover, input[type='number']:hover {
+    width: 100%;
+    background: bottom left linear-gradient(#FAAB00, #FAAB00) no-repeat, bottom center linear-gradient(#FAAB00, #FAAB00) repeat-x, bottom right linear-gradient(#FAAB00, #FAAB00) no-repeat;
+    background-size: 1px 6px, 1px 1px, 1px 6px; 
+} 
+
+.ui-focus {
+ -moz-box-shadow: none !important;
+ -webkit-box-shadow: none !important;
+ box-shadow: none !important;
+}
+
+.ui-input-text{
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.ui-input-text input{
+  border-radius : initial;
+}
+
+
+/* Cabecera popup ---------------------------- */
+html .ui-body-a .ui-bar-inherit {
+	border-bottom-color: #FAAB00;
+}
+
+
+.ui-page-theme-a a {
+
+	cursor: pointer;
+}
+
+/*--- estilos para los ul y li del formulario incidencia ---*/
+.contact_form ul {
+    list-style-type:none;
+    margin:0px;
+    padding:0px;
+}
+.contact_form li{
+    padding:5px;
+    border-bottom:1px solid #eee;
+    position:relative;
+}
+- See more at: http://www.tutosytips.com/tutorial-formulario-de-contacto-en-html5-y-css3/#sthash.rDH2zT5B.dpuf
+
+
+/* Estilo de las TAB */
+
+.ui-page-theme-a .ui-btn.ui-btn-active {
+	background-color: #fff;
+	border-color: #faab00;
+	color: #000;
+	text-shadow: none;
+	border-top-width: 4px;
+	border-right-width: 2px;
+	border-left-width: 2px;
+	border-bottom-width: 0;
+	
+
+	border-top-right-radius:				.5125em; 
+
+	-moz-border-radius-topright:		.5125em ;
+	-webkit-border-top-right-radius:.5125em ;
+	border-top-left-radius:				.5125em; 
+
+	-moz-border-radius-topleft:		.5125em ;
+	-webkit-border-top-left-radius:.5125em ;
+}
+
+.ui-page-theme-a .ui-btn {
+	border-bottom-color: #faab00;
+	border-bottom-width: 2px;
+	
+	text-shadow: none;
+	-moz-border-radius-topright:		.5125em ;
+	-webkit-border-top-right-radius:.5125em ;
+	border-top-left-radius:				.5125em; 
+
+	-moz-border-radius-topleft:		.5125em ;
+	-webkit-border-top-left-radius:.5125em ;
+	
+	/*
+	border-bottom-right-radius:				.5125em; 
+
+	-moz-border-radius-bottomright:		.5125em ;
+	-webkit-border-bottom-right-radius:.5125em ;
+	
+	border-bottom-rleft-radius:				.5125em; 
+	-moz-border-radius-bottomleft:		.5125em ;
+	-webkit-border-bottom-left-radius:.5125em ;
+	*/
+}
+
+
+.ui-page-theme-a a, .ui-page-theme-a a:hover {
+	color: #000000;
+}
+
+
+.ui-icon-carat-r:after {
+	background-image: url('');
+	
+}
+.ui-btn-icon-right:after{
+	background-color: transparent;
+}
+
+
+.ui-page-theme-a.ui-btn , .ui-page-theme-a.ui-btn:hover ,html body .ui-group-theme-a .ui-btn , html body .ui-group-theme-a .ui-btn:hover {
+	border-color: transparent;
+	background: transparent;
+	
+	border-bottom-color: grey;
+	border-bottom-width: 1px;
+}
+
+.k-state-selected {
+	color: #FFFFFF;
+	background-color: #838383;
+	border-color: #838383;
+	
+}  
+
+.colorRowGridErrorItem{
+    background-color:#FFBCBC;
+}
+
+.colorRowGridErrorLog{
+    background-color:#FFD3A2;
+}
+
+.ui-page-theme-a .ui-btn.ui-btn-active {
+	background-color: #fff;
+	border-color: #faab00;
+	color: #000;
+	text-shadow: none;
+	border-top-width: 4px;
+	border-right-width: 2px;
+	border-left-width: 2px;
+	border-bottom-width: 0;
+	
+
+	border-top-right-radius:				.5125em; 
+
+	-moz-border-radius-topright:		.5125em ;
+	-webkit-border-top-right-radius:.5125em ;
+	border-top-left-radius:				.5125em; 
+
+	-moz-border-radius-topleft:		.5125em ;
+	-webkit-border-top-left-radius:.5125em ;
+}
+	
+select {
+    font-size: 20px;
+
+}
+
+</style>
+
+		
+</head>
+<body>
+
+
+
+<!-- PAGINA WEB DE LOGIN EN LA APLICACIÓN -->
+
+<div data-role="page" id="LoginPage" data-title="Login">
+
+
+<table class="tabla_menu" border="0" cellspacing="0" cellpadding="0" align="center">
+<tr>
+  <td class="hr_amarilla" colspan="2">
+  </td>
+</tr>
+<tr>
+  <td height="137">
+    <img src="./img/logo_mambo.png">
+  </td>
+  <td rowspan="2" align="center" valign="middle">
+    <div id="form_div">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td class="campos" style="padding-top:10px;">
+        <label id="txtUsername"> Username </label>
+          
+        </td>
+      </tr>
+      <tr>
+        <td align="center">
+        	<div id="divUsername" style="width:75%"></div>           
+        </td>
+      </tr>
+      <tr>
+        <td class="campos">
+        	<label id="txtPassword"> Password </label>
+          
+        </td>
+      </tr>
+      <tr>
+        <td align="center">
+          <div id="divPassword" style="width:75%"></div>  
+        </td>
+      </tr>
+      </table>
+      <div id="space_button_div">  
+        	<button type="button" id="btnLogin" data-theme="a" style="top; width:50%" > Login </button>
+      </div>
+    </div>
+  </td>
+</tr>
+<tr>
+  <td class="slogan" >
+  	<label id="slogan"></label>
+    
+  </td>
+</tr>
+<tr>
+  <td colspan="2" align="center" valign="middle" class="hr_amarilla">
+  </td>
+</tr>
+<tr>
+	
+  <td colspan="2" style="text-align:right;">
+	  <label class="versionApp" style="display:inline">Hola</label>
+    <img  style="display:inline" class="logo_areas" src="./img/logo.png">
+  </td>
+</tr>
+</table>
+
+   
+        
+
+        <div data-role="popup" data-theme="a" data-dismissible="false" id="loginDialogAC" class="" data-overlay-theme="a" data-transition="flip">
+            <div data-role="header" style="background-color:#FFFFFF;">     
+            	<center>           
+	            <div class="ui-grid-b"  style="width:95%;">
+					      <div class="ui-block-a" style="width:15%"><img src="images/logoMambo.png" style="height: 65px;"></div>
+					      <div class="ui-block-b" style="width:70%; text-align:center"><h2><label id="loginDialogTituloAC" style="color: #231f20; font-size: x-large ">Aviso</label></h2></div>
+					      <div class="ui-block-c" style="width:15%; text-align:right"><img id="loginDialogIconoAC" src="images/verde.png" style="margin-top:20%"></div>
+					  	</div> 
+					  </center>
+            </div>
+            <div data-role="content" style="margin:5%">
+                <center>
+                    <div>
+                        <label id="loginDialogTextAC">  </label>
+                    </div>
+                    <div id="div_pass" style="width:300px;">
+                        <br>
+                        <div class="ui-grid-a" style="margin-top:10px;">
+                            <div class="ui-block-a"><br><label>Password:</label></div>
+                            <div class="ui-block-b" style="margin-top:10px;"><input type="password" id="loginDialogPassAC" name="clave" ></div>
+                        </div>
+                        <br>
+                        <label id="loginDialogACmsg" style="font-size:18px;"></label>
+                    </div>
+                    <br>
+                </center>   
+                   
+            </div>
+            <div style="background-color:#e6e7e9;">
+            	<center>
+            	<div  class="ui-grid-b"  style="width:95%;">
+	              <div class="ui-block-a"><button type="button" id="btnloginDialogOkAC" data-theme="a" > Aceptar </button></div>
+	              <div class="ui-block-b"></div>
+	              <div class="ui-block-c"><button type="button" id="btnloginDialogCancelAC" data-theme="a" > Cancelar </button></div>
+	        		</div>
+	        		</center>
+	        	</div>   	           
+        </div>
+        
+        <div data-role="popup" id="loginDialogA">
+			    <div data-role="header" style="background-color:#FFFFFF;">
+			    	<center>
+				    <div class="ui-grid-b" style="width:95%">
+				      <div class="ui-block-a" style="width:15%"><img src="images/logoMambo.png" style="height: 65px;"></div>
+				      <div class="ui-block-b" style="width:70%; text-align:center"><h2><label id="loginDialogTituloA" style="color: #231f20; font-size: x-large"></label></h2></div>
+				      <div class="ui-block-c" style="width:15%; text-align:right"><img id="loginDialogIconoA" src="images/verde.png" style="margin-top:20%"></div>
+					  </div>  
+					  </center>  
+			    </div>
+			    <div data-role="content" style="margin:5%">
+			        <center>
+			            <div>
+			                <label id="loginDialogTextA">  </label>
+			            </div>
+			        </center>
+			    </div>
+			    <div style="background-color:#e6e7e9;">
+            	<center>
+            	<div  class="ui-grid-b"  style="width:95%;">
+	              <div class="ui-block-a"></div>
+	              <div class="ui-block-b"></div>
+	              <div class="ui-block-c"><button type="button" id="btnloginDialogOkA" data-theme="a"> Aceptar </button></div>
+	        	</div>
+			     		</center>
+	    </div> 
+	</div>    
+
+</div>
+
+<!-- PAGINA WEB DE BARRA DE PROGRESO -->
+<div data-role="page" id="progressPage" data-title="Loading">
+
+    <div data-role="header"  style="border-bottom-width:1px; border-bottom-style:solid; border-bottom-color:#FAAB00;	background-color:#FFF; font-size: x-large">
+        <h1 id="tituloCargando"> Cargando... </h1>
+    </div>
+    <div data-role="content">
+        <center>
+            <div id="progressBar" class="default" style="text-align: left"><div></div></div>
+        
+            <div style="text-align: left; width: 500px"><h4><label id="progress-msg" > t </label></h4></div>
+				</center>
+        
+    </div>
+
+    <div data-role="footer" class="ui-bar" data-position="fixed" style="width:98%">
+        <div id="footerProgress" style="padding-left: 2%; padding-right: 2%">
+            <div class="ui-grid-b" style="background-color:#e6e7e9;">
+                <div class="ui-block-a" style="width:40%">
+                    <img src="images/icno_mambo_cabecera.png" style="display:inline">
+                    <label class="versionApp" style="font-weight: bold;margin-bottom: 0px;display:inline"> </label>
+                </div>
+                <div class="ui-block-b"  align="right" style="width:55%">
+                <label id="LbUltimaCargaProgress" style="font-weight: bold; margin-bottom: 0px; margin-top:15px"></label>
+                </div>
+                <div class="ui-block-c" align="right" style="width:5%">
+                    
+                    <img id="status_connectionProgress" src="./images/verde.png" style="margin-left:20px;display:inline" align="right"> 
+                 </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <!-- POP UP PARA INDICAR ERROR DE CARGA -->
+    <div data-role="popup" data-theme="a" data-dismissible="false" id="cargaDialogError" class="" data-overlay-theme="a" data-transition="flip" style="width:600px;">
+      <label id="pedidosDialogAOrden" style="display:none"></label>
+      <div data-role="header" style="background-color:#FFFFFF;">
+      	<center>
+      	<div class="ui-grid-b" style="width:95%">
+          <div class="ui-block-a" style="width:15%"><img src="images/logoMambo.png" style="height: 65px;"></div>
+          <div class="ui-block-b" style="width:70%; text-align:center"><h2><label id="cargaDialogTituloAC" style="color: #231f20; font-size: x-large ">Error</label></h2></div>
+          <div class="ui-block-c" style="width:15%; text-align:right"><img id="cargaDialogIconoAC" src="images/rojo.png" style="margin-top:20%"></div>
+  		  </div>
+  			</center>
+      </div>
+      <div data-role="content" style="margin:5%">
+          
+              <div>
+                  <label id="cargaDialogErrorText" style="font-size:18px;">ERROR EN LA CARGA</label>
+              </div>
+              <br>
+             
+      </div>
+  		<div style="background-color:#e6e7e9;">
+  			<center>
+  				<div class="ui-grid-b" style="width:95%;">
+  					<div class="ui-block-a"></div>
+  					<div class="ui-block-b"><button type="button" data-role="button" id="btnCargaDialogError" data-theme="a"  > Aceptar </button></div>
+  					<div class="ui-block-c"></div>
+  				</div>   
+  			</center> 
+  		</div>
+   </div>
+    
+    
+    
+    <!-- POP CARGA DATOS QUE HACER con el error -->
+    <div data-role="popup" data-theme="a" data-dismissible="false" id="cargaDialogAC" class="" data-overlay-theme="a" data-transition="flip" style="width:600px;">
+      <label id="pedidosDialogACOrden" style="display:none"></label>
+      <div data-role="header" style="background-color:#FFFFFF;">
+      	<center>
+      	<div class="ui-grid-b" style="width:95%">
+          <div class="ui-block-a" style="width:15%"><img src="images/logoMambo.png" style="height: 65px;"></div>
+          <div class="ui-block-b" style="width:70%; text-align:center"><h2><label id="cargaDialogTituloAC" style="color: #231f20; font-size: x-large ">Error</label></h2></div>
+          <div class="ui-block-c" style="width:15%; text-align:right"><img id="cargaDialogIconoAC" src="images/verde.png" style="margin-top:20%"></div>
+  		  </div>
+  			</center>
+      </div>
+      <div data-role="content" style="margin:5%">
+          
+              <div>
+                  <label id="cargaDialogTextAC" style="font-size:18px;">Pregunta</label>
+              </div>
+              <br>
+             
+      </div>
+  		<div style="background-color:#e6e7e9;">
+  			<center>
+  				<div class="ui-grid-b" style="width:95%;">
+  					<div class="ui-block-a"><button type="button" data-role="button" id="btnCargaDialogCancelAC" data-theme="a" > Cancelar </button></div>
+  					<div class="ui-block-b"></div>
+  					<div class="ui-block-c"><button type="button" data-role="button" id="btnCargaDialogOkAC" data-theme="a"  > Aceptar </button></div>
+  				</div>   
+  			</center> 
+  		</div>
+  </div>    
+
+</div>
+
+
+
+
+
+
+<!-- PEDIDOS EMITIDOS -->
+<div data-role="page" id="seccion_pedidos" data-title="Mambo Stock">
+
+
+<!-- POPUP DE NOTIFICACIONES -------------------------------------------------------->
+<div data-role="popup" data-theme="a" data-dismissible="false" id="pNotificacionesPopup" class="" data-overlay-theme="a" data-transition="flip" style="min-width: 400px"> 
+    <div data-role="header" style="background-color:#FFFFFF;">     
+    	<center>           
+      <div class="ui-grid-b"  style="width:100%;">
+	      <div class="ui-block-a" style="width:15%"><img src="images/logoMambo.png" style="height: 65px;"></div>
+	      <div class="ui-block-b" style="width:70%; text-align:center"><h2><label id="pNotificacionesTitulo" style="color: #231f20; font-size: x-large ">Notificaciones</label></h2></div>
+	      <div class="ui-block-c" style="width:15%; text-align:right"><img src="images/verde.png" style="margin-top:20%; padding-right: 10px"></div>
+	  	</div> 
+	  </center>
+	  
+    </div>
+    <div data-role="content" >
+    
+        <label id="pNotificacionesTxtNinguna">No hay notificaciones</label>
+        
+        <label id="pNotificacionesTxtPedidos">Pedidos pendientes de enviar</label>
+        <table id="pNotificacionesTablaPedidos">
+          
+          <tbody> <tr> <td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        
+        <label id="pNotificacionesTxtPedidosErrores">Pedidos erroneos</label>
+        <table id="pNotificacionesTablaPedidosErrores">
+          
+          <tbody> <tr> <td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        
+        <label id="pNotificacionesTxtBorradores">Borradores pendientes</label> 
+        <table id="pNotificacionesTablaBorradores">
+          <tbody> <tr> <td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        
+         <label id="pNotificacionesTxtPlantillasErrores">Plantillas erroneas</label>
+        <table id="pNotificacionesTablaPlantillasErrores">
+          
+          <tbody> <tr> <td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        
+        <label id="pNotificacionesTxtPlantillas">Plantillas pendientes de enviar</label>
+        <table id="pNotificacionesTablaPlantillas">
+          <tbody> <tr> <td></td><td></td><td></td></tr>
+          </tbody>
+        </table>    
+    </div>
+    <div style="background-color:#e6e7e9;">
+    	<center>
+    	<div  class="ui-grid-b"  style="width:95%;">
+        <div class="ui-block-a"></div>  
+        <div class="ui-block-b"></div>
+        <div class="ui-block-c"><button type="button" data-theme="a" id="pNotificacionesBtnCerrar"> Cerrar </button> </div>
+  		</div>
+  		</center>
+  	</div>   	           
+</div>
+
+<!-- ------------------------------------------------------------------------------------------------------------>
+<div data-role="popup" data-theme="a" data-dismissible="false" id="pedidosDialogAC" class="" data-overlay-theme="a" data-transition="flip" style="width:600px;">
+    <label id="pedidosDialogACOrden" style="display:none"></label>
+    <div data-role="header" style="background-color:#FFFFFF;">
+    	<center>
+    	<div class="ui-grid-b" style="width:95%">
+        <div class="ui-block-a" style="width:15%"><img src="images/logoMambo.png" style="height: 65px;"></div>
+        <div class="ui-block-b" style="width:70%; text-align:center"><h2><label id="pedidosDialogTituloAC" style="color: #231f20; font-size: x-large ">Aviso</label></h2></div>
+        <div class="ui-block-c" style="width:15%; text-align:right"><img id="pedidosDialogIconoAC" src="images/verde.png" style="margin-top:20%"></div>
+		  </div>
+			</center>
+    </div>
+    <div data-role="content" style="margin:5%">
+        
+            <div>
+                <label id="pedidosDialogTextAC" style="font-size:18px;">Pregunta</label>
+            </div>
+            <br>
+           
+    </div>
+		<div style="background-color:#e6e7e9;">
+			<center>
+				<div class="ui-grid-b" style="width:95%;">
+					<div class="ui-block-a"><button type="button" data-role="button" id="btnPedidosDialogCancelAC" data-theme="a" > Cancelar </button></div>
+					<div class="ui-block-b"></div>
+					<div class="ui-block-c"><button type="button" data-role="button" id="btnPedidosDialogOkAC" data-theme="a"  > Aceptar </button></div>
+				</div>   
+			</center> 
+		</div>
+</div>
+
+<div data-role="popup" data-theme="a" data-dismissible="false" id="pedidosDialogRefrescar" class="" data-overlay-theme="a" data-transition="flip">
+    <div data-role="header" style="background-color:#FFFFFF;">
+    	<center>
+     	<div class="ui-grid-b" style="width:95%">
+        <div class="ui-block-a" style="width:15%"><img src="images/logoMambo.png" style="height: 65px;"></div>
+        <div class="ui-block-b" style="width:70%; text-align:center"> <h2><label id="pedidosDialogTituloRefrescar" style="color: #231f20; font-size: x-large ">Aviso</label></h2></div>
+        <div class="ui-block-c" style="width:15%; text-align:right"><img id="pedidosDialogIconoRefrescar"src="images/verde.png" style="margin-top:20%"></div>
+		  </div>
+			</center>
+    </div>
+    <div data-role="content" style="margin:5%">
+        <center>
+            <div style="width:300px;">
+                <label id="pedidosDialogTextRefrescar" style="font-size:18px;">Pregunta</label>
+            </div>
+        </center>
+    </div>
+ 		<div style="background-color:#e6e7e9;">
+			<center>
+				<div class="ui-grid-b" style="width:95%;">
+					<div class="ui-block-a"><button type="button" data-role="button" id="btnPedidosDialogRefrescarOk" data-theme="a"  > Aceptar </button></div>
+					<div class="ui-block-b"></div>
+					<div class="ui-block-c"><button type="button" data-role="button" id="btnPedidosDialogRefrescarCancel" data-theme="a" > Cancelar </button></div>
+				</div>
+			</center> 
+		</div>
+</div>
+
+
+
+<!--  -->
+<div data-role="popup" data-theme="a" data-dismissible="false" id="pedidosPopUpNombrePlantilla" data-tap-toggle="false" class="" data-overlay-theme="a" data-transition="flip">
+    <div data-role="header" style="background-color:#FFFFFF;">
+    	<center>
+     	<div class="ui-grid-b" style="width:95%">
+        <div class="ui-block-a" style="width:15%"><img src="images/logoMambo.png" style="height: 65px;"></div>
+        <div class="ui-block-b" style="width:70%; text-align:center"> <h2><label id="pedidosPopUpTituloNombrePlantilla" style="color: #231f20; font-size: x-large ">Guardar Plantilla</label></h2></div>
+        <div class="ui-block-c" style="width:15%; text-align:right"><img id="pedidosDialogIconoRefrescar"src="images/verde.png" style="margin-top:20%"></div>
+		  </div>
+			</center>
+    </div>
+    <div data-role="content" style="margin:5%">
+        <center>
+            <div style="min-width:400px;">
+                <label id="pedidosPopUpTextoNombrePlantilla" style="font-size:18px;">Nombre de la plantilla</label>
+            </div>
+            
+            
+            <div style="min-width:400px;">
+                <input type="text" name="pedidosPopUpInputNombrePlantilla" id="pedidosPopUpInputNombrePlantilla" style="margin: 0px;" value="" width="40" class="text ui-widget-content ui-corner-all" /> 
+            </div>
+            <div style="min-width:400px;">
+            		<br>
+                <label id="pedidosPopUpErrorNombrePlantilla" style="font-size:22px; display: none; ">Debe introducir un nombre</label>
+                <br>
+            </div>
+        </center>
+    </div>
+ 		<div style="background-color:#e6e7e9;">
+			<center>
+				<div class="ui-grid-b" style="width:95%;">
+					<div class="ui-block-a"><button type="button" data-role="button" id="pedidosPopUpNombrePlantillaCancel" data-theme="a" > Cancelar </button></div>
+					<div class="ui-block-b"></div>
+					<div class="ui-block-c"> <button type="button" data-role="button" id="pedidosPopUpNombrePlantillaOk" data-theme="a"  > Aceptar </button></div>
+						
+				</div>   
+			</center> 
+		</div>
+</div>
+
+
+<div data-role="popup" data-theme="a" data-dismissible="false" id="pedidosDialogA" class="" data-overlay-theme="a" data-transition="flip">
+    <div data-role="header" style="background-color:#FFFFFF;">
+    	<center>
+      <div class="ui-grid-b" style="width:95%">
+        <div class="ui-block-a" style="width:15%"><img src="images/logoMambo.png" style="height: 65px;"></div>
+        <div class="ui-block-b" style="width:70%; text-align:center"><h2><label id="pedidosDialogTituloA" style="font-size: x-large ">Aviso</label></h2></div>
+        <div class="ui-block-c" style="width:15%; text-align:right"><img id="pedidosDialogIconoA"src="images/verde.png" style="margin-top:20%"></div>
+		  </div>
+		 	</center>
+    </div>
+    <div data-role="content" style="margin:5%">
+        <center>
+            <div style="width:300px;">
+                <label id="pedidosDialogTextA" style=" font-size:18px;">Pregunta</label>
+            </div>
+        </center>
+    </div>
+    
+   <div style="background-color:#e6e7e9;">
+      	<center>
+      	<div  class="ui-grid-b" style="width:95%;">
+          <div class="ui-block-a"></div>
+          <div class="ui-block-b"> </div>
+          <div class="ui-block-c"><button type="button" class=" ui-btn ui-btn-c ui-corner-all" id="btnPedidosDialogA" data-theme="a"  > Aceptar </button></div>
+    		</div>
+     		</center>
+    </div> 
+</div>
+
+  <div data-role="popup" data-theme="a" data-dismissible="false" id="dialogInsertarPedido" class="" data-overlay-theme="a" data-transition="flip">
+  	<label id="pedidosDialogInsertarOrden" style="display:none"></label>
+      <div data-role="header"  style="background-color:#FFFFFF;">
+        <h2 style="margin: 0px; text-align:center"> <label id="LbTituloInsertarPedido" style="color: #231f20; font-size: large ; ">NOMBRE DEL ARTICULO</label></h2>
+      </div>
+      <div class="ui-grid-a" style="margin:2%">
+      	<div class="ui-block-a" style="width:70%">
+		      <div style="margin:2%">
+		            <div class="ui-grid-c">
+		              <div class="ui-block-a"><label id="LbRefProvInsertarPedido"></label></div>
+		              <div class="ui-block-b"><label id="LbEANPrincipalInsertarPedido"></label></div>
+		              <div class="ui-block-c" align="right"><label id="LbStockInsertarPedido"></label></div>
+		              <div class="ui-block-d" align="right"><label id="LbStockMinInsertarPedido"></label></div>
+		            </div>
+		
+		             <div class="ui-grid-c">
+		              <div class="ui-block-a"><input type="text" id="InRefProvInsertarPedido" readonly style="width: 90%"></div>
+		              <div class="ui-block-b"><input type="text" id="InEANPrincipalInsertarPedido" readonly style="width: 90%"></div>
+		              <div class="ui-block-c"><input type="text" id="InStockInsertarPedido" readonly style="width: 90%" align="right"></div>
+		              <div class="ui-block-d"><input type="text" id="InStockMinInsertarPedido" readonly style="width: 90%" align="right">  </div>
+		             </div> 
+		      		<br>
+		      	   <div class="ui-grid-b">
+		              <div class="ui-block-a" style="width:25%"><label id="LbUnidadesInsertarPedido">Unidades</label></div>
+		              <div class="ui-block-b" style="width:50%"><label id="LbCadenaInsertarPedido">Cad.Logistica</label></div>
+		              <div class="ui-block-c" style="width:25%" align="right"><label id="LbTotalesInsertarPedido">Totales</label></div>
+		          </div>
+		          <div class="ui-grid-b">
+		              <div class="ui-block-a" style="width:25%"><input type="number" min="0" readonly id="InUnidadesInsertarPedido" placeholder="0" value=1 style="width: 90%; text-align: right"></div>
+		              <div class="ui-block-b" style="width:50%"><input id="InCadenaInsertarPedido" value=0></div>
+		              <div class="ui-block-c" style="width:25%"><input id="InTotalesInsertarPedido" readonly value=0 style="width: 90%; text-align: right"> </div>
+		          </div> 
+		          
+		          <div class="ui-grid-b" >
+		          	<div class="ui-block-a" style="width: 99%"><div id="chartTAM"></div>
+		          	<div class="ui-block-b" style="width: 99% "><input type="text" id="pLabelTextError" readonly style="display: none;width: 90%;padding-top: 30px;"></div>	
+		          	</div>
+		          </div>
+		      </div>
+		    </div>
+		 		<div class="ui-block-b" style="width:30%"> 
+		 			<div class="ui-grid-a">
+	          <div class="ui-block-a" style="padding-left: 10px; padding-right: 10px; width:100% " ><button type="button" id="pBtnNumDelete" data-theme="a"> Delete </button> </div>
+	        	<input type="hidden" id="pBtnNumCargado" value="0" >
+		      </div>
+		 			
+		 			<div class="ui-grid-b">
+	          <div class="ui-block-a" style="padding-left: 10px; padding-right: 10px;"><button type="button" id="pBtnNum7" data-theme="a"> 7 </button> </div>
+	          <div class="ui-block-b" style="padding-left: 10px; padding-right: 10px;"><button type="button" id="pBtnNum8" data-theme="a"> 8 </button></div>
+	          <div class="ui-block-c" style="padding-left: 10px; padding-right: 10px;"><button type="button" id="pBtnNum9" data-theme="a"> 9 </button></div>
+		      </div>
+		      <div class="ui-grid-b">
+	          <div class="ui-block-a" style="padding-left: 10px; padding-right: 10px;"><button type="button" id="pBtnNum4" data-theme="a"> 4 </button> </div>
+	          <div class="ui-block-b" style="padding-left: 10px; padding-right: 10px;"><button type="button" id="pBtnNum5" data-theme="a"> 5 </button></div>
+	          <div class="ui-block-c" style="padding-left: 10px; padding-right: 10px;"><button type="button" id="pBtnNum6" data-theme="a"> 6 </button></div>
+		      </div>
+		      
+		      <div class="ui-grid-b">
+	          <div class="ui-block-a" style="padding-left: 10px; padding-right: 10px;"><button type="button" id="pBtnNum1" data-theme="a"> 1 </button> </div>
+	          <div class="ui-block-b" style="padding-left: 10px; padding-right: 10px;"><button type="button" id="pBtnNum2" data-theme="a"> 2 </button></div>
+	          <div class="ui-block-c" style="padding-left: 10px; padding-right: 10px;"><button type="button" id="pBtnNum3" data-theme="a"> 3 </button></div>
+		      </div>
+		 			
+		 			<div class="ui-grid-a">
+	          <div class="ui-block-a" style="width:66%;padding-left: 10px; padding-right: 10px;"><button type="button" id="pBtnNum0" data-theme="a"> 0 </button> </div>
+	          <div class="ui-block-b" style="width:33%;padding-left: 10px; padding-right: 10px;"><button type="button" id="pBtnNumD" data-theme="a"> . </button></div>
+	         
+		      </div>
+		 			
+		 		</div>
+	    </div>
+      <div style="background-color:#e6e7e9;">
+      	<center>
+      	<div  class="ui-grid-b" style="width:95%;">
+ 			  <div class="ui-block-a"><button type="button" id="btnInsertarPedidoCancelar" data-theme="a"  ></button></div>
+              <div class="ui-block-b"></div>
+              <div class="ui-block-c"><button type="button" id="btnInsertarPedidoOk" data-theme="a"></button></div>
+          </div>
+     		</center>
+   		</div>
+  </div>
+
+    <div data-role="popup" style="height:99vh;width:100%; overflow-y:auto" data-theme="a" data-dismissible="false" id="pAyuda" data-overlay-theme="a" data-transition="flip">
+        <div data-role="header" style="background-color:#FFFFFF;">
+        <center>
+        <div class="ui-grid-b" style="width:95%">
+        <div class="ui-block-a" style="width:15%"><img src="images/logoMambo.png" style="height: 65px;"></div>
+        <div class="ui-block-b" style="width:70%; text-align:center"><h2><label id="LbTituloAyuda" style="color: #231f20; font-size: x-large ">Ayuda</label></h2></div>
+        <div class="ui-block-c" style="width:15%; text-align:right">
+            <a href="#" data-role="button" data-rel="back" data-icon="delete" data-iconpos="notext"></a>
+        </div>
+          </div>
+            </center>
+         </div>
+
+        <div data-role="content" style="margin:5%">
+
+         <div align="left" style="width:100%;">
+                <label id="pLabTituloAyuda" class="ayudaTitulo" style="font-size: x-large; color: #6c6d70; margin-left: 10%; margin-right: 10%;">Ayuda Contextual</label>
+            </div>
+            <br>
+            <div  align="left" style="width:100%">
+                <label id="pLabTextoAyuda" class="ayudaTexto" style="font-size: medium; color: #231f20; margin-left: 10%; margin-right: 10%;">Ayuda Contextual</label>
+            </div>
+        </div>
+    </div>
+
+    <div data-role="popup" id="pDialogInsertEan" data-theme="a" data-dismissible="false" class="" data-overlay-theme="a" data-transition="flip">
+	    <!-- <div data-role="header" style="background-color:#FFFFFF;">
+	    	<center>
+		     	<div class="ui-grid-b" style="width:95%">
+		        <div class="ui-block-a" style="width:10%"></div>
+		        <div class="ui-block-b" style="width:80%; text-align:center"> <h2><label id="LbTituloDialogEscaner" style="color: #231f20; font-size: large ">Selección de articulos por escaner</label></h2></div>
+		        <div class="ui-block-c" style="width:10%; text-align:right"></div>
+				 </div>
+			</center>
+    	</div> -->
+	    <div data-role="content">
+	        <center>
+	            <div>
+	                <label id="LbDetalleNuevoArticulo" style="font-weight: bold">Escanee el código de barras del artículo</label>
+	                <input type="text" id="InCodigoEan" class="text ui-widget-content ui-corner-all"/>
+	            </div>
+	            <div class="ui-grid-b">
+		            <div class="ui-block-a"></div>
+		            <div class="ui-block-b"></div>
+		            <div class="ui-block-c"><button type="button" id="btnpDialogInsertEanok" data-theme="a"  style="margin-top:15px" > Finalizar</button></div>
+		          </div>
+	        </center>
+	    </div>
+	</div>
+	
+	<div data-role="popup" id="pDialogEliminarNuevoArticulo" class="" data-overlay-theme="a" data-transition="flip" data-theme="a">
+	<div data-role="header" style="background-color:#FFFFFF;">
+		<center>
+			<div class="ui-grid-b" style="width:95%">
+				<div class="ui-block-a" style="width:15%"><img src="images/logoMambo.png" style="height: 65px;"></div>
+				<div class="ui-block-b" style="width:70%; text-align:center"><h2><label id="A2title_text" style="color: #231f20; font-size: x-large ">Aviso</label></h2></div>
+				<div class="ui-block-c" style="width:15%; text-align:right"><img src="images/amarillo.png" style="margin-top:20%"></div>
+			</div>
+		</center>
+	</div>
+	<div data-role="content">
+		<center>
+			<div>
+				<label id="LbDetalleEliminarNuevoArticulo">¿Esta seguro que desea eliminar este articulo?</label>
+			</div>
+		</center>
+	</div>
+	<div style="background-color:#e6e7e9;">
+		<center>
+			<div class="ui-grid-b" style="width:95%;">
+				<div class="ui-block-a">
+					<button type="button" id="btnpDialogEliminarNuevoArticulook" data-theme="a">Aceptar</button>
+				</div>
+				<div class="ui-block-b"></div>
+				<div class="ui-block-c">
+					<button type="button" id="btnpDialogEliminarNuevoArticuloCancel" data-theme="a">Cancelar</button>
+				</div>
+			</div>
+		</center>
+	</div>
+</div>
+
+  <div data-role="header" class="ui-bar" id="header_pedidos_emitidos" data-position="fixed" data-tap-toggle="false" style="border-bottom-width:1px; border-bottom-style:solid; border-bottom-color:#FAAB00;	background-color:#FFF; ">
+    <div class="ui-grid-c" style="width:98%;">
+        <div class="ui-block-a" style="width: 20%;">
+            <a id="bars-button" class="ui-btn-center" href="#navpanel"><img src="images/btn_menu.png" ></a>
+            <a href="#"><img  src="./images/btn_atras.png" id="btnHeaderBack" data-theme="b" ></a>
+        </div>
+			<div  class="ui-block-b" align="center" style="padding-top: 10px; width: 50%;border: 0;padding: 0;margin: 0; position: relative;float: left;display: inline-block;">
+             <div onclick="pMostrarNotificaciones();" class="div_notificaciones_menu_lateral" id="pedidosNotificacionTotalCabecera" align="center" ><span class="notificaciones_menu_lateral">2</span></div> 
+             <!-- <div class="div_notificaciones_menu_lateral" id="pedidosNotificacionBorradoresCab" align="center" > <span class="notificaciones_menu_lateral"></span></div> </a>-->
+           <span id="seccion_title" style="margin-top:10px; font-size: x-large; padding-top: 20px">TITULO</span>
+           
+           
+        </div>
+        <div  class="ui-block-c" align="right" style="width: 20%;" >
+            <div id="headerSearch">
+                <form role="search">
+                    <input id="searchText" placeholder="Filter items..." data-type="search" class="ui-input-text ui-body-d" height="40px"   >
+                </form>
+            </div>
+        </div>
+        <div  class="ui-block-d" align="right" style="width:10%; alignment-baseline: right;" >
+	         <div class="ui-grid-a">
+	            <div class="ui-block-a" align="right">
+	                <span>
+	                      
+	                </span>
+	            </div>
+	            <div class="ui-block-b">
+	                <span>
+	                        <a id="pBtnAyuda" class="ui-btn-center" ><img src="./images/btn_ayuda.png"></a>
+	                </span>
+	            </div>
+	         </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div data-role="" id="contenido_pedidos_emitidos" style="overflow-x:hidden;" style="width:98%" >
+<!-- info: Si pones data-role="content" estila los margenes como deberia ir, si los quitamos ocupa todo el ancho de la pantalla-->
+<!-- ----------------------------------DIV DE PEDIDOS EMITIDOS --------------------------------->
+      <div id="emitidos" class="k-content">
+				<center>
+					<div id="emitidos">
+						<div id="example3" class="k-content">
+						   <div id="pGridPedidos"></div>
+					  </div>
+				</center>	
+				<div data-role="popup" id="pFiltroPopUp" data-position="fixed"  >
+					
+			   <div data-role="header" style="min-width: 500px" >
+			    	<div class="ui-grid-a" style=" background-color:#e6e7e9; color: #231f20">
+			    		<div class="ui-block-a" style="width:80%; font-size: 20px;" id="tituloPopUpFiltro" >Opciones de columna: </div>
+			    		<div class="ui-block-b" style="width:20%; text-align:right"><a href="#" scrollbars="yes" data-icon="delete" data-rel="back" data-role="button" data-theme="b"  data-iconpos="notext" class="ui-btn-center"></a></div>
+			    			
+			      </div>
+			    </div>
+			    <div id="pFiltroPopUpContent" data-role="content" style="overflow-y:auto" >
+
+			      
+			         	   <div class="ui-grid-b" style="border-style: solid; border-bottom-width: 2px; border-bottom-color: #bfc0c3; border-top-width: 0; border-left-width: 0; border-right-width: 0;">
+			           	 		<div class="ui-block-a" style="width:75%;"> <a id="pBtnPopUpAsc" data-theme='b' value="0" data-role='button' role='button' style="text-align: left; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; padding-left: 0px; "> <img src='./images/icno_ascendente.png' >Orden ascendente </a></div>
+			           	 		<div class="ui-block-b" style="width:25%;"> <a id="pBtnPopUpAsc2" data-theme='b' value="0" data-role='button' role='button' style="margin-top: 0px; margin-bottom: 0px;"><img id="pImgAsc" > </a></div>
+			           	 </div>
+			           	 <div class="ui-grid-b" style="border-style: solid; border-bottom-width: 2px; border-bottom-color: #faab00; border-top-width: 0; border-left-width: 0; border-right-width: 0;">
+			           	 		<div class="ui-block-a" style="width:75%;"> <a id="pBtnPopUpDesc" data-theme='b' value="0" data-role='button' role='button' style="text-align: left; margin-top: 0px; margin-bottom: 0px; margin-left: 0px; padding-left: 0px; "> <img src='./images/icno_descendente.png' >Orden descendente </a></div>
+			           	 		<div class="ui-block-b" style="width:25%;"> <a id="pBtnPopUpDesc2" data-theme='b' value="0" data-role='button' role='button' style="margin-top: 0px; margin-bottom: 0px;"> <img id="pImgDesc" > </a></div>
+			           	 </div>
+			        
+		           <div><label id="LbPopUpFiltro" style="font-size: 20px; background-color: #f3f3f3; padding-top: 10px; padding-bottom: 5px;">Filtro </label></div>
+		          
+		           	 <div id="pListaFiltro">
+		           	 	<div id="pListaFiltroStrings" ></div>
+		           	 	<div id="pListaFiltroFechas" >
+		           	 		<div class="ui-grid-c">
+			           	 		<div class="ui-block-a" style="width:30%;"> <label id="LbpPopUpFiltroFechaD" >Fecha desde</label> </div>
+			           	 		<div class="ui-block-b" style="width:45%;"> <input id="pListaFiltroFechasInicio"> </div>
+			           	 		<div class="ui-block-c" style="width:10%;"> <a onclick='pLimpiarFiltro("pGridPedidos","undefined","gte")' data-role='button' role='button'>
+		                                                   <img id='pLimpiarFiltroFechas' src='./images/btnCancelar.png'> </a></div>
+			           	 	</div>
+			           	 	<div class="ui-grid-c">
+			           	 		<div class="ui-block-a" style="width:30%;"> <label id="LbpPopUpFiltroFechaH" >Fecha hasta</label> </div>
+			           	 		<div class="ui-block-b" style="width:45%;"> <input id="pListaFiltroFechasFin"> </div>
+			           	 		<div class="ui-block-c" style="width:10%;"> <a onclick='pLimpiarFiltro("pGridPedidos","undefined","lte")' data-role='button' role='button'>
+		                                                     <img id='pLimpiarFiltroFechas2' src='./images/btnCancelar.png' > </a></div>
+			           	 	</div>	
+			           	 	<div class="ui-grid-c">
+			           	 		<div class="ui-block-a" style="width:30%;"> </div>
+			           	 		<div class="ui-block-b" style="width:30%;"> </div>
+			           	 	  <div class="ui-block-c" style="width:30%;"> <button id="pBtnFiltrar" class="tFiltrar" data-theme="a" >Aceptar</button></div>
+		           	 	  </div>
+		           	 	</div>
+		           	 	<div id="pListaFiltroEstados" ></div>
+		           	 </div>
+			      
+
+			   </div>
+			</div>
+</div>
+
+<!-- DIV DE NUEVO PEDIDO MOSTRANDO CENTROS DE COMPRA DISPONIBLES   -->
+<div id="nuevo_centros" style="overflow-y:hidden;overflow-x:hidden;">
+   <div style="margin:10px">
+        <label style="display:inline" id="pLbNuevoPedidoCentro"></label>
+        <label style="display:inline" id="pLbNuevoPedidoSelecioneCentro"></label>
+    </div>
+    <center>
+   <div id="centros_autorizados" style="overflow-y:hidden;overflow-x:hidden;">
+        <center> 
+            <div  class="k-content">
+                <div id="pGridCentros"></div>
+            </div>
+        </center>
+    </div>        
+    </center>
+</div>
+
+<!-- DIV DE NUEVO PEDIDO MOSTRANDO PROVEEDORES DISPONIBLES   -->
+<div id="nuevo_proveedores" style="overflow-y:hidden;overflow-x:hidden;">
+    <div style="margin:10px">
+        <label style="display:inline" id="pLbNuevoPedidoProveedor"></label>
+        <label style="display:inline" id="pLbNuevoPedidoCentroProveedor"></label>
+        <label style="display:inline" id="pLbNuevoPedidoSelecioneProveedor"></label>
+    </div>
+    <div data-role="navbar">
+        <ul>
+            <li><a id="pBtnlproveedores" class="ui-btn-active"></a></li>
+            <li><a id="pBtnlalmacenes" href="#">Almacenes autorizados</a></li>
+        </ul>
+    </div>
+    <!-- SUBDIV DE NUEVO PEDIDO MOSTRANDO PROVEEDORES AUTORIZADOS   -->
+    <div id="proveedores_autorizados" style="overflow-y:hidden;overflow-x:hidden;">
+        <center> 
+            <div  class="k-content">
+                <div id="pGridProveedores"></div>
+            </div>
+        </center>
+    </div>
+    <!-- SUBDIV DE NUEVO PEDIDO MOSTRANDO ALMACENES AUTORIZADOS   -->
+    <div id="almacenes_autorizados" style="overflow-y:hidden;overflow-x:hidden;">
+        <center>
+            <ul id="plista_almacenes" data-role="listview" data-filter-placeholder="Buscar Almacenes" data-theme="a" class="ui-listview ui-listview-inset ui-corner-all ui-shadow" >
+                <li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">
+                    <h3> Almacenes Disponibles </h3>
+                    <span class="ui-li-count ui-btn-up-c ui-btn-corner-all"><label id="num_almacenes">0</label></span>
+                </li>
+            </ul>
+        </center>
+    </div>
+</div>
+
+<!-- DIV DE NUEVO PEDIDO MOSTRANDO PROVEEDORES DISPONIBLES   -->
+<div id="alta_pedidos" style="overflow-y:hidden;overflow-x:hidden;">
+    <div style="margin:10px">
+        <label style="display:inline" id="pLbNuevoPedidoAnterior"></label>
+        <label style="display:inline" id="pLbNuevoPedidoCentroAnterior"></label>
+        <label style="display:inline" id="pLbNuevoPedidoProveedorAnterior"></label>
+        <label style="display:inline" id="pLbNuevoPedidoSelecioneAnterior"></label>
+    </div>
+
+    <div data-role="navbar">
+        <ul>
+            <li><a id="pBtnAnteriores" class="ui-btn-active">Pedidos Anteriores</a></li>
+            <li><a id="pBtnlMisPlantillas" href="#">Mis Plantillas</a></li>
+        </ul>
+    </div>
+    <!-- SUBDIV DE ALTA PEDIDO MOSTRANDO GRID DE PEDIDOS ANTERIORES   -->
+    <div id="anteriores">
+        <div id="example4" class="k-content">
+            <div id="pGridPedidosAnteriores"></div>
+        </div>
+    </div>
+    <!-- SUBDIV DE ALTA PEDIDO MOSTRANDO GRID DE PLANTILLAS   -->
+    <div id="plantillas">
+        <div id="example5" class="k-content">
+            <div id="pGridPedidosPlantillas"></div>
+        </div>
+    </div>
+</div>
+
+<!-- DIV DE ALTA PEDIDO MOSTRANDO GRID DE DETALLE DE PEDIDOS ANTERIORES   -->
+<div id="anterioresDetalle" style="overflow-y:hidden;overflow-x:hidden; margin-top:12px">
+    <center>
+
+        <div class="ui-grid-c" align="left" style="width:90%">
+            <div class="ui-block-a"><label id="pLbDetalleNumAnt" style="font-weight: bold;margin-bottom: 0px;">Numero de pedido</label></div>
+            <div class="ui-block-b"><label id="pLbDetalleCentroProveedorAnt" style="font-weight: bold;margin-bottom: 0px;">Proveedor</label></div>
+            <div class="ui-block-c"><label id="pLbDetalleCentroCompraAnt" style="font-weight: bold;margin-bottom: 0px;">Centro de Compra</label></div>
+            <div class="ui-block-d"><label ></label></div>
+        </div>
+
+        <div class="ui-grid-c" align="left" style="width:90%">
+            <div class="ui-block-a">
+                <label><input type="text" name="CodCentro" id="txtCodPedidoAnt" value="" width="40" class="text ui-widget-content ui-corner-all" readonly/>
+                </label>
+            </div>
+            <div class="ui-block-b">
+                <label> <input type="text" name="NomProveedor" id="txtNomProveedorAnt" value="" width="40" class="text ui-widget-content ui-corner-all" readonly/>
+                </label>
+            </div>
+            <div class="ui-block-c">
+                <label>  <input type="text" name="CodCentro" id="txtCodCentroAnt" value="" width="40" class="text ui-widget-content ui-corner-all" readonly/>
+                </label>
+            </div>
+            <div class="ui-block-d">
+                <label> </label>
+            </div>
+
+        </div>
+
+        <div class="ui-grid-c" align="left" style="width:90%">
+
+            <div class="ui-block-a"><label id="pLbDetalleEmisionAnt" style="font-weight: bold;margin-bottom: 0px;">Emisión</label></div>
+            <div class="ui-block-b"><label id="pLbDetalleEntregaAnt" style="font-weight: bold;margin-bottom: 0px;">Entrega</label></div>
+            <div class="ui-block-c"><label id="pLbDetalleEstadoAnt" style="font-weight: bold;margin-bottom: 0px;">Estado del Pedido</label></div>
+            <div class="ui-block-d"><label id="pLbDetalleValoracionAnt" style="font-weight: bold;margin-bottom: 0px;">Valoración Total</label></div>
+
+        </div>
+
+        <div class="ui-grid-c" align="left" style="width:90%">
+        	
+        	
+            <div class="ui-block-a">
+
+                <label><input type="text" name="CodPedido" id="txtFechaEmisionAnt" class="text ui-widget-content ui-corner-all" readonly/></label>
+            </div>
+            <div class="ui-block-b">
+                <label><input type="text" name="CodCentro" id="txtFechaEntregaAnt" value="" class="text ui-widget-content ui-corner-all" readonly/><br></label>
+            </div>
+            <div class="ui-block-c">
+                <input type="text" name="NomCentro" id="txtEstadoPedidoAnt" value="" class="text ui-widget-content ui-corner-all" readonly/><br>
+            </div>
+            <div class="ui-block-d">
+                <label><input type="text" name="NomCentro" id="txtValorPedidoAnt" value="" class="text ui-widget-content ui-corner-all" readonly/><br></label>
+            </div>
+        </div>
+    </center>
+    <div id="example6" class="k-content">
+        <div id="pGridPedidosAnterioresDetalle"></div>
+    </div>
+</div>
+
+
+
+<!-- DIV DE PLANTILLAS  DETALLE   -->
+<div id="pPlantillasDetalle" style="overflow-y:hidden;overflow-x:hidden; margin-top:12px"> 
+    <center>
+ 				<div class="ui-grid-a" align="left" id="pDivDetallePedidoPlantilla0" style="padding-right: 0px; padding-left: 0px;">
+						<div class="ui-block-a" style="width:80%;">&nbsp;</div>
+						<div class="ui-block-b" style="width:20%; padding-right: 15px; padding-left: 15px;">
+							<a data-role="button" data-theme="b" id="pBtnMostrarCabeceraDetallePlantilla" ><img src="./images/desplega_2.png"  height="30"></a>
+						</div>
+				</div>	
+        <div class="ui-grid-c" align="left" id="pDivDetallePedidoPlantilla1" style="display:none" >
+            <div class="ui-block-a" style="width:20%; margin-bottom: 0px; padding-right: 15px; padding-left: 15px;"><label id="pLbNuevoPedidoPlantillaRef" style="font-weight: bold;" >Referencia</label></div>
+            <div class="ui-block-b" style="width:30%; margin-bottom: 0px; padding-right: 15px; padding-left: 15px;"><label id="pLbNuevoPedidoPlantillaProveedor" style="font-weight: bold;">Proveedor</label></div>
+            <div class="ui-block-c" style="margin-bottom: 0px; padding-right: 15px; padding-left: 15px;"><label id="pLbNuevoPedidoPlantillaCentro" style="font-weight: bold;" >Centro de Compra</label></div>
+            <div class="ui-block-d" style="margin-bottom: 0px; padding-right: 15px; padding-left: 15px;"><label id="pLbNuevoPedidoPlantillaZona" style="font-weight: bold;" >Zona</label></div>
+        </div>
+
+        <div class="ui-grid-c" align="left" id="pDivDetallePedidoPlantilla2" style="display:none">
+            <div class="ui-block-a" style="width:20%; padding-right: 15px; padding-left: 15px;">
+                <input type="text" name="CodCentro" id="pTxtNuevoPedidoPlantillaRef" value="" width="40" class="text ui-widget-content ui-corner-all" readonly/>
+            </div>
+            <div class="ui-block-b" style="width:30%; padding-right: 15px; padding-left: 15px;">
+                <input type="text" name="NomProveedor" id="pTxtNuevoPedidoPlantillaProveedor" value="" width="40" class="text ui-widget-content ui-corner-all" readonly/>
+            </div>
+            <div class="ui-block-c" style="padding-right: 15px; padding-left: 15px;">
+                <input type="text" name="CodCentro" id="pTxtNuevoPedidoPlantillaCentro" value="" width="40" class="text ui-widget-content ui-corner-all" readonly/>
+            </div>
+            <div class="ui-block-d" style=" padding-right: 15px; padding-left: 15px;">
+                <input type="text" name="CodCentro" id="pTxtNuevoPedidoPlantillaZona" value="" width="40" class="text ui-widget-content ui-corner-all" readonly/>
+            </div> 
+        </div>
+
+        <div class="ui-grid-b" align="left" id="pDivDetallePedidoPlantilla3" style="display:none">
+
+            <div class="ui-block-a" style="width:20%; padding-right: 15px; padding-left: 15px;"><label id="pLbNuevoPedidoPlantillaFecha" style="font-weight: bold;margin-bottom: 0px;">Fecha</label></div>
+            <div class="ui-block-b" style="width:80%; padding-right: 15px; padding-left: 15px;"><label id="pLbNuevoPedidoPlantillaTexto" style="font-weight: bold;margin-bottom: 0px;">Descripción</label></div>
+            
+        </div>
+
+        <div class="ui-grid-b" align="left" id="pDivDetallePedidoPlantilla4" style="margin-bottom: 15px;display:none" >
+            <div class="ui-block-a" style="width:20%; padding-right: 15px; padding-left: 15px;">
+                <input type="text" name="CodCentro" id="pTxtNuevoPedidoPlantillaFecha" value="" width="40" class="text ui-widget-content ui-corner-all" readonly/>
+            </div>
+            <div class="ui-block-b" style="width:70%; padding-right: 15px; padding-left: 15px;">
+                <input type="text" name="NomProveedor" id="pTxtNuevoPedidoPlantillaTexto" value="" width="40" class="text ui-widget-content ui-corner-all" readonly/>
+            </div>
+            <div class="ui-block-c" style="width:10%; padding-right: 15px; padding-left: 15px; margin: 0px">
+							<a data-role="button" data-theme="b" id="pBtnOcultarCabeceraDetallePlantilla" style="border-width: 0px; padding: 0px; margin: 0px; text-align:right; background: #f9f9f9; border-color: #f9f9f9; -webkit-box-shadow: 0px"><img src="./images/desplega_1.png"  height="30"></a>
+						</div>
+        </div>
+    </center>
+    <div id="pDivNuevoPedidoPlantilla" class="k-content">
+        <div id="pGridNuevoPedidoPlantilla"></div>
+    </div>
+</div>
+
+
+<!-- DIV DE DETALLE DE NUEVO PEDIDO MOSTRANDO PROVEEDORES DISPONIBLES   -->
+<div id="pedidosDetalleNuevo" style="overflow-y:hidden;overflow-x:hidden; margin-top:12px">
+	<div class="ui-grid-b" align="left" style="width:90%; margin-left:15px" id="pFiltroProveedores">
+		<div class="ui-block-a" style="width:15%"> <label id="pLbProveedorBaseEscaner" style="font-weight: bold;margin-top: 15px;">Proveedor </label></div>
+        <div class="ui-block-b" style="width:40%" id="listaFiltroProveedores"><label style="margin-top:10px; font-size:22px" id="selectProveedor"></label></div>
+    </div>
+    <div class="ui-grid-a" align="" style="margin-left:10px; width:100%" id="divInfoDetallePedido">
+        <div class="ui-block-a" style="width:70%">
+	        <label style="display:inline" id="pLbDetalleNuevoPedido"></label>
+	        <label style="display:inline" id="pLbCentroSeleccionado"></label>
+	        <label style="display:inline" id="pLbProveedorSeleccionado"></label>
+   		</div>
+        <div class="ui-block-b" style="width:30%;">
+        	<div class="ui-grid-a">
+        		<div class="ui-block-a" style="margin-top:5px" >	
+        	 		<label id="pLbpedidosDetalleNuevoPrecio" style="font-weight: bold; margin-bottom: 0px;text-align: center;">Mostrar precios</label>
+        		</div>	
+				<div class="ui-block-b" style="height: 35px; margin-top: 5px;">	
+					<!--<select name="flip-mini" id="flipPrecioDetallePedido" data-role="slider" data-mini="true" >
+						<option value="off">No</option>
+						<option value="on" selected>Si</option>
+					</select>-->
+					<div id="pDivCheckPrecioDetallePedido"> <img id="checkPrecioDetallePedido" src="images/uncheck.png" style="width:30px; height:30px"></div>
+					<!--					<input type="checkbox" id="checkPrecioDetallePedido"> -->
+				</div>
+			</div>
+        </div>
+    </div>
+    <br>
+    <div id="example2" class="k-content">
+        <div id="pGridNuevoPedido"></div>
+        <div id="pGridNuevoPedido2"></div>
+        <div id="pGridPedidoDetMod"></div>
+    </div>
+       
+    
+
+    
+    <div data-role="popup" id="pDialogEliminarNuevoArticulo" class="" data-overlay-theme="a" data-transition="flip" data-theme="a">
+	    <div data-role="header" style="background-color:#FFFFFF;">
+	    	<center>
+		     	<div class="ui-grid-b" style="width:95%">
+		        <div class="ui-block-a" style="width:15%"><img src="images/logoMambo.png" style="height: 65px;"></div>
+		        <div class="ui-block-b" style="width:70%; text-align:center"> <h2><label id="A2title_text" style="color: #231f20; font-size: x-large ">Aviso</label></h2></div>
+		        <div class="ui-block-c" style="width:15%; text-align:right"><img src="images/amarillo.png" style="margin-top:20%"></div>
+				  </div>
+				</center>
+	    </div>
+	    
+	    <div data-role="content">
+	        <center>
+	            <div>
+	                <label id="LbDetalleEliminarNuevoArticulo">¿Esta seguro que desea eliminar este articulo? </label>
+	            </div>
+	          </center>  
+	    </div>  	 
+	    <div style="background-color:#e6e7e9;" >
+					<center>	
+	             <div class="ui-grid-b" style="width:95%;">
+	               <div class="ui-block-a"><button type="button" id="btnpDialogEliminarNuevoArticulook" data-theme="a"  >Aceptar</button> </div>
+	               <div class="ui-block-b"></div>
+	               <div class="ui-block-c"><button type="button" id="btnpDialogEliminarNuevoArticuloCancel" data-theme="a"   >Cancelar</button></div>
+	            </div>
+	        </center>
+	    </div>
+		</div>
+    
+    
+</div>
+
+<!-- DIV DE INSERTAR PEDIDO POR FAMILIAS   -->
+<div id="insertarArticulos" style="overflow-y:hidden;overflow-x:hidden;">
+    <!-- DIV DE FILTRO POR FAMILIAS   -->
+    <label id="pLbFiltroPorFamiliasInsertar" style="margin:10px"></label>
+    <div id="pFiltroFamilias" style="overflow-y:hidden;overflow-x:hidden;">
+        <div class="ui-grid-b" id="pFiltroFamiliasDiv" style="width:95%; padding-left: 5%;">
+      
+	        	<div class="ui-block-a">
+	            	<div class="ui-grid-a" style="width:95%">
+	                    <div class="ui-block-a" style="width:80%" id="ListaNivel1" ><label style="margin-top:10px; font-size:22px" id="nivel1"></label></div>
+	                    <div class="ui-block-b" style="width:15%" id=""><a data-role="button" id="cancelNivel1" data-icon="delete" style="width:44px; height:44px" data-iconpos="notext" role="button"></a></div>
+	              </div>
+	          </div>
+	          <div class="ui-block-b">
+	          	<div class="ui-grid-a" style="width:95%">
+	                  <div class="ui-block-a" style="width:80%" id="ListaNivel2"><label style="margin-top:10px; font-size:22px" id="nivel2"></label></div>
+	                  <div class="ui-block-b" style="width:15%" id=""><a data-role="button" id="cancelNivel2" data-icon="delete" style="width:44px; height:44px" data-iconpos="notext" role="button"></a></div>
+	              </div>
+	          </div>
+	          <div class="ui-block-c">
+	          	<div class="ui-grid-a" style="width:95%">
+	                  <div class="ui-block-a" style="width:80%" id="ListaNivel3"><label style="margin-top:10px; font-size:22px" id="nivel3"></label></div>
+	                  <div class="ui-block-b" style="width:15%" id=""><a data-role="button" id="cancelNivel3" data-icon="delete" style="width:44px; height:44px" data-iconpos="notext" role="button"></a></div>
+	              </div>
+	          </div>
+      
+        </div>
+    </div>
+    <br>
+    <div id="example7" class="k-content">
+        <div id="pGridArticulos"></div>
+    </div>
+      
+</div>
+
+<!-- DIV DE INSERTAR PEDIDO POR ESCANER   -->
+<div id="insertarArticulosEscaner" style="overflow-y:hidden;overflow-x:hidden;">
+    
+    <label id="pLbNuevoArticuloEscaner" style="margin:10px"></label>
+    <div id="example8" class="k-content">
+        <div id="pGridArticulosEscaner"></div>
+    </div>
+      
+</div>
+
+		<!-- DIV DE CABECERA DE PEDIDO   -->
+		<div id="pCabeceraPedido" style="overflow-y:hidden;overflow-x:hidden;">
+		<div class="ui-grid-b" id="" style="padding-top: 15px;"> 
+						<div class="ui-block-a" style="padding-right: 15px; padding-left: 15px;width:33%;"><label id="plbCentroCabecera" style="font-weight: bold;margin-bottom: 0px;">Centro</label></div>
+						<div class="ui-block-b" style="padding-right: 15px; padding-left: 15px;width:33%;"><label id="plbProveedorCabecera" style="font-weight: bold;margin-bottom: 0px;">Proveedor</label></div>
+						<div class="ui-block-c" style="padding-right: 15px; padding-left: 15px;width:33%;"><label id="plbZonaCabecera" style="font-weight: bold;margin-bottom: 0px;">Zona</label></div>
+		</div>
+		<div class="ui-grid-b" id="" >
+						<div class="ui-block-a"style="padding-right: 15px; padding-left: 15px;width:33%;"><input type="text" name="" id="ptxtCentroCabecera" style="margin: 0px;" value="" width="40" class="text ui-widget-content ui-corner-all" readonly/></div>
+						<div class="ui-block-b"style="padding-right: 15px; padding-left: 15px;width:33%;"><input type="text" name="" id="ptxtProveedorCabecera" style="margin: 0px;" value="" width="40" class="text ui-widget-content ui-corner-all" readonly/></div>
+						<div class="ui-block-c"style="padding-right: 15px; padding-left: 15px;width:33%;"><label id="ptxtZonaCabecera"></label></div>
+		</div>
+		<div class="ui-grid-b" id="" style="padding-top: 15px;">
+						<div class="ui-block-a" style="padding-right: 15px; padding-left: 15px;width:33%;"><label id="plbFechaEntregaCabecera" style="font-weight: bold;margin-bottom: 0px;">Fecha de Entrega</label></div>
+						<div class="ui-block-b" style="padding-right: 15px; padding-left: 15px;width:33%;"><label id="plbEstadoPedidoCabecera" style="font-weight: bold;margin-bottom: 0px;">Estado del Pedido</label></div>
+						<div class="ui-block-c" style="padding-right: 15px; padding-left: 15px;width:33%;"><label id="plbFechaEmisionCabecera" style="font-weight: bold;margin-bottom: 0px;">Fecha de Emision</label></div>
+		</div>
+		<div class="ui-grid-b" id="">
+						<div class="ui-block-a" style="padding-right: 15px; padding-left: 15px;width:33%;"><input id="ptxtFechaEntregaCabecera"></label></div>
+						<div class="ui-block-b" style="padding-right: 15px; padding-left: 15px;width:33%;"><input type="text" name="" id="ptxtEstadoPedidoCabecera" style="margin: 0px;" value="" width="40" class="text ui-widget-content ui-corner-all" readonly/></div>
+						<div class="ui-block-c" style="padding-right: 15px; padding-left: 15px;width:33%;"><input type="text" name="" id="ptxtFechaEmisionCabecera" style="margin: 0px;" value="" width="40" class="text ui-widget-content ui-corner-all" readonly/></div>
+		</div>
+		<div class="ui-grid-b" id="" style="padding-top: 15px;">
+						<div class="ui-block-a" style="width:64%;padding-right: 15px; padding-left: 15px;"><label id="plbObservacionesCabecera" style="font-weight: bold;margin-bottom: 0px;">Observaciones</label></div>
+						<div class="ui-block-b" style="width:2%;padding-right: 15px; padding-left: 15px;"></div>
+						<div class="ui-block-c" style="width:33%;padding-right: 15px; padding-left: 15px;"><label id="plbValoracionFinalCabecera" style="font-weight: bold;margin-bottom: 0px;">Valoración Total</label></div>
+		</div>
+		<div class="ui-grid-b" id="">
+						<div class="ui-block-a" style="width:50%;padding-right: 15px; padding-left: 15px;"><input type="text" name="" id="ptxtObservacionesCabecera" style="margin: 0px;" value="" width="40" class="text ui-widget-content ui-corner-all"/></div>
+						<div class="ui-block-b" style="width:16%;padding-right: 15px; padding-left: 15px;"></div>
+						<div class="ui-block-c" style="width:33%;padding-right: 15px; padding-left: 15px;"><input type="text" name="" id="ptxtValoracionTotalCabecera" style="margin: 0px;" value="" width="40" class="text ui-widget-content ui-corner-all" readonly/></div>
+		</div>			
+</div>
+
+
+
+<!-- DIV CONSULTAR PLANTILLAS -->
+
+<div id="pMostrarPlantillas" class="k-content">
+
+   <div id="pGridPlantillas"></div>
+   	
+</div>
+
+<!-- DIV CONSULTAR PLANTILLAS -->
+
+<div id="pMostrarBorradores" class="k-content">
+
+   <div id="pGridBorradores"></div>
+   	
+</div>
+
+<!-- DIV DE PLANTILLAS  DETALLE   -->
+<div id="pBorradoresDetalle" style="overflow-y:hidden;overflow-x:hidden; margin-top:12px"> 
+    <center>
+ 				<div class="ui-grid-a" align="left" id="pDivDetallePedidoBorrador0" style="padding-right: 0px; padding-left: 0px;">
+						<div class="ui-block-a" style="width:80%;">&nbsp;</div>
+						<div class="ui-block-b" style="width:20%; padding-right: 15px; padding-left: 15px;">
+							<a data-role="button" data-theme="b" id="pBtnMostrarCabeceraDetalleBorrador" style="border-width: 0px; padding: 0px; margin: 0px; text-align:right; background: #f9f9f9; border-color: #f9f9f9; -webkit-box-shadow: 0px"><img src="./images/desplega_2.png"  height="30"></a>
+						</div>
+				</div>	
+        <div class="ui-grid-c" align="left" id="pDivDetallePedidoBorrador1" style="margin-bottom:4px;display:none" >
+            <div class="ui-block-a" style="width:33%; margin-bottom: 0px; padding-right: 15px; padding-left: 15px;"><label id="pLbNuevoPedidoBorradorProveedor" style="font-weight: bold;">Proveedor</label></div>
+            <div class="ui-block-b" style="width:33%; margin-bottom: 0px; padding-right: 15px; padding-left: 15px;"><label id="pLbNuevoPedidoBorradorCentro" style="font-weight: bold;" >Centro de Compra</label></div>
+            <div class="ui-block-c" style="width:13%; margin-bottom: 0px; padding-right: 15px; padding-left: 15px;"><label id="pLbNuevoPedidoBorradorValoracion" style="font-weight: bold;" >Valoracion</label></div>
+            <div class="ui-block-d" style="width:20%; margin-bottom: 0px; padding-right: 15px; padding-left: 15px;"><label id="pLbNuevoPedidoBorradorFecha" style="font-weight: bold;" >Fecha</label></div>
+        </div>
+
+        <div class="ui-grid-c" align="left" id="pDivDetallePedidoBorrador2" style="display:none">
+            <div class="ui-block-a" style="width:33%; padding-right: 15px; padding-left: 15px;">
+            	<input type="text" name="NomProveedor" id="pTxtNuevoPedidoBorradorProveedor" value="" width="40" class="text ui-widget-content ui-corner-all" readonly/>                
+            </div>
+            <div class="ui-block-b" style="width:33%; padding-right: 15px; padding-left: 15px;">
+               <input type="text" name="CodCentro" id="pTxtNuevoPedidoBorradorCentro" value="" width="40" class="text ui-widget-content ui-corner-all" readonly/>
+            </div>
+            <div class="ui-block-c" style="width:13%; padding-right: 15px; padding-left: 15px;">
+                <input type="text" name="Valoracion" id="pTxtNuevoPedidoBorradorValoracion" value="" width="40" class="text ui-widget-content ui-corner-all" readonly/>
+            </div>
+            <div class="ui-block-d" style="width:20%; padding-right: 15px; padding-left: 15px;">
+                <input type="text" name="Fecha" id="pTxtNuevoPedidoBorradorFecha" value="" width="40" class="text ui-widget-content ui-corner-all" readonly/>
+            </div> 
+        </div>
+
+        <div class="ui-grid-b" align="left" id="pDivDetallePedidoBorrador3" style="display:none">
+
+           
+        </div>
+
+        <div class="ui-grid-b" align="left" id="pDivDetallePedidoBorrador4" style="display:none" >
+            <div class="ui-block-a" style="width:20%; padding-right: 15px; padding-left: 15px;">
+                
+            </div>
+            <div class="ui-block-b" style="width:70%; padding-right: 15px; padding-left: 15px;">
+               
+            </div>
+            <div class="ui-block-c" style="width:10%; padding-right: 15px; padding-left: 15px; margin: 0px">
+							
+						</div>
+        </div>
+    </center>
+    <div id="pDivDetalleBorrador" class="k-content">
+        <div id="pGridDetalleBorrador"></div>
+    </div>
+</div>
+
+<!-- DETALLE de pedido -->
+<div id="detalle" style="overflow-y:hidden;overflow-x:hidden; margin-top:12px">
+			
+					<div class="ui-grid-a" align="left" id="pDivDetallePedido0" style="padding-right: 0px; padding-left: 0px;">
+						<div class="ui-block-a" style="width:50%;">&nbsp;</div>
+						<div class="ui-block-b" style="width:50%; padding-right: 15px; padding-left: 15px;"><a data-role="button" data-theme="b" id="pBtnMostrarCabeceraDetalle" style="text-align:right; border-width: 0px; padding: 0px; margin: 0px; text-align:right; background: #f9f9f9; border-color: #f9f9f9; -webkit-box-shadow: 0px"><img src="./images/desplega_2.png"  height="30"></a></div>
+					</div>	
+					<div class="ui-grid-b" align="left" id="pDivDetallePedido1" style="display:none">
+						<div class="ui-block-a" style="width:40%; padding-right: 15px; padding-left: 15px;"><label id="pLbDetalleProveedor" style="font-weight: bold;margin-bottom: 0px;">Proveedor</label></div>
+						<div class="ui-block-b" style="width:40%; padding-right: 15px; padding-left: 15px;"><label id="pLbDetalleCentroCompra" style="font-weight: bold;margin-bottom: 0px;">Centro de Compra</label></div>
+						<div class="ui-block-c" style="width:20%; padding-right: 15px; padding-left: 15px;"><label id="pLbDetalleNum" style="font-weight: bold;margin-bottom: 0px;">Numero de pedido</label></div>
+						<!-- <div class="ui-block-d" style="padding-right: 15px; padding-left: 15px;" ><label ></label></div> -->
+					</div>
+			
+					<div class="ui-grid-b" align="left" id="pDivDetallePedido2" style="display:none">
+						<div class="ui-block-a" style="width:40%; padding-right: 15px; padding-left: 15px;">
+							<label ><input type="text" name="CodCentro" id="txtNomProveedor" style="margin: 0px;" value="" width="40" class="text ui-widget-content ui-corner-all" readonly/>
+							</label>
+						</div>
+						<div class="ui-block-b" style="width:40%;  padding-right: 15px; padding-left: 15px;">
+							<label><input type="text" name="NomProveedor" id="txtCodCentro" style="margin: 0px;" value="" width="40" class="text ui-widget-content ui-corner-all" readonly/>
+							</label>
+						</div>
+						<div class="ui-block-c" style="width:20%; padding-right: 15px; padding-left: 15px;">
+							<label><input type="text" name="CodCentro" id="txtCodPedido"  style="margin: 0px;" value="" width="40" class="text ui-widget-content ui-corner-all" readonly/>
+							</label>
+						</div>
+						<!--
+						<div class="ui-block-d" style="padding-right: 15px; padding-left: 15px;">
+							<label> </label>
+						</div>
+						-->						
+					</div>
+		
+					<div class="ui-grid-d" align="left" id="pDivDetallePedido3" style="display:none">
+				
+						<div class="ui-block-a" style="width:20%;  padding-right: 15px; padding-left: 15px;"><label id="pLbDetalleEmision" style="font-weight: bold;margin-bottom: 0px;">Emisión</label></div>
+						<div class="ui-block-b" style="width:20%;padding-right: 15px; padding-left: 15px;"><label id="pLbDetalleEntrega" style="font-weight: bold;margin-bottom: 0px;">Entrega</label></div>
+						<div class="ui-block-c" style="width:20%;padding-right: 15px; padding-left: 15px;"><label id="pLbDetalleEstado" style="font-weight: bold;margin-bottom: 0px;">Estado del Pedido</label></div>
+						<div class="ui-block-d" style="width:20%;padding-right: 15px; padding-left: 15px;">
+                        </div>
+                        <div class="ui-block-e" style="width:20%;padding-right: 15px; padding-left: 15px;"><label id="pLbDetalleValoracion" style="font-weight: bold;margin: 0px;" >Valoración Total</label></div>
+						
+					</div>
+		
+					<div class="ui-grid-d" align="left" id="pDivDetallePedido4"  style="display:none" >
+				    	<div class="ui-block-a" style="width:20%; padding-right: 15px; padding-left: 15px;">
+							<input type="text" name="CodPedido" id="txtFechaEmision" class="text ui-widget-content ui-corner-all" readonly/>
+						</div>
+						<div class="ui-block-b" style="width:20%; padding-right: 15px; padding-left: 15px;">
+							<input type="text" name="CodCentro" id="txtFechaEntrega" value="" class="text ui-widget-content ui-corner-all" readonly/>
+						</div>
+						<div class="ui-block-c" style="width:40%; padding-right: 15px; padding-left: 15px;">
+              <div class="ui-grid-a">
+                  <div class="ui-block-a" style="width:8%">
+                      <img id="imagenEstado" src="" style="margin:15px">
+                  </div>
+                  <div class="ui-block-b" style="width:92%">
+                      <input type="text" name="NomCentro" id="txtEstadoPedido2" value="" class="text ui-widget-content ui-corner-all" readonly />
+                  </div>
+              </div>
+            </div>
+				
+						<div class="ui-block-e" style="width:20%; padding-right: 15px; padding-left: 15px; margin: 0px">
+							<input type="text" name="NomCentro" id="txtValorPedido" value="" class="text ui-widget-content ui-corner-all" readonly/>
+						</div>						
+					</div>
+
+                     <div id="pDivDetallePedido6" style="padding-right: 15px; margin-top:5px; padding-left: 15px; text_align:left"><label id="pLbDetalleObservaciones" style="font-weight: bold;margin-bottom: 0px;">Observaciones</label></div>
+
+                    <div class="ui-grid-a"  align="left" id="pDivDetallePedido5"  style="display:none">
+                        <div class="ui-block-a" style="width:80%; padding-right: 15px; padding-left: 15px;">
+                            <input type="text" name="CodPedido" id="txtObservaciones" class="text ui-widget-content ui-corner-all" readonly/>
+                        </div>
+                        <div class="ui-block-b" style="width:20%; padding-right: 15px; padding-left: 15px;">
+                            <a data-role="button" data-theme="b" id="pBtnOcultarDetalle" style="border-width: 0px; padding: 0px; margin: 0px; 
+                            text-align:right; background: #f9f9f9; border-color: #f9f9f9; -webkit-box-shadow: 0px"><img src="./images/desplega_1.png"  height="30">
+                            </a>
+                        </div>   
+                    </div>
+
+				
+				<div id="example1" class="k-content" style="padding-top:0px">
+				 <div id="pGridPedidosDet"></div>	
+				</div>		
+				<div data-role="popup" id="DialogPedisoDetalleErrorQuery" data-theme="a" data-dismissible="false" class="" data-overlay-theme="a" data-transition="flip" style="min-width: 400px">
+	    		<div data-role="header"  style="background-color:#e6e7e9; color: #231f20; font-size: x-large">
+	    			 <center>
+					     	<div class="ui-grid-b" style="width:95%">
+					        <div class="ui-block-a" style="width:15%"><img src="images/logoMambo.png" style="height: 65px;"></div>
+					        <div class="ui-block-b" style="width:70%; text-align:center"><h2><label id="A2title_text">Error!</label></h2></div>
+					        <div class="ui-block-c" style="width:15%; text-align:right"><img src="images/rojo.png" style="margin-top:20%"></div>
+							  </div>
+						</center>
+	   			</div>
+	    				<div data-role="content">
+	        	 <center>
+	            <div>
+	            <label id="pedidosDialogAText">Mensage de error: </label>
+	            </div>
+	            <div>
+	            </div>
+	            <div class="ui-grid-b">
+		            <div class="ui-block-a"></div>
+		            <div class="ui-block-b"></div>
+		            <div class="ui-block-c"><button type="button" id="btnDialogDetalleQueryOk" data-theme="a"  style="background: #fcb814; border-color: #fcb814;margin-top:15px" > Aceptar </button></div>
+		          </div>
+	        	</center>
+	    		</div>
+				</div>
+				
+				
+</div>	
+
+
+	<!-- DIV DE PANEL DEL MENU       --><!-- DIV DE PANEL DEL MENU       -->
+	<div data-role="panel" id="navpanel" data-theme="a" data-display="overlay" data-position="left" >
+	    <div data-role="controlgroup"  data-theme="a" data-corners="false">
+	        <div class="ui-grid-a" >
+	         <div class="ui-block-a" style="width:100%">
+	          <a id="mpBtnTitulo" data-theme="a" data-role="button" style="text-align: left; background: #d1d2d4; color: #57585a ; border-top: 0px; border-left: 0px; border-right: 0p; border-bottom: 0px;">Men&uacute; Pedidos</a></div>
+	        </div>
+	        <div class="ui-grid-a" style="border-color: #443D3D; border-style: solid; border-width: 2px; border-top: 0; border-left: 0px; border-right: 0;" >
+	        
+	         <div class="ui-block-a" style="width:75%" >
+	          <a id="mpBtn1" data-theme="a" data-role="button" style="text-align: left; color: grey ; background: #FFFFFF; border-top: 0px; border-left: 0px; border-right: 0px; border-bottom: 0px;">Pedidos Emitidos</a>
+	         </div>
+	         <div class="ui-block-b" style="width:25%">
+	          <a onclick="pMostrarNotificaciones('O');" data-theme="a" data-role="button"   class="ui-link ui-btn ui-btn-a ui-shadow ui-corner-all" style=" text-align: left; color: grey ; background: #FFFFFF; border-top: 0px; border-left: 0px; border-right: 0; border-bottom: 0px; padding-top: 0px">
+	          	<div class="div_notificaciones_menu_lateral" id="pedidosNotificacionEmitidos" align="center" style="margin-top: 10px;" > 
+	          		<span class="notificaciones_menu_lateral">2</span>
+	          	</div>
+	          </a>
+	         </div>
+	        
+	        </div>
+	        
+	        <div class="ui-grid-a" >
+	         <div class="ui-block-a" style="width:100%">
+	          <a id="mpBtn2" data-theme="a" data-role="button" style="text-align: left; color: grey ; background: #FFFFFF; border-top: 0px; border-left: 0px; border-right: 0px; border-bottom-width: 2px;">
+	            Nuevo Pedido
+	          </a>
+	         </div>
+	        </div>
+	        
+	        <div class="ui-grid-a" style="border-color: #443D3D; border-style: solid; border-width: 2px; border-top: 0; border-left: 0px; border-right: 0;" >
+	         <div class="ui-block-a" style="width:75%">
+	          <a id="mpBtn3" data-theme="a" data-role="button" class="ui-link ui-btn ui-btn-a ui-shadow ui-corner-all" style=" text-align: left; color: grey ; background: #FFFFFF; border-top: 0px; border-left: 0px; border-right: 0; border-bottom: 0px;">
+	            Borradores
+	          </a>
+	         </div>
+	         <div class="ui-block-b" style="width:25%">
+	         	<a onclick="pMostrarNotificaciones('D');" data-theme="a" data-role="button"  class="ui-link ui-btn ui-btn-a ui-shadow ui-corner-all" style=" text-align: left; color: grey ; background: #FFFFFF; border-top: 0px; border-left: 0px; border-right: 0; border-bottom: 0px; padding-top: 0px">
+	 
+	          <!-- <a onclick="pMostrarNotificaciones('D');" data-theme="a" data-role="button" style="margin-top: -4px; text-align: left; color: grey ; background: #FFFFFF; border-top: 0px; border-left: 0px; border-right: 0; border-bottom-width: 2px;"> -->
+	          	<div class="div_notificaciones_menu_lateral" id="pedidosNotificacionBorradores" align="center"  > 
+	          		<span class="notificaciones_menu_lateral">2</span>
+	          	</div> 
+	          </a>
+	         </div>
+	        </div>
+	        
+	        <div class="ui-grid-a" >
+	         <div class="ui-block-a" style="width:100%">
+	          <a id="mpBtn4" data-theme="a" data-role="button" style="text-align: left; color: grey ; background: #FFFFFF; border-top: 0px; border-left: 0px; border-right: 0; border-bottom-width: 2px;">Mis Plantillas</a>
+	         </div>
+	        </div>
+	        <br><br><br><br><br><br><br>
+	        <div class="ui-grid-a" >
+	         <div class="ui-block-a" style="width:100%">
+	          <a id="pBtnPedidosMenuInicio" data-theme="a" data-role="button">Men&uacute Principal</a>
+	         </div>
+	        </div>
+	    </div>
+	</div>
+
+</div>
+<!--
+
+<div>
+        <div></div>
+        <br><br><br><br><br><br><br>
+
+-->
+
+<!--- PEU DE PAGINA ------------------------------------------------------>
+	<div data-role="footer" id="footer_comun" class="ui-bar" data-position="fixed" data-tap-toggle="false" style="width:100%; padding-top: 0px; ">
+	        <div class="ui-grid-b" style="width:98%;">
+	            <div class="ui-block-a" style="width:72%" id="botonerafooter">
+	                <div class="ui-grid-d">
+	                    <div id="divBoton1" style="text-align:center;display:inline" ><a data-role="button" data-theme="a" id="fbtn1" style="text-shadow: 0 0 0; font-size: 16px; margin-top: 10px;">s1</a></div>
+	                    <div id="divBoton2" style="text-align:center;display:inline"><a data-role="button" data-theme="a" id="fbtn2" style="text-shadow: 0 0 0; font-size: 16px; margin-top: 10px;">s2</a></div>
+	                    <div id="divBoton3" style="text-align:center;display:inline"><a data-role="button" data-theme="a" id="fbtn3" style="text-shadow: 0 0 0; font-size: 16px; margin-top: 10px;">s3</a></div>
+	                    <div id="divBoton4" style="text-align:center;display:inline"><a data-role="button" data-theme="a" id="fbtn4" style="text-shadow: 0 0 0; font-size: 16px; margin-top: 10px;">s4</a></div>   
+	                    <div id="divBoton5" style="text-align:center;display:inline"><a data-role="button" data-theme="a" id="fbtn5" style=" text-shadow: 0 0 0; font-size: 16px; margin-top: 10px;">s5</a></div>                                          		  
+	                </div>
+	            </div>
+				<div class="ui-block-b" style="width:23%" id="divPaginacionFooter">
+	                <div class="ui-grid-b" id="divPag">
+	                    <div class="ui-block-a" align="left">
+	                        <a data-role="button" data-theme="b" id="pBtnPagBack" style="margin-top: 0px;"> 
+	                        	<img src="./images/icno_btn_prev.png" >
+	                        </a>
+	                    </div>
+	                    <div class="ui-block-b" style="margin-top:15px;" align="center">
+	                        <span id="pSpanPagDesc" style="font-size: large;"> XXX </span>
+	                    </div>
+	                    <div class="ui-block-c" align="right">
+	                        <a data-role="button" data-theme="b" id="pBtnPagNext" style="margin-top: 0px;">
+	                        	<img src="./images/icno_btn_next.png" >
+	                        </a>
+	                    </div>
+	                </div>
+							</div>
+	            <div class="ui-block-c" style="width:9%; margin-left:1%" id="divEstadoFooter" >
+	            		<div class="ui-grid-a">            		
+		            	  <div class="ui-block-a" style="margin-top:4px; text-align:right">
+		            	  	<a id="pCargaDatos"><img src="./images/btn_refresh.png"></a>
+		            	  </div>
+		                <div class="ui-block-b" id="imagenConexionPedidos" style="margin-top:10px; text-align:right">
+		                	<img id="status_connection" src="./images/verde.png" >
+		                </div>	
+	                </div>
+	            </div>
+	        </div>
+	</div>
+</div>
+
+<!-- MENU PRINCIPAL -->
+<div data-role="page" id="menuPrincipal" data-title="Mambo Panel">
+      <div data-role="popup" id="pedidosDialogA">
+		    <div data-role="header"  style="background-color:#e6e7e9; color: #231f20; font-size: x-large">
+		         <center>
+					     	<div class="ui-grid-b" style="width:95%">
+					        <div class="ui-block-a" style="width:15%"><img src="images/logoMambo.png" style="height: 65px;"></div>
+					        <div class="ui-block-b" style="width:70%; text-align:center"><h2><label id="A2title_text"></label></h2></div>
+					        <div class="ui-block-c" style="width:15%; text-align:right"><img src="images/verde.png" style="margin-top:20%"></div>
+							  </div>
+						</center>
+		    </div>
+		    <div data-role="content">
+		        <center>
+		            <div>
+		                <label id="pedidosDialogAText">  </label>
+		            </div>
+		            <div>
+		            </div>
+		            <div class="ui-grid-b">
+			            <div class="ui-block-a"></div>
+			            <div class="ui-block-b"></div>
+			            <div class="ui-block-c"><button type="button" id="btnA2DialogOk" data-theme="a"  style="background: #fcb814; border-color: #fcb814;margin-top:15px" > Aceptar </button></div>
+			          </div>
+		            
+		            
+		        </center>
+		    </div>
+			</div>
+		
+		<!-- POP-UP CARGA DE DATOS -->
+		<div data-role="popup" data-theme="a" data-dismissible="false" id="mDialogAC" class="" data-overlay-theme="a" data-transition="flip">
+		    <div data-role="header" style="background-color:#FFFFFF;">
+		    	<center>
+		     	<div class="ui-grid-b" style="width:95%">
+		        <div class="ui-block-a" style="width:15%"><img src="images/logoMambo.png" style="height: 65px;"></div>
+		        <div class="ui-block-b" style="width:70%; text-align:center"> <h2><label id="mDialogACTitulo" style="color: #231f20; font-size: x-large ">Aviso</label></h2></div>
+		        <div class="ui-block-c" style="width:15%; text-align:right"><img id="pedidosDialogIconoRefrescar"src="images/verde.png" style="margin-top:20%"></div>
+				  </div>
+					</center>
+		    </div>
+		    <div data-role="content" style="margin:5%">
+		        <center>
+		            <div style="width:300px;">
+		                <label id="mDialogACTexto" style="font-size:18px;">Pregunta</label>
+		            </div>
+		        </center>
+		    </div>
+		 		<div style="background-color:#e6e7e9;">
+					<center>
+						<div class="ui-grid-b" style="width:95%;">
+							<div class="ui-block-a"><button type="button" data-role="button" id="mBtnDialogACOk" data-theme="a"  > Aceptar </button></div>
+							<div class="ui-block-b"></div>
+							<div class="ui-block-c"><button type="button" data-role="button" id="mBtnDialogACCancel" data-theme="a" > Cancelar </button></div>
+						</div>
+					</center> 
+				</div>
+		</div>
+			<!-- POPUP DE AYUDA -->
+		<div data-role="popup" data-theme="a"  style="height:100%;width:100%; overflow-y:auto" data-dismissible="false" id="mAyudaa" class="" data-overlay-theme="a" data-transition="flip">
+        <div data-role="header" style="background-color:#FFFFFF;">
+       			 <center>
+			        <div class="ui-grid-b" style="width:95%">
+				        <div class="ui-block-a" style="width:15%"><img src="images/logoMambo.png" style="height: 65px;"></div>
+				        <div class="ui-block-b" style="width:70%; text-align:center"><h2><label id="mLbTituloAyuda" style="color: #231f20; font-size: x-large ">Ayuda</label></h2></div>
+				        <div class="ui-block-c" style="width:15%; text-align:right"><a href="#" data-role="button" data-rel="back" data-icon="delete" data-iconpos="notext"></a></div>
+			        </div>
+            </center>
+         </div>
+
+        <div data-role="content" style="margin:5%">
+
+         <div align="left" style="width:100%;">
+                <label id="mLabTituloAyuda" class="ayudaTitulo" style="font-size: x-large; color: #6c6d70; margin-left: 10%; margin-right: 10%;">Bienvenidos a MAMBO!</label>
+            </div>
+            <br>
+            <div  align="left" style="width:100%">
+                <label id="mLabTextoAyuda" class="ayudaTexto" style="font-size: medium; color: #231f20; margin-left: 10%; margin-right: 10%;">Ayuda Contextual</label>
+            </div>
+        </div>
+    </div>
+		
+
+    <!-- CABECERA -->
+    <div data-role="header" class="ui-bar" data-position="fixed"  style="border-bottom-width:1px; border-bottom-style:solid; border-bottom-color:#FAAB00;	background-color:#FFF; " >
+       
+        
+        <div class="ui-grid-c" style="width:98%">
+            <div class="ui-block-a" style="width:33%; min-width:100px; padding-left: 10px; margin-top: 10px; font-size: 14px">
+            	<div class="ui-grid-a" style="width:98%">
+	              	<div class="ui-block-a" style="width:30%"><a id="mLogout" class="ui-btn-center" ><img src="./images/btn_logout.png"></a></div>
+	         
+		            <div class="ui-block-b" style="width:70%; margin-top:10px">
+						<label id="cabeceraPrincipalUsuario">Usuario conectado: </label>
+						<label id="mUsuario"><strong>thlleida</strong></label>
+					</div>
+					<div class="ui-block-c">					
+						
+					</div>
+				</div>
+            </div>
+            <div  class="ui-block-c" align="center" style="width:33%; " >
+                <div id="tituloPrincipal" style="height: 100%; vertical-align: middle;padding-top: 12px; font-size: x-large" >Indice</div>
+            </div>
+            <div  class="ui-block-d" align="right" style="width:33%" >
+                <a id="mBtnAyuda" class="ui-btn-center" ><img src="./images/btn_ayuda.png"></a>
+            </div>
+
+        </div>
+    </div>
+
+    <div data-role="content" id="menuPrincipalPantalla" style="" style="width:98%" >
+
+        <table width="90%" border="0" cellspacing="0" cellpadding="0" align="center">
+            <tr>
+                <td style="width:120px">
+                    <div class="div_icono_menu" >
+                        <a id="mBtnPedidos" data-theme="b" data-role="button"  style=" border-width: 0px; padding-top: 0px; padding-bottom: 0px; padding-right: 0px; padding-left: 0px;"> <img src="images/pedidos.png">
+                            <div  class="div_notificaciones_menu" id="pedidosNotificacion"><span class="notificaciones_menu" id="pedidosNotificacionPedidosMenuPrincipal">x</span></div></a>
+                    </div>
+                </td>
+                <td style="width:120px">
+                    <div class="div_icono_menu"><a id="mBtnMenuNoDisponible" data-theme="b" data-role="button"  style="border-width: 0px; padding-top: 0px; padding-bottom: 0px; padding-right: 0px; padding-left: 0px;"> <img src="images/recepciones_off.png" >
+                        <div class="div_notificaciones_menu" id="recepcionNotificacion"><span class="notificaciones_menu">x</span></div></a>
+                    </div>
+                </td>
+                <td style="width:120px">
+                    <div class="div_icono_menu"><a id="mBtnMenuNoDisponible" data-theme="b" data-role="button"  style="border-width: 0px; padding-top: 0px; padding-bottom: 0px; padding-right: 0px; padding-left: 0px;"> <img src="images/devoluciones_off.png">
+                        <div class="div_notificaciones_menu" id="devolucionNotificacion"><span class="notificaciones_menu">x</span></div></a>
+                    </div>
+                </td>
+                <td style="text-align:right">
+                    <div class="div_icono_menu">&nbsp;</div></td>
+                <td><div class="div_icono_menu"><a id="mBtnMenuCargaTotal" data-theme="b" data-role="button"  style="border-width: 0px; padding-top: 0px; padding-bottom: 0px; padding-right: 0px; padding-left: 0px;"> <img src="images/refresco.png"></a>
+
+                </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5">&nbsp;</td>
+            </tr>
+            <tr>
+                <td style="width:120px"><div class="div_nombre_menu" id="mTextoIndicePedidos">Pedidos</div></td>
+                <td style="width:120px"><div class="div_nombre_menu" id="mTextoIndiceRecepciones">Recepciones</div></td>
+                <td style="width:120px"><div class="div_nombre_menu" id="mTextoIndiceDevoluciones">Devoluciones</div></td>
+                <td><div class="div_nombre_menu"></div></td>
+                <td style="text-align:right"><div class="div_nombre_menu" id="mTextoIndiceActualizacion">Actualización de datos</div></td>
+            </tr>
+            <tr>
+                <td colspan="5">&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="5">&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="5">&nbsp;</td>
+            </tr>
+            <tr>
+                <td style="width:120px"><div class="div_icono_menu"><a id="mBtnMenuNoDisponible" data-theme="b" data-role="button"  style=" border-width: 0px; padding-top: 0px; padding-bottom: 0px; padding-right: 0px; padding-left: 0px;"> <img src="images/expedicion_off.png">
+                    <div class="div_notificaciones_menu" id="expedicionNotificacion"><span class="notificaciones_menu">x</span></div></a>
+                </div></td>
+                <td style="width:120px"><div class="div_icono_menu"><a id="mBtnMenuNoDisponible" data-theme="b" data-role="button"  style=" border-width: 0px; padding-top: 0px; padding-bottom: 0px; padding-right: 0px; padding-left: 0px;"> <img src="images/inventario_off.png">
+                    <div class="div_notificaciones_menu" id="inventarioNotificacion"><span class="notificaciones_menu">x</span></div></a>
+                </div></td>
+                <td style="width:120px"><div class="div_icono_menu"><a id="mBtnMenuNoDisponible" data-theme="b" data-role="button"  style=" border-width: 0px; padding-top: 0px; padding-bottom: 0px; padding-right: 0px; padding-left: 0px;"> <img src="images/mermas_off.png">
+                    <div class="div_notificaciones_menu" id="mermasNotificacion"><span class="notificaciones_menu">x</span></div></a>
+                </div></td>
+                <td><div class="div_icono_menu">&nbsp;</div></td>
+                <td style="text-align:right"><a id="mBtnMenuCargaTotal" data-theme="b" data-role="button"  style="border-width: 0px; padding-top: 0px; padding-bottom: 0px; padding-right: 0px; padding-left: 0px;"> <div class="div_icono_menu" id="BtnSistema"><img src="images/sistema.png"></div></a></td>
+            </tr>
+            <tr>
+                <td colspan="5">&nbsp;</td>
+            </tr>
+            <tr>
+                <td style="width:120px"><div class="div_nombre_menu" id="mTextoIndiceExpedicion">Expedición</div></td>
+                <td style="width:120px"><div class="div_nombre_menu" id="mTextoIndiceInventario">Inventario</div></td>
+                <td style="width:120px"><div class="div_nombre_menu" id="mTextoIndiceMermas">Mermas</div></td>
+                <td ><div class="div_nombre_menu"></div></td>
+                <td style="text-align:right"><div class="div_nombre_menu" id="mTextoIndiceSistema">Sistema</div></td>
+            </tr>
+        </table>
+
+    </div>
+
+    <!--- PEU DE PAGINA ------------------------------------------------ <a data-role='button' style='background: #e9e9e9; border-color: #e9e9e9; box-shadow:0 0 0' > -->
+    <div data-role="footer" class="ui-bar" data-position="fixed" style="width:98%">
+        <div id="footerMenuPrincipal">
+            <div class="ui-grid-c">
+                <div class="ui-block-a" style="width:10%; min-width:100px"> 
+                	 <img src="images/icno_mambo_cabecera.png" >	
+                </div>
+                <div class="ui-block-b" style="width:23%">
+             			 <span><label class="versionApp"> </label> 
+             		</span>
+                </div>
+                <div class="ui-block-c" style="width:62%" > <label id="mLbLastDataPrincipal" align="right"></label></div>
+
+                <div class="ui-block-d" style="width:5%" align="right" id="imagenConexionMenu"> <span id="imagenConexionMenuPrincipal"> <img id="status_connection" src="./images/verde.png" id="mImageOnline" style="margin-left:20px;" align="right"> </span> </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- PAGINA WEB DE CUADRO DE DIALOGO -->
+<div data-role="page" id="dialogDelete">
+    <div data-role="header">
+        <h2>Confirmación</h2>
+    </div>
+    <div data-role="content">
+        <p>¿Desea eliminar este pedido?</p>
+        <a data-role="button" id="btnDelete" data-theme="a" style="background: #fcb814; border-color: #fcb814">Aceptar</a>
+        <a href="#detalle" data-rel="back" data-role="button"  data-theme="a" style="background: #fcb814; border-color: #fcb814">Rechazar</a>
+    </div>
+</div>
+
+<!---  PAGINA WEB DE INCIDENCIAS          -->
+<div data-role="page" id="Sistema" data-title="Sistema">
+
+	 	<div data-role="header"  style="border-bottom-width:1px; border-bottom-style:solid; border-bottom-color:#FAAB00;	background-color:#FFF; font-size: x-large">
+		    <div class="ui-block-a" style="width: 20%; margin-left:10px">
+	            <a href="#"><img  src="./images/btn_atras.png" id="btnSistemasHeaderBack" data-theme="b" ></a>
+	        </div>
+	        <h1 id="sTituloSistemas">Sistema</h1>
+	  </div>
+	  
+	  <div id="menuSistema">
+	    <div data-role="content">
+	    	<div class="ui-grid-c" style="width:90%">
+		        <div class="ui-block-a">
+			         <a id="btnEnviarDB" data-theme="b" data-role="button"  style=" border-width: 0px; padding-top: 0px; padding-bottom: 0px; padding-right: 0px; padding-left: 0px;">
+			         <img src="images/bbdd_mail.png">
+			         <label id="sLbEnviarDb">Enviar Base de datos</label>
+			         </a>
+			         <a id="btnReportarIncidencia" data-theme="b" data-role="button"  style=" border-width: 0px; padding-top: 0px; padding-bottom: 0px; padding-right: 0px; padding-left: 0px;">
+			         <img src="images/incidencias.png">
+			         <label id="sLbReportarIncidencia">Reportar incidencia</label>
+								</a>
+		     	</div>
+		     	<div class="ui-block-b">
+
+		     	</div>
+		     	<div class="ui-block-c">
+
+		     	</div>
+		     </div>
+	    </div>
+	    <div data-role="footer" class="ui-bar" data-position="fixed" style="width:98%">
+	        <div id="" style="padding-left: 2%; padding-right: 2%">
+	            <div class="ui-grid-c">
+	                <div class="ui-block-a" style="width:10%; min-width:100px"> 
+	                	 <img src="images/icno_mambo_cabecera.png" style="height:80px">	
+	                </div>
+	                <div class="ui-block-b" style="width:23%">
+	             			 <span><label class="versionApp"> </label> 
+	             		</span>
+	                </div>
+	                <div class="ui-block-c" style="width:33%" ></div>
+
+	                <div class="ui-block-d" style="width:33%" align="right" id=""> 
+	                	<img id="sStatusConnection" src="./images/verde.png" style="margin-left:20px;" align="right">
+	                </div>
+	            </div>
+	        </div>
+    	</div>
+
+    </div> 	
+    
+    
+    
+     
+		<div id="reportarIncidencia">
+		    <div data-role="content" style="text-align: left">
+		        	<form class="contact_form" action="#" method="post" >
+		   					 <ul class="test">
+						       <li style="width:25%">
+						           <label for="centro" id="sLbCentro" style="font-weight:bold;"></label>
+						           <input type="text" id="listaCentrosIncidencia" style=""  />
+						       </li>
+						       <li>
+						           <label for="asunto" id="sLbAsunto" style="font-weight:bold;" ></label>
+						           <input type="text" id="Asunto" class="" style="" required />
+						       </li>
+						       <li>
+						           <label for="descripcion" id="sLbDescripcion" style="font-weight:bold;">xxxxx</label>
+						           <textarea id="Descripcion" name="descripcion" rows="6" cols="50" style="height: 100px;width:100%;resize:none"  ></textarea>
+						       </li>
+						       <li>
+						       	<div class="ui-grid-a" style="">
+			                <div class="ui-block-a" style="padding-right:2%;"><label for="persona" id="sLbPersona" style="font-weight:bold;"></label></div>
+			                <div class="ui-block-b" style=""><label for="telf" id="sLbTelefono" style="font-weight:bold;"></label></div>
+		            		</div>
+						       </li>
+						       <li>
+						       	<div class="ui-grid-a">
+			                <div class="ui-block-a" style="padding-right:2%;"><input type="text"  id="Persona"style="width:100%;"/></div>
+			                <div class="ui-block-b" style=""><input type="text"  id="Telf" style="width:100%;"/></div>
+		            		</div>
+						       </li>
+		    					</ul>
+							</form>
+		    </div>
+		    
+		    
+		   
+		    
+		    
+		    <div data-role="footer" class="ui-bar" data-position="fixed" style="width:98%">
+		        <div id="footerLogin" style="padding-left: 2%; padding-right: 2%">
+		            <div class="ui-grid-b" style="background-color:#e6e7e9;">
+		                <div class="ui-block-a" align="left"><div id="divBoton1" style="text-align:center;display:inline" ><a data-role="button" data-theme="a" id="iBtnAddImagen" style="text-shadow: 0 0 0; font-size: 16px; margin-top: 10px;">Adjuntar imagen</a></div></div>
+		                <div class="ui-block-b" align="left"><div id="divBoton2" style="text-align:center;display:inline" ><a data-role="button" data-theme="a" id="iBtnEnviar" style="text-shadow: 0 0 0; font-size: 16px; margin-top: 10px;">Enviar</a></div></div>
+		                <div class="ui-block-c" align="right"></span> <span id="imagenConexionMenuPrincipal">  <img id="" src="./images/verde.png" style="margin-left:20px;" align="right"> </span> 
+		            </div>
+		        </div>
+		    </div>
+		</div>
+	</div>
+
+
+		<!-- Pantalla envio de BD -->
+	    
+	  <div id="enviarBD">
+	    	<div data-role="content" style="text-align: left">
+	    		
+	        	<form class="enviarBDForm" action="http://cimc.esadecreapolis.com/aaa/enviarEmail.php" method="post" > 
+				
+		           <label id="enviarBDText" style="font-weight:bold;"> Generando BD </label><br>
+		            <label id="enviarBDText1" style="font-weight:bold; visibility: hidden"> Enviando BD </label><br>
+		             <label id="enviarBDText2" style="font-weight:bold; visibility: hidden"> Proceso Finalizado </label><br>
+		           
+		           <input type="text" id="enviarBDTo" name="enviarBDTo" class="" style="width:100%;" /><br>
+		           <input type="text" id="enviarBDSubject" name="enviarBDSubject" class="" style="width:100%;" /><br>
+		           <input type="textarea " id="enviarBDContenido"  name="enviarBDContenido" class="" style="width:100%;" /><br><br>
+						
+							  <input type="submit" value="submit" name="submit"/>
+				
+						</form> 
+	    	</div>
+	    	
+	    	<div data-role="footer" class="ui-bar" data-position="fixed" style="width:98%">
+	        <div id="footerLoginx" style="padding-left: 2%; padding-right: 2%">
+	            <div class="ui-grid-a" style="background-color:#e6e7e9;">
+
+	                <div class="ui-block-a" align="left"><div id="divBoton2" style="text-align:center;display:inline" ><a data-role="button" data-theme="a" id="iBtnEnviarBD" style="text-shadow: 0 0 0; font-size: 16px; margin-top: 10px;">Enviar</a></div></div>
+	                <div class="ui-block-b" align="right"></span> <span id="imagenConexionMenuPrincipalx">  <img id="" src="./images/verde.png" style="margin-left:20px;" align="right"> </span> 
+	            </div>
+	        </div>
+	    	</div>
+	    
+	  </div>
+	    
+	    
+	    
+	  <div data-role="popup" id="DialogIncidenciaOffLine" data-theme="a" data-dismissible="false" class="" data-overlay-theme="a" data-transition="flip">
+		    <div data-role="header"  style="background-color:#e6e7e9; color: #231f20; font-size: x-large">
+		    	 <center>
+		        <div class="ui-grid-b" style="width:95%">
+			        <div class="ui-block-a" style="width:15%"><img src="images/logoMambo.png" style="height: 65px;"></div>
+			        <div class="ui-block-b" style="width:70%; text-align:center"><h2><label id="A2title_text">Problema con la conexion</label></h2></div>
+			        <div class="ui-block-c" style="width:15%; text-align:right"><img id="pedidosDialogIconoRefrescar"src="images/amarillo.png" style="margin-top:20%"></div>
+		        </div>
+           </center>
+		        
+		    </div>
+		    <div data-role="content">
+		        <center>
+		            <div>
+		                <label id="LbDetalleNuevoArticulo">No tiene conexion para poder reportar la incidencia. Por favor conectese primero a internet</label>
+		            </div>
+		            <div class="ui-grid-b">
+			            <div class="ui-block-a"></div>
+			            <div class="ui-block-b"></div>
+			            <div class="ui-block-c"><button type="button" id="btnpDialogIncidenciaOffLine" data-theme="a"  style="margin-top:15px" >Salir</button></div>
+			          </div>
+		        </center>
+		    </div>
+	  </div>
+
+</div>
+
+		
+ 
+	
+</body>
+</html>

@@ -1,0 +1,2335 @@
+
+/**
+* Llamadas a WS y enlace con la BD
+*/
+
+
+var _porPurchase=2;
+var _porZones=3;
+
+var _porOrders=3;
+var _porPlantillas=2;
+var _porFamilias=5; //15 %
+
+var _porCatalog=15; //30 %
+var _porItems=25; 	//55 %
+
+var _porLogisticChains=10;
+
+var _porRelVendor=12;
+var _porVendors=13;
+var _porEAN=10;
+
+localStorage['cargaPaso1']=0;
+localStorage['cargaPaso2']=0;
+localStorage['cargaPaso3']=0;
+localStorage['cargaPaso4']=0;
+localStorage['cargaPaso5']=0;
+localStorage['cargaPaso6']=0;
+localStorage['cargaPaso7']=0;
+localStorage['cargaPaso8']=0;
+localStorage['cargaPaso9']=0;
+localStorage['cargaPaso10']=0;
+localStorage['cargaPaso11']=0;
+localStorage['cargaPaso12']=1; //ESTADOS
+localStorage['pModoCargaParcial']="";
+
+var errorCargaInicial=0;
+var maxtime=400000;
+
+var tipoLogWS=10;
+var categoriaLogWS=0;
+var categoriaLogWSError=1;
+
+function restServices(res){	
+                          
+	if (localStorage["token"]=!null) {
+		var currentdate = new Date(); 
+		localStorage["ultima_carga"] = currentdate.getTime();
+
+		traducir();
+		
+		//trunkDB();
+		
+		errorCargaInicial=0;
+		
+		var sqlS = "SELECT DISTINCT(nombre) as nombre FROM tablas";
+	
+		db.transaction ( 
+		function (transaction) 
+		{
+			
+			localStorage['recargaTotal']="recargaTotal";
+			localStorage['errorEnCarga']=0;
+			
+			transaction.executeSql (sqlS, undefined, 
+			function (transaction, result)
+			{
+				for (var i = 0; i < result.rows.length; i++) 
+				{
+					nombre = result.rows.item(i).nombre;
+					
+					console.log("ALTER TABLE "+nombre+" RENAME TO back_"+nombre);
+					
+					transaction.executeSql ("ALTER TABLE "+nombre+" RENAME TO back_"+nombre, [],  function (tx ) { } , errorAqui);
+
+				}
+			});
+
+		});
+		
+		setTimeout(cargaLlamadasWS(res), 10000);
+		
+		
+		
+
+	}
+	
+	//localStorage["pantalla"]="menuPrincipal";
+	//completedLoad();
+	
+}
+
+
+function cargaLlamadasWS(res){
+		_createTable();
+	
+		insertUserSecurity(res);
+		
+		
+  	var user = $('#user_txt').text();
+  	
+		var texto = $('#LbUltimaCargaProgress').text();
+		
+		if (user == localStorage['ultimo_usuario'])
+			$('#LbUltimaCargaProgress').text(texto+localStorage["ultimaCarga"]);
+		else
+			$('#LbUltimaCargaProgress').text("");
+
+
+		localStorage['errorEnCarga']=0;
+		localStorage['porcentageCarga']=0;
+		
+		console.log(" CAMBIO DE PANTALLA ");
+		
+		localStorage['textoCargaInicial']="";
+		$.mobile.changePage('#progressPage');		
+		
+		progress(1, "" );
+		insertUserData(); // Añadimos a la Db los datos del usuario (fecha, usuario, pass MD5)
+		console.log("Hemos vaciado la base de datos");
+		localStorage["ultimo_usuario"]=localStorage["usuario"]; // Guardamos el ultimo usuario que se ha logado
+		var estado= 0;
+		
+		insertLog(1,2,"Inicio de la carga de datos","Ambito");//Log de comienzo de la carga de datos
+		console.log("Insercion del log de inicio de la carga de datos");
+		//Guardamos los permisos y el ambito
+		//deleteDB();
+
+		localStorage['pModoCargaParcial']="";
+		
+		
+		localStorage['cargaPaso1']=0;
+		localStorage['cargaPaso2']=0;
+		localStorage['cargaPaso3']=0;
+		localStorage['cargaPaso4']=0;
+		localStorage['cargaPaso5']=0;
+		localStorage['cargaPaso6']=0;
+		localStorage['cargaPaso7']=0;
+		localStorage['cargaPaso8']=0;
+		localStorage['cargaPaso9']=0;
+		localStorage['cargaPaso10']=0;
+		localStorage['cargaPaso11']=0;
+		localStorage['cargaPaso12']=1;
+		
+		
+		//insertTiempos(0);
+		
+		restSecuritySettingsJSON();
+		
+		restPurchaseCenterJSON();
+
+		restDeliveryZonesJSON();
+		restStatusJSON();	
+		
+		restPurchaseCentersAllVendorsJSON(); // dentro addAllVendors();
+		//restRelItemsJSON(); 								 // dentro addAllItems();
+
+		restCatalogJSON();
+		restLogisticChainsJSON();
+		
+		restAllOrdersJSON();
+
+		restAllTemplatesJSON();
+		
+		restFamiliesJSON();
+		
+		restEANSJSON();
+	
+		
+	  
+	  //insertTiempos(1);
+			
+		console.log(" FIN JSON ");
+}
+
+
+function insertUserSecurity(data) {
+	
+    var y = 0;
+    var querys = new Array();
+    var modulo="";
+      
+    if (data != null) {  
+        
+	    if (typeof(data.body.authorities.APP_ORDERS) != "undefined"  ) {
+				
+				modulo="APP_ORDERS";
+				$.each(data.body.authorities.APP_ORDERS, function() {
+	
+						querys[y]='INSERT OR IGNORE INTO security (username, module , action )  VALUES ("'+ localStorage['usuario']+'", "'+modulo+'", "'+this+'")';
+						y++;
+						
+				});
+			}
+	    		
+			
+			if (typeof(data.body.authorities.APP_DELIVERY) != "undefined"  ) {
+				
+				modulo="APP_DELIVERY";
+				$.each(data.body.authorities.APP_DELIVERY, function() {
+		    	
+		    		querys[y]='INSERT OR IGNORE INTO security (username, module , action )  VALUES ("'+ localStorage['usuario']+'", "'+modulo+'", "'+this+'")';
+						y++;
+						
+				});
+			}
+			
+			
+			$.each(data.body.scopes, function() {
+	    	
+					querys[y]='INSERT OR IGNORE INTO scopes (username, scope)  VALUES ("'+ localStorage['usuario']+'", "'+this+'")';; 
+					y++;	
+				
+			});
+	      
+	          
+	    // Ejecutar todas las querys en bloque              
+	    db.transaction ( 
+			  function (transaction) 
+			  {
+			      var qa="";
+				    
+				    console.log("BD Inicio de lote Centers ");
+				    
+				    for (i=0; i < querys.length; i++) {  	
+				    	
+				    	qa=querys[i];
+				    	
+				    	//console.log(" " + qa ); 
+				    	
+					    transaction.executeSql (qa, [],  function ()
+					    {
+					    }, error);
+					     
+					  }
+	  
+				  
+				}
+			);
+		}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Centros de venta
+function restPurchaseCenterJSON() {
+		
+		
+		
+		var uri = "/purchasecenters/";	
+		var dir = host+uri;
+
+		console.log("URL Purchase Center: " + dir);
+		$.mobile.changePage('#progressPage');		
+		
+		insertLog(tipoLogWS,categoriaLogWS,"Llamar al WS " + uri,"");
+		
+		$.ajax({
+				async: true, timeout: maxtime,
+				url:dir,
+				data: {token:token},
+			  contentType: 'application/json',
+				dataType: "json",
+				//method : 'GET', 
+				type:"GET",
+				success:addPuchaseCenter,
+				error: function (uri) { errorDeWS(uri); }
+			
+		});
+	
+		
+}
+
+
+
+
+function addPuchaseCenter(data){	
+		
+		var debug=0;
+
+    console.log("JSON de CENTROS DE VENTA");
+    //if (debug==1) { console.log(JSON.stringify(data)); }
+        
+    var y = 0;
+    
+    var querys = new Array();
+    
+    $.each(data.body, function() {
+    	
+				var center = {};
+
+			  if ( this.purchaseCenterId === undefined ) {  this.purchaseCenterId=0;   }
+			  if ( this.name === undefined ) {  this.name =""; }
+			  if ( this.type === undefined ) {  this.type =""; }
+			  if ( this.shortName === undefined ) {  this.shortName =""; }
+
+			 	center.id=this.purchaseCenterId;
+				center.nombre=this.name.replace( "\u0027", "´" );
+				//center.nombre = center.nombre.replace( "\u0027", "" );
+				center.tipo=this.type;
+				center.shortName=this.shortName;
+				center.currency=this.currency;
+				
+				if (center.id > 0 ) {
+							 querys[y]=getQueryInsertPurchaseCenter(center); 
+							 y++;
+				}
+
+		});
+            
+    // Ejecutar todas las querys en bloque              
+    db.transaction ( 
+		  function (transaction) 
+		  {
+		      var qa="";
+			    
+			    console.log("BD Inicio de lote Centers ");
+			    
+			    for (i=0; i < querys.length; i++) {  	
+			    	
+			    	qa=querys[i];
+			    	
+			    	//if (debug==1) {  console.log(" " + qa ); }
+			    	
+				    transaction.executeSql (qa, [],  function ()
+				    {
+				    }, controlErrorCarga);
+				     
+				  }
+			  
+			    var estado= 1;
+			  	
+			  	//progress(parseInt(localStorage['porcentageCarga']), getEstadoCarga(estado) );
+			  	
+			  	localStorage['porcentageCarga']= parseInt(localStorage['porcentageCarga'])+ _porPurchase;
+			  	localStorage['cargaPaso1']=1;
+			  	
+			  	progress(parseInt(localStorage['porcentageCarga']), getEstadoCargaAsincrono(estado) );
+			  	
+			  	cargadoTotal(estado);
+			  	
+			  	console.log("BD FIN Centros de compra  Porcentage " +localStorage['porcentageCarga'] ); 
+			  
+			}
+		);
+				  
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+//EANS
+function restEANSJSON() {
+		
+
+var uri = "/purchasecenters/vendors/items/eans/";			var dir = host+uri;
+
+		insertLog(tipoLogWS,categoriaLogWS,"Llamar al WS " + uri,"");
+		console.log("URL EANS: " + dir);
+		
+		$.ajax({
+				async: true, timeout: maxtime,
+				url:dir,
+				data: {token:token},
+			  contentType: 'application/json',
+				dataType: "json",
+				//method : 'GET', 
+				type:"GET",
+				success:addEANs,
+				error: function (uri) { errorDeWS(uri); }
+			
+		});
+		
+}
+
+function addEANs(data){	
+		
+		var debug=0;
+
+    console.log("JSON de EANS");
+    //if (debug==1) { console.log(JSON.stringify(data)); }
+        
+    var y = 0;
+    
+    var querys = new Array();
+    var error=0;
+    
+    $.each(data.body, function() {
+    	
+				var ean = {};
+				/*
+				 "status": "A",
+         "logisticsChainId": "00",
+         "itemId": 427936,
+         "sizeId": "0000",
+         "isMain": 1,
+         "eanId": "033991042209"
+        */
+       
+        //error=0;
+        /*
+        if ( this.itemId === undefined ) { error=1;  }       
+			  if ( this.eanId === undefined ) {  error=1;   }
+			  if (error == 0) {
+			  	
+			  	*/
+			  	ean.idItem=this.itemId;
+				 	ean.idEAN=this.eanId;
+					
+					ean.idLogisticsChain=this.logisticsChainId;
+					ean.sizeId=this.sizeId;
+					
+					if ( this.isMain === undefined ) {  ean.isMain=0;   }
+					else { ean.isMain=this.isMain; }
+						
+					if ( this.status === undefined ) {  ean.status=0;   }
+					else { ean.status=this.status; }
+						
+					//console.log(" ALGO => "+ getQueryInsertEANS(ean));
+				  querys[y]=getQueryInsertEANS(ean); 
+				  y++;
+					
+				//}
+		});
+            
+    // Ejecutar todas las querys en bloque              
+    db.transaction ( 
+		  function (transaction) 
+		  {
+		      var qa="";
+			    
+			    console.log("BD Inicio de lote EANs ");
+			    
+			    for (i=0; i < querys.length; i++) {  	
+			    	
+			    	qa=querys[i];
+			    	//console.log(" ALGO => "+ qa);
+				    transaction.executeSql (qa, [],  function ()
+				    {
+				  }, controlErrorCarga );
+				     
+				  }
+			  
+			    var estado= 7;
+			  	
+			  	//progress(parseInt(localStorage['porcentageCarga']), getEstadoCarga(estado) );
+			  	
+			  	localStorage['porcentageCarga']= parseInt(localStorage['porcentageCarga'])+ _porEAN;
+			  	localStorage['cargaPaso7']=1;
+			  	
+			  	progress(parseInt(localStorage['porcentageCarga']), getEstadoCargaAsincrono(estado) );
+			  	
+			  	cargadoTotal(estado);
+			  	
+			  	console.log("BD FIN  EANS  Porcentage " +localStorage['porcentageCarga'] ); 
+			  
+			}
+		);
+				  
+}
+
+function restDeliveryZonesJSON() {
+	
+		var uri = "/purchasecenters/deliveryzones/";	
+		var dir = host+uri;
+		
+		insertLog(tipoLogWS,categoriaLogWS,"Llamar al WS " + uri,"");
+		console.log("URL Delivery Zones: " + dir);
+				
+		$.ajax({
+				async: true, timeout: maxtime,
+				url:dir,
+				data: { token:token },
+				contentType: 'application/json',
+				dataType: "json",
+				type:"GET",
+				success:addDeliveryZones,
+				error: function (uri) { errorDeWS(uri); }
+			
+		});
+	
+		
+}
+
+
+function addDeliveryZones(data){	
+		
+		var debug=0;
+	
+    console.log("JSON de Zonas de entrega");
+    console.log(JSON.stringify(data));
+        
+    var y = 0;
+    var error= 0;
+    var querys = new Array();
+    
+    $.each(data.body, function() {
+    	
+    		/*
+    		"address": "PAISOS CATALANS, S/N",
+        "currency": "EUR",
+        "deliveryZoneId": "COC",
+        "globalLocationNumber": "8432897007084",
+        "main": 0,
+        "name": "COCINA",
+        "responsible": "VICTOR DE LA ROSA RIDRIGUEZ",
+        "siteId": "407",
+        "purchaseCenterId": 40710,
+        "purchaseCenterName": "SANTS EST ARS",
+        "type": "H"
+    		*/
+    	
+				var center = {};
+				error= 0;
+				
+			  if ( this.deliveryZoneId === undefined ) { error=1; }
+			  else { error=0; }
+			  
+			  if (error==0) {
+			  
+				    center.idDeliveryZone=this.deliveryZoneId;
+				    center.name=this.name.replace( "\u0027", "´" );
+					center.idPurchaseCenter=this.purchaseCenterId;
+					center.type=this.type;
+	
+					if (center.idDeliveryZone != "" ) {
+								 querys[y]=getQueryInsertDeliveryZones(center); 
+								 y++;
+					}
+				}	
+		});
+            
+    // Ejecutar todas las querys en bloque              
+    db.transaction ( 
+		  function (tx) 
+		  {
+		      var qa="";
+			    
+			    console.log("BD Inicio de lote Zonas de entrega ");
+			    
+			    for (i=0; i < querys.length; i++) {  	
+			    	
+			    	qa=querys[i];
+			    	
+			    	if (debug==1) {  console.log(" q = " + qa + " -> "+ typeof qa ); }
+			    	
+				    tx.executeSql (  qa ,[], function(){} , controlErrorCarga);
+				    
+				  }
+			  
+			  	var estado= 2;
+			  	//progress(parseInt(localStorage['porcentageCarga']), getEstadoCarga(estado) );
+			  	
+		  		localStorage['porcentageCarga']= parseInt(localStorage['porcentageCarga']) + _porZones;
+		  		localStorage['cargaPaso2']=1;
+			  	progress(parseInt(localStorage['porcentageCarga']), getEstadoCargaAsincrono(estado) );
+			  	
+			  	cargadoTotal(estado);
+			  	
+			  	
+			   
+			});
+			  
+}
+
+// Relacion centros de venta -> Proveedores
+function restPurchaseCentersAllVendorsJSON() {
+
+	var uri = "/purchasecenters/vendors/";	
+	
+	var dir = host+uri;
+	console.log("URL Vendors: " + dir);
+	insertLog(tipoLogWS,categoriaLogWS,"Llamar al WS " + uri,"");
+	
+	$.ajax({
+		async: true, timeout: maxtime,
+		url:dir,
+		data: { token:token },
+		contentType: 'application/json',
+		dataType: "json",
+		method : 'GET', 
+		type:"GET",
+		success:addPurchaseCentersAllVendors,
+		error: function (uri) { errorDeWS(uri); }
+		
+	});
+
+	
+}
+
+
+function addPurchaseCentersAllVendors(data){	
+		
+		var debug=0;
+	
+    if (debug==1) console.log("JSON de Purchase Centers -> Vendors");
+   //if (debug==1) { console.log(JSON.stringify(data)); }
+        
+    var y = 0;
+    
+    var querys = new Array();
+    var error = 0;
+    var rel = {};
+    
+    $.each(data.body, function() {
+    	
+        error=0;
+        rel={};
+				
+			  if ( this.purchaseCenterId === undefined || this.purchaseCenterId == 0 || this.purchaseCenterId == '' ) {  error=1;  }
+			  if ( this.vendorId === undefined || this.vendorId == 0 || this.vendorId == '' ) {  error=1; }
+			  
+        if (error==0 ) {
+		 	
+  			 	rel.idCentroVenta=this.purchaseCenterId;
+  				rel.idProveedor=this.vendorId; 
+          rel.vendorCommunicationType=this.vendorCommunicationType;
+          querys[y]=getQueryInsertRelPurchaseCentersVendors(rel); 
+					y++;
+				} else {
+          console.log("Relacion Centro compra -> Proveedor No valida");
+        }
+        				
+		});
+            
+    // Ejecutar todas las querys en bloque              
+    db.transaction ( 
+		  function (transaction) 
+		  {
+		   
+			    var i=0;
+			    var qa="";
+			    
+			    if (debug==1) console.log("BD Inicio de lote Purchase Centers -> Vendors ");
+			    
+			    for (i=0; i < querys.length; i++) {  	
+			    	
+			    	qa=querys[i];
+			    	
+			    	//if (debug==1) {  console.log(" " + qa + " ;"); }
+			    	
+				    transaction.executeSql (qa, [],  function ()
+				    {
+				    }, controlErrorCarga);
+				     
+				  }
+			  	
+			  	localStorage['cargandoNumVendors']= ( i - 1 );
+			  	
+			  	var estado= 3;
+			  	//progress(parseInt(localStorage['porcentageCarga']), getEstadoCarga(estado) );
+          
+          localStorage['porcentageCarga']= parseInt(localStorage['porcentageCarga']) + _porRelVendor;
+          localStorage['cargaPaso3']=1;
+			  	progress(parseInt(localStorage['porcentageCarga']), getEstadoCargaAsincrono(estado) );
+			  	
+			  	cargadoTotal(estado);
+			  	
+			    if (debug==1) console.log("BD FIN de lote Purchase Centers -> Vendors " + i);
+			    
+			    addAllVendors();
+			});
+			
+     
+}
+
+
+function error2() {
+	console.log("error en la query");
+	
+}
+
+//Maestro Proveedores
+function addAllVendors() {
+   db.transaction ( 
+		  function (transaction) 
+		  {
+        //Buscamos todos los centros de venta
+		    var q="SELECT DISTINCT(idPurchaseCenter) FROM relPurchaseCenter_Vendors";
+        transaction.executeSql (q, [],  function (transaction, result)
+			  { 
+			  		var aux;
+			  		
+			  		
+			  	  for (var i = 0; i < result.rows.length; i++) 
+			      {
+			          aux = result.rows.item(i);
+                restVendorJSON(aux.idPurchaseCenter);
+            } 
+						
+						
+						if (result.rows.length==0) { console.log("000000000000000000000000000000000000000000000000000000000000000000"); }
+						
+						
+						var estado= 4;
+			  		//progress(parseInt(localStorage['porcentageCarga']), getEstadoCarga(estado) );
+			  		localStorage['porcentageCarga']= parseInt(localStorage['porcentageCarga']) + _porVendors;
+			  		localStorage['cargaPaso4']=1;
+				  	progress(parseInt(localStorage['porcentageCarga']), getEstadoCargaAsincrono(estado) );
+				  	
+				  	cargadoTotal(estado);
+						
+        }, error);
+       
+			}
+		);
+
+}
+
+
+function restVendorJSON(idPurchaseCenter) {
+
+	var uri = "/purchasecenters/"+idPurchaseCenter+"/vendors/";	
+	var dir = host+uri;
+	console.log("CALL WEBService Providers URL: " + dir);
+	insertLog(tipoLogWS,categoriaLogWS,"Llamar al WS " + uri,"");
+	
+	$.ajax({
+		async: true, timeout: maxtime,
+		url:dir,
+		data: { token:token },
+		contentType: 'application/json',
+		dataType: "json",		
+		//method : 'GET', 
+		type:"GET",
+		success: addDetailVendors,
+		error: function (uri) { errorDeWS(uri); }
+		
+	});
+
+	console.log("FIN descarga " + dir);
+}
+
+
+function addDetailVendors(data){	
+	
+    console.log("JSON de los Proveedores -------------------------------------------------------- ");
+    //console.log(JSON.stringify(data));
+  	
+  	var debug=0;
+  	
+  	var querys= new Array();
+		var n = data.body.length;
+     
+    var proveedor = {};
+    var elem = null;
+    for (var i=0; i < n ; i++) {
+			
+			proveedor = {};
+			elem = data.body[i];
+			
+      /*
+      Ejemplo 
+      "address": "CALLE PAJARITOS, 24 ",
+      "city": "MADRID",
+      "contactExtensionNumber": "546",
+      "contactId": "CSANAHUJA",
+      "contactName": "CONSUELO",
+      "contactEmail": "chelo.sanahuja@areasmail.com",
+      "lastName1": "SANAHUJA",
+      "lastName2": "TOMAS",
+      "lastUpdate": "2013-11-09T08:00:27+0100",
+      "name": "PROSEGUR COMPAÑIA DE SEGURIDAD",
+      "phone": "915898310",
+      "taxId": "A28430882",
+      "vendorFinancialId": 717,
+      "vendorId": 717,
+      "zipCode": "28007"
+      */
+      	
+			proveedor.idVendor=elem.vendorId;
+      
+      if (elem.name === undefined ) {  elem.name=""; }
+			proveedor.name=JSON.stringify(elem.name).replace(/"/g,'').replace("'",'´');
+      
+			if (elem.phone === undefined ) {  elem.phone=""; }
+			proveedor.phone=JSON.stringify(elem.phone).replace(/"/g,'');
+			
+      querys[i]=getQueryInsertVendor(proveedor);
+                   
+  	}		
+    
+    // Ejecutar todas las querys en bloque
+    db.transaction ( 
+		  function (transaction) 
+		  {
+		   
+		    var i=0;
+		    
+		    if (debug==1) console.log("BD Inicio de lote Proveedores ");
+		    
+		    for (i=0; i < querys.length; i++) {  	
+		    	
+		    	qa=querys[i];
+
+          //if (debug==1) {  console.log(" " + qa + " ;"); }
+			    	
+			    transaction.executeSql (qa, [],  function ()
+			    { 
+			    }, controlErrorCarga);
+		   							     
+			  }
+ 
+       // if (debug==1) console.log("Guardando Proveedores");	
+			}
+		);
+ 			  			
+}
+
+/*
+function restRelItemsJSON() {
+
+	var uri = "/purchasecenters/vendors/items/";	
+	var dir = host+uri;
+	console.log("CALL WEBService Rel Items URL: " + dir);
+	$.ajax({
+		async: true, timeout: maxtime,
+		url:dir,
+		data: { token:token },
+		contentType: 'application/json',
+		dataType: "json",
+		method : 'GET', 
+		type:"GET",
+		success:addRelItems,
+		error: function (uri) { errorDeWS(uri); }
+		
+	});
+
+	console.log("URL: " + dir);
+}
+
+
+function addRelItems(data){	
+		
+		var debug=0;
+	
+    if (debug==1) console.log("JSON de Items");
+    //if (debug==1) { console.log(JSON.stringify(data)); }
+        
+    var y = 0;
+    
+    var querys = new Array();
+    var error = 0;
+    var rel = {};
+    $.each(data.body, function() {
+    	
+        error=0;
+        rel={};
+				        
+        if ( this.purchaseCenterId === undefined || this.purchaseCenterId == 0 || this.purchaseCenterId == '' ) {  error=1;  }
+			  if ( this.vendorId === undefined || this.vendorId == 0 || this.vendorId == '' ) {  error=2; }
+			  if ( this.itemId === undefined || this.itemId == 0 || this.itemId == '' ) {  error=3;  }
+        
+        if (error==0 ) {
+		 	
+  			 	rel.idCentroVenta=this.purchaseCenterId;
+  				rel.idProveedor=this.vendorId; 
+          rel.idArticulo=this.itemId;
+          
+          querys[y]=getQueryInsertRelItems(rel); 
+					y++;
+					
+				} else {
+					
+					rel.idCentroVenta=this.purchaseCenterId;
+  				rel.idProveedor=this.vendorId; 
+          rel.idArticulo=this.itemId;
+					
+          console.log("Relacion Articulos No valida" + getQueryInsertRelItems(rel) );
+        }
+        				
+		});
+            
+    // Ejecutar todas las querys en bloque              
+    db.transaction ( 
+		  function (transaction) 
+		  {
+			    var i=0;
+			    var qa="";
+			    
+			    if (debug==1) console.log("BD Inicio de lote Relacion Articulos ");
+			    
+			    for (i=0; i < querys.length; i++) {  	
+			    	
+			    	qa=querys[i];
+			    	
+			    	//if (debug==1) {  console.log(" " + qa + " ;"); }
+			    	
+				    transaction.executeSql (qa, [],  function ()
+				    {
+			    	}, error2);
+				     
+				  }
+			  	var estado= 5;
+			  	
+			  	localStorage['cargaPaso5']="1";
+			  	
+			  	
+			  	localStorage['porcentageCarga']= parseInt(localStorage['porcentageCarga']) + _porRelItems;
+			  	
+			  	progress(parseInt(localStorage['porcentageCarga']), getEstadoCargaAsincrono(estado) );
+                   
+          
+			    if (debug==1) console.log("BD FIN de lote Relacion articulos");
+			    
+			    addAllItems();
+			});
+}
+
+*/
+
+function addAllItems(){
+	db.transaction ( 
+		  function (transaction) 
+		  {
+        //Buscamos todos los centros de venta
+		    var q="SELECT * FROM relPurchaseCenter_Vendors";
+        transaction.executeSql (q, [],  function (transaction, result)
+			  { 
+			  		var aux;
+			  		
+			  		localStorage['cargandoNumTotalItems']=result.rows.length;
+			  		
+			  	  for (var i = 0; i < result.rows.length; i++) 
+			      {
+			          aux = result.rows.item(i);
+                restItemsJSON(aux.idPurchaseCenter, aux.idVendor );
+            } 
+						
+						
+						
+						
+        }, controlErrorCarga);
+       
+			}
+		);
+	
+}
+
+
+function restItemsJSON(idPurchaseCenter, idVendor ){
+	var uri = "/purchasecenters/"+idPurchaseCenter+"/vendors/"+idVendor+"/items/";	
+
+	var dir = host+uri;
+	
+	insertLog(tipoLogWS,categoriaLogWS,"Llamar al WS " + uri,"");
+	
+	console.log("URL ITEMS: " + dir);
+
+	$.ajax({
+		async: true, timeout: maxtime,
+		url:dir,
+		data: { token:token },
+		contentType: 'application/json',
+		dataType: "json",
+		method : 'GET', 
+		type:"GET",
+		success:addItems,
+		error: function (uri) { errorDeWS(uri); }
+		
+	});
+
+}
+
+
+function addItems(data) {
+
+		/*
+		"artEsp": 0,
+    "desArtEsp": "Normal",
+    "desEstArt": "Activo",
+    "desUdsFmt": "UNIDAD",
+    "firstFamilyId": "03",
+    "firstFamilyName": "PAPELERIA",
+    "itemId": 550910,
+    "itemName": "AGENDAS 2014 (M12)-MORRIS DANZA DEL VIENTO  UN",
+    "secondFamilyId": "0303",
+    "secondFamilyName": "PAPELERIA OTROS",
+    "status": 0,
+    "thirdFamilyId": "030301",
+    "thirdFamilyName": "AGENDAS",
+    "type": "A",
+    "typeName": "Compra y venta",
+    "udsFmt": "UN"
+		*/
+		
+		var debug=0;
+	
+    if (debug==1) console.log("JSON de Items");
+    //if (debug==1) { console.log(JSON.stringify(data)); }
+        
+    var y = 0;
+    
+    var querys = new Array();
+    var error = 0;
+    var aux = {};
+    
+    $.each(data.body, function() {
+    	
+        error=0;
+        aux={};
+				    
+        aux.idItem=this.itemId;
+        //aux.name=this.itemName.replace(/"/g,"'");
+        
+        if (this.itemName != undefined)  {
+            aux.name=this.itemName.replace(/"/g,"´");
+            aux.name=this.itemName.replace(/"/g,"´");
+        }
+        else this.itemName="";
+        
+        aux.idFirstFamily=this.firstFamilyId;
+        aux.firstFamilyName=this.firstFamilyName;
+        aux.idSecondFamily=this.secondFamilyId;
+        aux.secondFamilyName=this.secondFamilyName;
+        aux.idThirdFamily=this.thirdFamilyId;
+        aux.thirdFamilyName=this.thirdFamilyName;
+        aux.status=this.status;
+        aux.artEsp=this.artEsp;
+        aux.desArtEsp=this.desArtEsp;
+        aux.desEstArt=this.desEstArt;
+        aux.desUdsFmt=this.desUdsFmt;
+        aux.type=this.type;
+        aux.typeName=this.typeName;
+        aux.udsFmt=this.udsFmt;
+        aux.itemUnitName=this.itemUnitName;
+        
+        //if ( this.itemId == "undefined" || this.itemId == 0 || this.itemId == '' ) {  error=1;  }
+			  
+        if (error==0 ) {
+
+          querys[y]=getQueryInsertItem(aux); 
+					y++;
+				} else {
+          console.log("Item no valido");
+        }
+        				
+		});
+            
+    // Ejecutar todas las querys en bloque              
+    db.transaction ( 
+		  function (transaction) 
+		  {
+		   
+			    var i=0;
+			    var qa="";
+			    
+			    if (debug==1) console.log("BD Inicio de lote Estados ");
+			    
+			    for (i=0; i < querys.length; i++) {  	
+			    	
+			    	qa=querys[i];
+			    	
+			    	//if (debug==1) {  console.log(" " + qa + " ;"); }
+			    	
+				    transaction.executeSql (qa, [],  function ()
+				    {
+				    }, controlErrorCarga);
+				     
+				  }
+			  	
+			  	var estado= 6;
+
+			  	//progress(parseInt(localStorage['porcentageCarga']), getEstadoCarga(estado) );
+			  	//localStorage['porcentageCarga']= parseInt(localStorage['porcentageCarga']) + _porPlantillas;
+
+			  	
+			
+			  	
+			  	localStorage['cargandoNumTotalItems'] = localStorage['cargandoNumTotalItems'] - 1;
+			  	if (parseInt(localStorage['cargandoNumTotalItems'])== 0 ) {
+			  		localStorage['cargaPaso6']=1;
+			  		console.log("CARGANDO!!!!!!!!!!!!!!!!!!!!! -> NUM TOTAL DE ITEMS CARGADO " );
+			  	} else {
+			  		console.log("CARGANDO!!!!!!!!!!!!!!!!!!!!! -> NUM TOTAL DE ITEMS " + localStorage['cargandoNumTotalItems']);
+			  		
+			  	}
+		  		
+			  	progress(parseInt(localStorage['porcentageCarga']), getEstadoCargaAsincrono(estado) );
+			  	
+			  	cargadoTotal(estado);
+          
+			    if (debug==1) console.log("BD FIN de lote Estados");
+			});
+				
+}
+
+// Catalogo
+function restCatalogJSON() {
+
+	var uri = "/purchasecenters/vendors/items/";	
+	var dir = host+uri;
+	
+	insertLog(tipoLogWS,categoriaLogWS,"Llamar al WS " + uri,"");
+	console.log("CALL WEB URL: " + dir);
+	$.ajax({
+		async: true, timeout: maxtime,
+		url:dir,
+		data: { token:token },
+		contentType: 'application/json',
+		dataType: "json",
+		method : 'GET', 
+		type:"GET",
+		success:addCatalog,
+		error: function (uri) { errorDeWS(uri); }
+		
+	});
+
+	
+}
+
+
+function addCatalog(data){	
+		
+		var debug=0;
+	
+    if (debug==1) console.log("JSON de Catalog");
+   // if (debug==1) { console.log(JSON.stringify(data)); }
+        
+    var y = 0;
+    
+    var querys = new Array();
+    var error = 0;
+    var rel = {};
+    $.each(data.body, function() {
+    	
+        error=0;
+        rel={};
+				
+        //if ( this.logisticsChainId === undefined || this.logisticsChainId == 0 || this.logisticsChainId == '' ) {  error=1;  }
+			  //if ( this.vendorId === undefined || this.vendorId == 0 || this.vendorId == '' ) {  error=1; }
+			  //if ( this.itemId === undefined || this.itemId == 0 || this.itemId == '' ) {  error=1;  }
+        
+        if (error==0 ) {
+
+          querys[y]=getQueryInsertCatalog(this); 
+					y++;
+				} else {
+          console.log("Relacion Articulos No valida");
+        }
+        				
+		});
+            
+    // Ejecutar todas las querys en bloque              
+    db.transaction ( 
+		  function (transaction) 
+		  {
+		   
+			    var i=0;
+			    var qa="";
+			    
+			    if (debug==1) console.log("BD Inicio de lote Relacion Articulos ");
+			    
+			    for (i=0; i < querys.length ; i++) {  	
+			    	
+			    	qa=querys[i];
+			    	
+			    	//if (debug==1) {  console.log(" " + qa + " ;"); }
+			    	
+				    transaction.executeSql (qa, [],  function ()
+				    {
+				    }, controlErrorCarga);
+				     
+				  }
+			  	
+			  	var estado= 8;
+			  	
+			  	localStorage['cargaPaso8']="1";
+			  	
+			  	localStorage['porcentageCarga']= parseInt(localStorage['porcentageCarga']) + _porCatalog;
+			  	
+			  	progress(parseInt(localStorage['porcentageCarga']), getEstadoCargaAsincrono(estado) );
+          
+          cargadoTotal(estado);
+          
+			    if (debug==1) console.log("BD FIN de lote Relacion articulos");
+			    addAllItems();
+			});
+			   
+}
+
+
+function restLogisticChainsJSON() {
+
+	var uri = "/purchasecenters/vendors/items/logisticschains";	
+	var dir = host+uri;
+	
+	console.log("CALL WEB URL: " + dir);
+	insertLog(tipoLogWS,categoriaLogWS,"Llamar al WS " + uri,"");
+	$.ajax({
+		async: true, timeout: maxtime,
+		url:dir,
+		data: { token:token },
+		contentType: 'application/json',
+		dataType: "json",
+		method : 'GET', 
+		type:"GET",
+		success:addLogisticChains,
+		error: function (uri) { errorDeWS(uri); }
+		
+	});
+
+	
+}
+
+
+
+function addLogisticChains(data){	
+		
+		var debug=0;
+	
+    if (debug==1) console.log("JSON de Catalog");
+   // if (debug==1) { console.log(JSON.stringify(data)); }
+        
+    var y = 0;
+    
+    var querys = new Array();
+    var error = 0;
+    var rel = {};
+    $.each(data.body, function() {
+    	
+        error=0;
+        rel={};
+				
+       
+        if ( this.logisticsChainId === undefined || this.logisticsChainId == 0 || this.logisticsChainId == '' ) {  error=1;  }
+			  if ( this.vendorId === undefined || this.vendorId == 0 || this.vendorId == '' ) {  error=1; }
+			  if ( this.itemId === undefined || this.itemId == 0 || this.itemId == '' ) {  error=1;  }
+        
+        if (error==0 ) {
+		 	
+  			 	//rel.idCentroVenta=this.purchaseCenterId;
+  				rel.idProveedor=this.vendorId; 
+          rel.idArticulo=this.itemId;
+          rel.idCadenaLogistica=this.logisticsChainId;
+          
+          if ( this.desCad === undefined ) {  this.desCad = '';  }
+          rel.desCantidad=JSON.stringify(this.logisticsChainName).replace(/"/g,'');   ;
+          rel.isAuthorizedVendor=this.isAuthorizedVendor;   //???????
+          rel.ordinalType=this.ordinalType;
+          
+          if ( this.vendorReference === undefined  ) {  this.vendorReference = '';  }
+          rel.vendorReference=this.vendorReference;   
+          rel.unitType=this.unitType;
+          rel.isPrimary=this.isPrimary;
+          
+          querys[y]=getQueryInsertLogisticChain(rel); 
+					y++;
+				} else {
+          console.log("Relacion Articulos No valida");
+        }
+        				
+		});
+            
+    // Ejecutar todas las querys en bloque              
+    db.transaction ( 
+		  function (transaction) 
+		  {
+		   
+			    var i=0;
+			    var qa="";
+			    
+			    if (debug==1) console.log("BD Inicio de lote Relacion Articulos ");
+			    
+			    for (i=0; i < querys.length  ; i++) {  	
+			    	
+			    	qa=querys[i];
+			    	
+			    	//if (debug==1) {  console.log(" " + qa + " ;"); }
+			    	
+				    transaction.executeSql (qa, [],  function ()
+				    {
+				    }, controlErrorCarga);
+				     
+				  }
+			  	
+			  	var estado= 5;
+			  	
+			  	localStorage['cargaPaso5']="1";
+			  	
+			  	localStorage['porcentageCarga']= parseInt(localStorage['porcentageCarga']) + _porLogisticChains;
+			  	
+			  	progress(parseInt(localStorage['porcentageCarga']), getEstadoCargaAsincrono(estado) );
+          
+          cargadoTotal(estado);
+          
+			    if (debug==1) console.log("BD FIN de lote Relacion articulos");
+			});
+			   
+}
+
+
+
+function restAllOrdersJSON() {
+
+	var f_ini=nowBD().substr(0,10);
+	
+	var f_fin="";
+	var n_meses=6;
+	var n_meses_short=1;
+	var restar=0;
+	
+	var aux1="";
+	
+	
+	console.log("MODO CARGA PARCIAL 22222222 "+localStorage['pModoCargaParcial']);
+	
+	if (localStorage['pModoCargaParcial'] != "") {
+		restar=n_meses_short;
+	} else {
+		restar=n_meses;
+	}
+	
+	var a=f_ini.substr(0,4);
+	var m=parseInt( f_ini.substr(5,2) ) - restar;
+	var d=f_ini.substr(8,2);
+	
+	if ( m < 0 ) {
+		m= (  12 + m );
+		
+		a=parseInt(a) - 1;	
+	
+		
+		console.log("new mes " +m);
+	} 
+	
+	if (m < 10 ) m="0"+m;
+		
+		
+	
+	f_fin=a+"-"+m+"-"+d;
+	
+
+//f_fin="2013-10-01";
+
+	var uri = "/purchasecenters/vendors/orders/search/findByDocumentDateBetween/?start="+f_fin+"&end="+f_ini;	
+	var dir = host+uri;
+	insertLog(tipoLogWS,categoriaLogWS,"Llamar al WS " + uri,"");
+	
+	$.ajax({
+		async: true, timeout: maxtime,
+		url:dir,
+		data: { token:token,  },
+		contentType: 'application/json',
+		dataType: "json",
+		method : 'GET', 
+		type:"GET",
+		success:addOrders,
+		error: function (uri) { errorDeWSOrders(uri);  }
+		
+	});
+
+	console.log("URL ORDERS: " + dir);
+}
+
+function restSecuritySettingsJSON() {
+
+	var uri = "/security/settings";	
+	
+	var dir = host+uri;
+	console.log("URL Setings: " + dir);
+	insertLog(tipoLogWS,categoriaLogWS,"Llamar al WS " + uri,"");
+	
+	$.ajax({
+		async: true, timeout: maxtime,
+		url:dir,
+		data: { token:token },
+		contentType: 'application/json',
+		dataType: "json",
+		method : 'GET', 
+		type:"GET",
+		success:addSecuritySettings,
+		error: function (uri) { errorDeWS(uri); }
+		
+	});
+
+	
+}
+
+function addSecuritySettings(data){	
+		
+	 var y = 0;
+    var querys = new Array();
+    var modulo="";
+	var reference;
+	var name;
+	var value;
+
+	//console.log("JSON DE SECURITY " + JSON.stringify(data.body.settings.SCOPES) );
+      
+    if (data != null) {  
+			
+			for (var key in data.body.settings.SCOPES)
+			{	
+				reference = key;
+				for (var key in data.body.settings.SCOPES[reference])
+				{
+					name = key;
+					value = data.body.settings.SCOPES[reference][key];
+				//console.log("NOMBRE " + name + "DATO " + value);
+				querys[y]='INSERT OR IGNORE INTO settings (reference, name, value)  VALUES ("'+reference +'","'+name+'", "'+value+'")';; 
+					y++;
+				
+				}
+			}
+		
+			for (var key in data.body.settings.COUNTRY)
+			{	
+				reference = key;
+				for (var key in data.body.settings.COUNTRY[reference])
+				{
+					name = key;
+					value = data.body.settings.COUNTRY[reference][key];
+				//console.log("NOMBRE " + name + "DATO " + value);
+				querys[y]='INSERT OR IGNORE INTO settings (reference, name, value)  VALUES ("0","'+name+'", "'+value+'")';; 
+					switch(name) {
+						case "NUMBER_OF_DECIMALS":
+							localStorage['NUMBER_OF_DECIMALS'] = value;
+							break;
+						case "DECIMAL_MARK":
+							localStorage['DECIMAL_MARK'] = value;
+							break;
+						case "CURRENCY":
+							if(value.indexOf('$')>=0){
+								var simbolo = value.substring(2,3);
+							}else{
+								var simbolo = '\u20AC';						
+							}
+							localStorage['CURRENCY'] = simbolo;
+							//CURRENCY = value;
+							break;
+						case "THOUSANDS_MARK":
+							localStorage['THOUSANDS_MARK'] = value;
+							break;
+						case "DATE_FORMAT":
+							localStorage['DATE_FORMAT'] = value;
+							break;
+						case "CURRENCY_SIGN_PLACE":
+							localStorage['CURRENCY_SIGN_PLACE'] = value;
+							break;
+						case "EMAIL_ADDRESS":
+							localStorage['EMAIL_ADDRESS'] = value;
+							break;
+						default:
+							console.log("Parametro de Setting desconocido " + name);
+					}
+					y++;
+				}
+			}
+
+
+	    // Ejecutar todas las querys en bloque              
+	    db.transaction ( 
+			  function (transaction) 
+			  {
+			      var qa="";
+				    
+				    console.log("BD Inicio de lote Settings ");
+				    
+				    for (i=0; i < querys.length; i++) {  	
+				    	
+				    	qa=querys[i];
+				    	
+					    transaction.executeSql (qa, [],  function ()
+					    {
+					    }, error);
+					     
+					  }
+	  
+				  
+				}
+			);
+	}
+		
+			  
+}
+
+
+function formatearFechaBD(f){
+	var tiempo = new Date(f);
+	var year    = tiempo.getFullYear();
+	var month   = (tiempo.getMonth() + 1);
+	var day     = tiempo.getDate();
+	var hour    = tiempo.getHours();
+	var minute  = tiempo.getMinutes();
+	var seconds = tiempo.getSeconds();
+	
+	if (parseInt(month) < 10 ) { month="0"+month; }
+	if (parseInt(day) < 10 ) { day="0"+day; }
+	if (parseInt(hour) < 10 ) { hour="0"+hour; }
+	if (parseInt(minute) < 10 ) { minute="0"+minute; }
+	if (parseInt(seconds) < 10 ) { seconds="0"+seconds; }
+	return (year+"-"+month+"-"+day+" "+hour+":"+minute+":"+seconds) ;
+	
+}
+
+
+function addOrders(data){	
+	
+		var debug=0;
+    console.log("JSON de los Pedidos");
+    //if (debug==1) { console.log(JSON.stringify(data)); }
+    
+    var p = 0;
+    var l = 0;
+    var q = "";
+    
+    /*
+    	"amount": 467.994,
+      "currency": "EUR",
+      "deliveryDate": "2013-10-29T00:00:00+0100",
+      "deliveryZoneId": "ALM",
+      "documentDate": "2013-10-25T07:44:00+0200",
+      "internalId": 2544581,
+      "isTemplate": 0,
+      "number": 1072,
+      "purchaseCenterId": 40710,
+      "reference": "40710T1072",
+      "sourceId": "T",
+      "status": 8,
+      "type": "P",
+      "vendorId": 216,
+      "orderLines": [
+          {
+              "quantity": 6,
+              "itemId": 527460,
+              "secondSizeId": "0",
+              "firstSizeId": "0",
+              "internalId": 2544581,
+              "lineNumber": 1,
+              "unitType": 1,
+              "ordinalType": 1,
+              "logisticsChainId": "11"
+          },
+      ],
+		*/
+    
+    var pedido = {};
+		var querys = new Array();
+    
+    var articulo = new Array();
+		var linea = {} ;
+		var lineas = new Array();
+    var entradas=0;
+    
+    $.each(data.body, function() {
+    	
+				pedido = {};
+				
+				if (this.internalId === undefined || this.purchaseCenterId === undefined ) { 
+					console.log("Orden mal ");
+				} else {
+				
+					pedido.amount=this.amount;
+					pedido.currency=this.currency;
+					pedido.deliveryDate=formatearFechaBD(this.deliveryDate);
+					pedido.idDeliveryZone=this.deliveryZoneId;
+					pedido.documentDate=formatearFechaBD(this.documentDate);
+					pedido.idInternal=this.internalId;
+					pedido.idPurchaseCenter=this.purchaseCenterId;
+					pedido.number=this.number;	
+					pedido.reference=this.reference;
+					pedido.isTemplate=this.isTemplate;	
+					pedido.sourceId=this.sourceId;
+					pedido.status=this.status;
+					pedido.type=this.type;
+					pedido.idVendor=this.vendorId;
+					pedido.Observaciones='';
+					
+					querys[l]=getQueryInsertOrder(pedido); 
+					l++;
+					
+					
+					//TEMPORAL!!!!!!!
+					/*
+					if (entradas < 20 ) {
+						querys[l]=getQueryInsertOrderDraft(pedido); 
+						l++;
+						
+						entradas++;
+					}
+					*/
+					
+					if (this.orderLines !== undefined) {
+						for (var i=0; i < this.orderLines.length ; i++) {
+		        		 
+								articulo = {};
+			
+								linea =  this.orderLines[i];
+			
+								articulo.idOrder=pedido.idInternal;
+								articulo.quantity=linea.quantity;
+								articulo.idItem=linea.itemId;
+                            
+								
+								if (linea.itemName==undefined) { articulo.itemName=""; }
+                                else { articulo.itemName=linea.itemName.replace("'","´"); }
+                            
+								articulo.itemStatus=linea.itemStatus;
+								if (linea.itemStatus==undefined) { articulo.itemStatus=0; }
+
+								articulo.secondSizeId=linea.secondSizeId;
+								articulo.firstSizeId=linea.firstSizeId;
+								articulo.lineNumber=linea.lineNumber;
+								articulo.unitType=linea.unitType;
+								articulo.ordinalType=linea.ordinalType;
+								articulo.idLogisticsChain=linea.logisticsChainId;
+								
+								if (linea.logisticsChainName===undefined) { articulo.logisticsChainName=""; }
+								else {  articulo.logisticsChainName=linea.logisticsChainName.replace("'","´"); } 
+                            
+								articulo.logisticsChainStatus=linea.logisticsChainStatus;
+								if (linea.logisticsChainStatus===undefined) { articulo.logisticsChainStatus=0; }
+		
+								querys[l]=getQueryInsertOrderDetail(articulo); 
+								
+								l++;
+								
+								/*
+								if (entradas < 21 ) {
+									//TEMPORAL!!!!!!!
+									querys[l]=getQueryInsertOrderDraftDetail(articulo); 
+									l++;	
+								}
+								*/
+								
+		        }
+	        } else {
+	        	console.log("PEDIDO sin detalle --> ");
+	        }
+	        p++;
+
+				 	//var textoProgreso = getEstadoCarga( 4);			  	
+				  //document.getElementById('progress-msg').innerHTML = textoProgreso;		
+				 	//progress(90, $('#progressBar')); 
+				}
+				
+		});
+				
+		// Ejecutar todas las querys en bloque
+    db.transaction ( 
+		  function (transaction) 
+		  {
+		   
+		    var i=0;
+		    var n=(querys.length - 1 );
+		    
+		    console.log("BD Inicio de lote Pedidos Cabecera");
+		    
+		    for (i=0; i < querys.length; i++) {  	
+		    	
+		    	qa=querys[i];
+		    	
+		    	//console.log(qa);
+		    	
+			    transaction.executeSql (qa, [],  function (tx )
+			    { 
+			    	//console.log("i =" + i +" n="+ n);
+			    	
+			    	
+			    	
+			    }, controlErrorCarga);
+		   			
+		   		/*
+		   		transaction.executeSql (qa, [],  function ( )
+			    { 
+			    	
+			    	
+			    }, errorEnCarga);
+			    */				     
+			  }
+			  
+			  
+	 			  
+				var estado= 9;
+	  		//progress(parseInt(localStorage['porcentageCarga']), getEstadoCarga(estado) );
+	  		
+	  		console.log("MODO CARGA PARCIAL 333333 ==> "+ localStorage['pModoCargaParcial'] );
+	  		
+	  		if (localStorage['pModoCargaParcial'] == "") {  
+	  			
+		  		localStorage['porcentageCarga']= parseInt(localStorage['porcentageCarga']) + _porOrders;
+		  		localStorage['cargaPaso9']=1;
+			  	progress(parseInt(localStorage['porcentageCarga']), getEstadoCargaAsincrono(estado) );
+			  	
+			  }	
+			  cargadoTotal(estado);
+			  
+			  if (localStorage['pModoCargaParcial'] != "") {  		
+				setInterval(pFinalizarCargaParcial(),3000);
+			  			 
+			}
+			});		
+			
+			
+	  console.log("FIN BLOQUE");
+   
+}
+
+
+
+function controlErrorCarga(tx, error){
+	localStorage['errorEnCarga']=parseInt(localStorage['errorEnCarga'])+1;
+
+
+}
+
+
+function restAllTemplatesJSON() {
+
+	var uri = "/purchasecenters/vendors/templates/";	
+	var dir = host+uri;
+	insertLog(tipoLogWS,categoriaLogWS,"Llamar al WS " + uri,"");
+	$.ajax({
+		async: true, timeout: maxtime,
+		url:dir,
+		data: { token:token,  },
+		contentType: 'application/json',
+		dataType: "json",
+		method : 'GET', 
+		type:"GET",
+		success:addTemplates,
+		error: function (uri) { errorDeWS(uri); }
+		
+	});
+
+	console.log("URL ORDERS: " + dir);
+}
+
+
+function addTemplates(data){	
+	
+	
+		var debug=0;
+    console.log("JSON de los Pedidos Plantillas");
+    if (debug==0) { console.log(data); }
+     
+    var p = 0;
+    var l = 0;
+    var q = "";
+    
+    /*
+currency	:	EUR
+deliveryZoneId	:	TDA
+documentDate	:	2013-07-26T12:35:00+0200
+amount	:	0
+internalId	:	2454930
+isTemplate	:	1
+number	:	7137
+reference	:	1602D7137
+sourceId	:	D
+status	:	1	
+purchaseCenterId	:	1602	
+type	:	P		
+vendorId	:	257
+
+			quantity	:	0	
+			itemId	:	2482		
+			secondSizeId	:	0	
+			firstSizeId	:	0	
+			internalId	:	2454930	
+			lineNumber	:	1	
+			unitType	:	2	
+			ordinalType	:	12	
+			logisticsChainId	:	212
+
+		*/
+    
+    var pedido = {};
+		var querys = new Array();
+    
+    var articulo = new Array();
+		var linea = {} ;
+		var lineas = new Array();
+    
+    $.each(data.body, function() {
+    	
+				pedido = {};
+				
+				if (this.internalId === undefined || this.purchaseCenterId === undefined ) { 
+					console.log("Orden mal ");
+				} else {
+				
+					pedido.amount=this.amount;
+					pedido.currency=this.currency;
+					pedido.idDeliveryZone=this.deliveryZoneId;
+					pedido.documentDate=formatearFechaBD(this.documentDate);
+					pedido.idTemplate=this.internalId;
+					pedido.idPurchaseCenter=this.purchaseCenterId;
+					pedido.number=this.number;	
+					pedido.reference=this.reference;
+					pedido.isTemplate=this.isTemplate;	
+					pedido.sourceId=this.sourceId;
+					pedido.type=this.type;
+					pedido.idVendor=this.vendorId;
+					
+					if (this.comments === undefined ) { pedido.name=""; }
+					else { pedido.name=this.comments; }
+					
+					querys[l]=getQueryInsertOrdersTemplates(pedido); 
+					l++;
+
+					if (this.templateLines !== undefined) {
+						for (var i=0; i < this.templateLines.length ; i++) {
+		        		 
+								articulo = {};
+							
+								linea =  this.templateLines[i];
+
+								articulo.idTemplate=linea.internalId;
+								articulo.quantity=linea.quantity;
+								articulo.idItem=linea.itemId;
+								articulo.secondSizeId=linea.secondSizeId;
+								articulo.firstSizeId=linea.firstSizeId;
+								articulo.lineNumber=linea.lineNumber;
+								articulo.unitType=linea.unitType;
+								articulo.ordinalType=linea.ordinalType;
+								articulo.idLogisticsChain=linea.logisticsChainId;
+                            
+                                if (linea.logisticsChainName != undefined) articulo.logisticsChainName=linea.logisticsChainName;
+                                else articulo.logisticsChainName="";
+                            
+								articulo.logisticsChainStatus=linea.logisticsChainStatus;
+                                if (linea.itemName != undefined) {
+                                    articulo.itemName=linea.itemName.replace(/''/g,"´");
+                                    articulo.itemName=linea.itemName.replace(/"/g,"´´");
+                                }
+                                else { articulo.itemName=""; }
+								articulo.itemStatus=linea.itemStatus;
+		
+								querys[l]=getQueryInsertOrdersTemplatesDetail(articulo); 
+								//console.log(querys[l]);
+								l++;
+		        }
+	        } else {
+	        	console.log("PEDIDO sin detalle --> ");
+	        }
+	        p++;
+	                
+				 	//var textoProgreso = getEstadoCarga( 4);			  	
+				  //document.getElementById('progress-msg').innerHTML = textoProgreso;		
+				 	//progress(90, $('#progressBar')); 
+				}
+				
+				});
+				
+				// Ejecutar todas las querys en bloque
+        db.transaction ( 
+				  function (transaction) 
+				  {
+				   
+				    var i=0;
+				    
+				    console.log("BD Inicio de lote Pedidos TEMPLATES----------------------------------------------");
+				    
+				    for (i=0; i < querys.length ; i++) {  	
+				    	
+				    	qa=querys[i];
+				    	//console.log(qa);
+				    	if (qa.indexOf("PEPPA") > 0 ) { console.log(qa); };
+					    transaction.executeSql (qa, [],  function ()
+					    { 
+					
+					    }, controlErrorCarga);
+				   							     
+					  }
+						var estado= 10;
+			  		//progress(parseInt(localStorage['porcentageCarga']), getEstadoCarga(estado) );
+			  		localStorage['porcentageCarga']= parseInt(localStorage['porcentageCarga'])+ _porPlantillas;
+			  		localStorage['cargaPaso10']=1;
+				  	progress(parseInt(localStorage['porcentageCarga']), getEstadoCargaAsincrono(estado) );
+				  	
+				  	cargadoTotal(estado);
+			  	
+					});		
+
+	  console.log("FIN BLOQUE");
+   
+}
+
+
+
+
+// FAMILIAS
+function restFamiliesJSON() {
+
+	var uri = "/purchasecenters/families/";	
+	var dir = host+uri;
+	insertLog(tipoLogWS,categoriaLogWS,"Llamar al WS " + uri,"");
+	$.ajax({
+		async: true, timeout: maxtime,
+		url:dir,
+		data: { token:token },
+		contentType: 'application/json',
+		dataType: "json",
+		method : 'GET', 
+		type:"GET",
+		success:addFamilies,
+		error: function (uri) { errorDeWS(uri); }
+		
+	});
+
+	console.log("URL FAMILIES : " + dir);
+}
+
+
+function addFamilies(data){	
+		
+		var debug=0;
+	
+    if (debug==1) console.log("JSON de FAMILIES");
+   // if (debug==1) { console.log(JSON.stringify(data)); }
+        
+    var y = 0;
+    
+    var querys = new Array();
+    var error = 0;
+    var aux = {};
+    $.each(data.body, function() {
+    	
+        error=0;
+        aux={};
+				
+        /*
+        "firstFamilyId": "10",
+        "firstFamilyName": "PERFUMERIA",
+        "secondFamilyId": "1002",
+        "secondFamilyName": "COLONIAS Y PERFUMES",
+        "thirdFamilyId": "100207",
+        "thirdFamilyName": "COMPLEMENTOS PERFUMERIA"
+        */
+        
+        if ( this.firstFamilyId === undefined  || this.firstFamilyId == 0  || this.firstFamilyId == '' ) {  error=1;  }
+			  if ( this.secondFamilyId === undefined || this.secondFamilyId == 0 || this.secondFamilyId == '' ) {  error=1; }
+			  if ( this.thirdFamilyId === undefined  || this.thirdFamilyId == 0  || this.thirdFamilyId == '' ) {  error=1;  }
+        
+        if (error==0 ) {
+		 	
+  			 	aux.idFirstFamily=this.firstFamilyId;
+  				aux.firstFamilyName=JSON.stringify(this.firstFamilyName).replace(/"/g,'') ; 
+          aux.idSecondFamily=this.secondFamilyId;
+          aux.secondFamilyName=JSON.stringify(this.secondFamilyName).replace(/"/g,'') ;
+  				aux.idThirdFamily=this.thirdFamilyId; 
+          aux.thirdFamilyName=JSON.stringify(this.thirdFamilyName).replace(/"/g,'') ;
+          
+          querys[y]=getQueryInsertFamilies(aux); 
+					y++;
+				} else {
+          console.log("Relacion Articulos No valida");
+        }
+        				
+		});
+            
+    // Ejecutar todas las querys en bloque              
+    db.transaction ( 
+		  function (transaction) 
+		  {
+		   
+			    var i=0;
+			    var qa="";
+			    
+			    //if (debug==1) console.log("BD Inicio de lote Families ");
+			    
+			    for (i=0; i < querys.length; i++) {  	
+			    	
+			    	qa=querys[i];
+			    	
+			    	//if (debug==1) {  console.log(" " + qa + " ;"); }
+			    	
+				    transaction.executeSql (qa, [],  function ()
+				    {
+				    }, controlErrorCarga);
+				     
+				  }
+			  	
+			  	var estado= 11;
+			  	//progress(parseInt(localStorage['porcentageCarga']), getEstadoCarga(estado) );
+			  	
+			  	localStorage['porcentageCarga']= parseInt(localStorage['porcentageCarga'])+ _porFamilias;
+		  		localStorage['cargaPaso11']=1;
+			  	progress(parseInt(localStorage['porcentageCarga']), getEstadoCargaAsincrono(estado) );
+			  	
+			  	cargadoTotal(estado);
+          
+			    if (debug==1) console.log("BD FIN de lote Families ");
+			});
+    
+}
+
+
+
+
+// Status
+function restStatusJSON() {
+
+	var uri = "/purchasecenters/orders/status";	
+	var dir = host+uri;
+	insertLog(tipoLogWS,categoriaLogWS,"Llamar al WS " + uri,"");
+	$.ajax({
+		async: true, timeout: maxtime,
+		url:dir,
+		data: { token:token },
+		dataType: "json",
+		contentType: 'application/json',
+		method : 'GET', 
+		type:"GET",
+		success:addStatus,
+		error: function (uri) { errorDeWS(uri); }
+		
+	});
+
+	console.log("URL: " + dir);
+
+
+}
+
+
+function addStatus(data){	
+		
+		var debug=0;
+	
+    if (debug==1) console.log("JSON de Status");
+   // if (debug==1) { console.log(JSON.stringify(data)); }
+        
+    var y = 0;
+    
+    var querys = new Array();
+    var error = 0;
+    var aux = {};
+    
+    $.each(data.body, function() {
+    	
+        error=0;
+        aux={};
+				
+        /*
+					"desItm": "Pendiente de completar",
+           "sitDoc": "1"
+        */
+        
+        if ( this.sitDoc === undefined || this.sitDoc == 0 || this.sitDoc == '' ) {  error=1;  }
+			  
+        if (error==0 ) {
+		 	
+  			 	aux.idStatus=this.sitDoc;
+          aux.description=JSON.stringify(this.desItm).replace(/"/g,'');   ;
+          
+          querys[y]="UPDATE status SET name='"+aux.description+"' WHERE id="+ aux.idStatus; 
+					y++;
+				} else {
+          console.log("Estado No valida");
+        }
+        				
+		});
+    
+    
+    if (localStorage['language']=="EN") {
+    	querys[y]="UPDATE status SET name='Draft' WHERE id=2"; 
+			y++;
+			querys[y]="UPDATE status SET name='Pending sent' WHERE id=3"; 
+			y++;
+    }
+            
+    // Ejecutar todas las querys en bloque              
+    db.transaction ( 
+		  function (transaction) 
+		  {
+		   
+			    var i=0;
+			    var qa="";
+			    
+			    if (debug==1) console.log("BD Inicio de lote Estados ");
+			    
+			    for (i=0; i < querys.length; i++) {  	
+			    	
+			    	qa=querys[i];
+			    	
+			    	//if (debug==1) {  console.log(" " + qa + " ;"); }
+			    	
+				    transaction.executeSql (qa, [],  function ()
+				    {
+				    }, controlErrorCarga);
+				     
+				  }
+			  	
+			  	var estado= 12;
+			  	localStorage['cargaPaso12']="1";
+			  	
+			  	progress(parseInt(localStorage['porcentageCarga']), getEstadoCargaAsincrono(estado) );
+          
+          cargadoTotal(estado);
+          
+			    if (debug==1) console.log("BD FIN de lote Estados");
+			});
+			 
+}
+
+
+
+
+
+function ServiceLoginFailed(result) {
+    console.log("ServiceLoginFailed.result=" + result.status);
+		if (result.status ==200)
+		{
+			getDescripcionAviso("loginIncorrecto"); 
+		  $( "#loginDialogA" ).popup( "open" );
+			 insertLog(1, 'Credenciales no validas'); // LOGIN ----> 1
+		}
+		else {
+			getDescripcionAviso("loginOfflineNoData"); 
+		  $( "#loginDialogA" ).popup( "open" );
+			//alert('Error de conexion con servidor')
+			insertLog(1, 'Error de conexion con servidor'); // LOGIN ----> 1
+    }   
+    
+    varType = null; varUrl = null; varData = null; varContentType = null; varDataType = null; varProcessData = null;
+}
+
+
+function ServiceFailed(result) {
+ 				
+ 				console.log('Service call failed: ' + result.status + ' ' + result.statusText + ' Token no valido');
+ 				
+        console.log('Service call failed: ' + result.status + ' ' + result.statusText + ' Token no valido');
+        varType = null; varUrl = null; varData = null; varContentType = null; varDataType = null; varProcessData = null;
+}
+
+
+
+function cargadoTotal(estado){
+	
+	
+	//console.log("CARGANDO ESTADO !!! -> 1=" + localStorage['cargaPaso1']+" 2="+localStorage['cargaPaso2']+" 3="+ localStorage['cargaPaso3']+" 4="+ localStorage['cargaPaso4']+" 5="+ localStorage['cargaPaso5']+" 6="+localStorage['cargaPaso6']+" 7="+ localStorage['cargaPaso7']+" 8="+ localStorage['cargaPaso8']+" 9="+localStorage['cargaPaso9']+" 10="+ localStorage['cargaPaso10']+" 11="+ localStorage['cargaPaso11']+" 12="+localStorage['cargaPaso12']);
+	
+	if ( localStorage['cargaPaso1']=="1" && localStorage['cargaPaso2']=="1" && localStorage['cargaPaso3']=="1" && localStorage['cargaPaso4']=="1" && localStorage['cargaPaso5']=="1" && localStorage['cargaPaso6']=="1" && localStorage['cargaPaso7']=="1" && localStorage['cargaPaso8']=="1" && localStorage['cargaPaso9']=="1" && localStorage['cargaPaso10']=="1" && localStorage['cargaPaso11']=="1" && localStorage['cargaPaso12']=="1" ) {
+		
+		
+		console.log("FINALIZANDO EL PROCESO DE RECARGA111111111---->"+localStorage['pantalla'] + " recargaTpotal=" +localStorage['recargaTotal'] + " recargaParcial="+localStorage['pModoCargaParcial'] );
+		
+		 	//Decidimos si se ha mostar mas de una zona de entrega
+			  
+  	var t="SELECT * FROM deliveryZones as d,purchaseCenters as p WHERE d.idPurchaseCenter=p.idPurchaseCenter GROUP BY idPurchasecenter HAVING COUNT(*) > 1";
+  	
+  	db.transaction(function (transaction) {	
+			transaction.executeSql (t, undefined, 
+				function (transaction, result)
+				{
+					
+					if (result.rows.length > 0) {
+						localStorage['multiplesZonasEntrega']=1;
+					} else {
+						localStorage['multiplesZonasEntrega']=0;
+					}
+							
+			  });
+				  			  
+			console.log("BD FIN Zonas entrega "); 
+			localStorage['multiplesZonasEntrega']=0;
+		});
+		
+		
+		if ( localStorage['recargaTotal']=="recargaTotal" ) {
+			
+				console.log("FINALIZANDO EL PROCESO DE RECARGA22222222222");
+				localStorage['recargaTotal']="";
+				finalizarRecargaTotal();
+		} else {
+			localStorage['erroresCargaInicial']=localStorage['errorEnCarga'];
+		}
+		
+		var tiempo = new Date();
+		var year    = tiempo.getFullYear();
+		var month   = tiempo.getMonth() + 1;
+		var day     = tiempo.getDate();
+		var hour    = tiempo.getHours();
+		var minute  = tiempo.getMinutes();
+		var seconds = tiempo.getSeconds();
+		
+		if (parseInt(month) < 10 ) { month="0"+month; }
+		if (parseInt(day) < 10 ) { day="0"+day; }
+		if (parseInt(hour) < 10 ) { hour="0"+hour; }
+		if (parseInt(minute) < 10 ) { minute="0"+minute; }
+		if (parseInt(seconds) < 10 ) { seconds="0"+seconds; }
+	
+		localStorage["ultimaCarga"]=day+"-"+month+"-"+year+" "+hour+":"+minute+":"+seconds;
+		pRefrescarNotificaciones();
+		
+		insertLog(1,2,"Fin de la carga de datos","Ambito");
+		console.log("Insercion del log de finalizacion de carga de datos");
+		
+		if (localStorage['pModoCargaParcial']=="") {
+			localStorage['pantalla']="menuPrincipal";
+			$.mobile.changePage('#menuPrincipal');
+		}
+		
+			
+		
+		
+		
+		return true;
+		
+	} else {
+		
+		return false;
+	}
+	
+	
+}
+
+function recargarInformacion(){
+		// var uri = "/sec/auth/login";
+		var uri = "/security/login";
+			console.log("getToken");
+			$.support.cors = true;
+        $.ajax({
+            async: false, timeout: maxtime,
+            url : host+uri,
+            dataType : "json",
+            crossDomain: true,
+            //method : 'POST',
+            type : 'POST',
+            //data : { Application: "APP_REPLENISHMENT", Authorization: "Basic dGVzdDp0ZXN0" },
+            //data : { Application: "APP_REPLENISHMENT" },
+            beforeSend : function(req) {
+            req.setRequestHeader('Authorization', localStorage.getItem('auth'));
+            //req.setRequestHeader('Areas-Application', "APP_REPLENISHMENT");
+          },
+            success: restData, // modificado
+            error: ServiceLoginFailed
+
+        });
+
+		console.log("URL: " + uri);
+}
+
+function restData(response){	
+                          
+  //console.log(JSON.stringify(response));
+	token = response.body.tokenValue;
+	console.log(" Token de la session " + token);
+	localStorage["token"] = token;	
+	
+	if (token!=null) 
+	{
+		restServices();
+
+	}	else {
+		console.log("credenciales no validas");
+		getDescripcionAviso("CredencialesErroneas");
+    $("#pedidosDialogAC").popup("open");
+	}
+
+}
+
+function errorDeWS(uri , error ) {
+
+
+	    console.log("ERROR DE WS 13/05");
+	    console.log(uri);
+	    console.log(error);
+
+		insertLog(tipoLogWS,categoriaLogWSError,"Error al llamar al WS " + uri,"");
+		
+		//if (errorCargaInicial==0) {
+		
+			//alert("error"+uri);
+			$("#cargaDialogTextAC").html("Error al cargar los datos. <br> Si desea recargar pulse aceptar. <br> Si desea continuar con los datos antiguos pulse cancelar.");
+			$("#cargaDialogAC").popup("open");
+			errorCargaInicial=1;
+
+		///}
+}
+
+
+function errorDeWSOrders() {
+    
+    //Ha fallado la carga parcial de Orders
+    
+    //borrar orders y restaurar tabla cargada
+    db.transaction ( 
+    function (transaction) 
+    {
+    
+        transaction.executeSql ("DROP TABLE orders", [],  function (transaction) {
+             transaction.executeSql ("ALTER TABLE back_orders RENAME TO orders", [],  function (transaction) {
+
+
+             }, errorAqui);
+
+         }, errorAqui);
+
+        transaction.executeSql ("DROP TABLE ordersDetail", [],  function (transaction) {
+             transaction.executeSql ("ALTER TABLE back_ordersDetail RENAME TO ordersDetail", [],  function (transaction) {
+
+
+             }, errorAqui);
+
+         }, errorAqui);
+        
+    });		
+    
+}
+
+function restPing() {
+
+	var uri = "/security/ping";
+	var dir = host+uri;
+	//insertLog(tipoLogWS,categoriaLogWS,"Llamar al WS " + uri,"");
+
+	console.log("LLAMANDO A PING");
+
+	$.ajax({
+		async: true, timeout: 10000,
+		url:dir,
+		dataType: "json",
+		contentType: 'application/json',
+		method : 'GET',
+		type:"GET",
+		success: function (data, text) {
+                        console.log("YESSSS!!!!!");
+                            localStorage['online']=1;
+                     },
+		error:  function (request, status, error) {
+                        console.log("KO!!!!!");
+                            localStorage['online']=0;
+
+                    }
+
+	});
+
+	console.log("URL: " + dir);
+
+
+}
+
+

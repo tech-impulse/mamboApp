@@ -1,0 +1,94 @@
+@charset "UTF-8";
+
+/* CSS segunda Pantalla login ---------------------*/
+
+
+
+
+
+@font-face {
+  font-family: "century";
+  src: url('./font/gothic.eot') format('eot'),
+  	   /*url("century.woff") format("woff"),*/
+  	   url('./font/gothic.ttf') format('truetype');
+}
+
+.body {
+	background-color:#f7f7f7;
+	margin:auto;
+	font-family:century;
+}
+
+.tabla_menu {
+	margin-top:100px;
+}
+
+.logo_areas {
+	padding-top:15px;
+	padding-bottom:0px;
+	padding-right:10px;
+}
+
+.slogan {
+	font-size:14px;
+	padding-left:20px;
+	padding-top:70px;
+	padding-bottom:20px;
+}
+
+.hr_amarilla {
+	background-color: #FAAB00;
+    height: 1px;
+}
+
+
+#form_div {
+	width:310px;
+	height:260px;
+	background-color:#f4f4f4;
+	margin: 20px 0 20px 20px;
+	border-radius: 10px;
+    -moz-box-shadow: 3px 3px 3px #c3c3c3;
+    -webkit-box-shadow: 3px 3px 3px #c3c3c3;
+    box-shadow: 3px 3px 3px #c3c3c3;
+}
+
+
+.campos {
+	padding-top:20px;
+	text-align:center;
+	font-size:16px;
+	color:#000;
+	font-weight:normal;
+	line-height:normal;
+}
+
+.celda_boton_login {
+	padding-top:30px;
+	text-align:center;
+}
+
+#space_button_div {
+	width:100%;
+	height:70px;
+	background-color:#ccc;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	margin-top:20px;
+	padding-top:20px; 
+}
+
+#button {
+	margin:auto;
+	width:50%;
+	height:33px;
+	background-color:#403e3e;
+	border-radius: 10px;
+	padding-top:10px;
+}
+
+.text_button {
+	font-family:century;
+	font-size:16px;
+	color:#fff;
+}
