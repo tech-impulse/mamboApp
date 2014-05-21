@@ -285,25 +285,28 @@ function checkScopes(res){
 function parseTokenJSON(response){	
                           
   //console.log(JSON.stringify(response));
+    var accion = $('#pedidosDialogACOrden').text();
 	token = response.body.tokenValue;
 	console.log(" Token de la session " + token);
 	localStorage["token"] = token;	
-	
-	if (token!=null) 
-	{
-		
-		localStorage['language']=response.body.language;
-		localStorage['transactionId']=response.body.transactionId;
-		console.log("IDIOMA DEL WS ---->|"+localStorage['language']+"|" );
-		traducir();		// Traducimos la App según el idioma del ws
-		checkScopes(response); // comprobamos los scopes
-		//loginOnline(response);
+	if (accion !="actualizar"){
+        
+        if (token!=null) 
+        {
 
-	}	else {
-		console.log("credenciales no validas");
-		getDescripcionAviso("CredencialesErroneas");
-		$("#pedidosDialogAC").popup("open");
-	}
+            localStorage['language']=response.body.language;
+            localStorage['transactionId']=response.body.transactionId;
+            console.log("IDIOMA DEL WS ---->|"+localStorage['language']+"|" );
+            traducir();		// Traducimos la App según el idioma del ws
+            checkScopes(response); // comprobamos los scopes
+            //loginOnline(response);
+
+        }	else {
+            console.log("credenciales no validas");
+            getDescripcionAviso("CredencialesErroneas");
+            $("#pedidosDialogAC").popup("open");
+        }
+    }
 
 }
 

@@ -819,9 +819,6 @@ function pRellenarGridNuevoPedido(proveedor, tipo) {
 
                 });
 
-
-                
-                
                 if (localStorage["pedidos_detalle_pag_act"] > 1) {
                     console.log("HA OCURRIDO ESTO");
                     var grid = $("#pGridNuevoPedido").data("kendoGrid");

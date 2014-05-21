@@ -14,25 +14,25 @@ function getTraduccionPedidos() {
         $('#login_username').text("Usuario");
         $('#login_password').text("Contraseña");
         $('#LbUltimaCargaProgress').text("Última Carga: ");
-        $('.versionApp').text("Versión: "+ versionApp); 
-        $('#slogan').text("Gestión de movimientos de stock \r\n desde dispositivos móviles"); 
-        $("label[for='btnRemember'] span.ui-btn-text").text("Recordar");  
+        $('.versionApp').text("Versión: " + versionApp);
+        $('#slogan').text("Gestión de movimientos de stock \r\n desde dispositivos móviles");
+        $("label[for='btnRemember'] span.ui-btn-text").text("Recordar");
 
 
         /////////////////////////////////////////////////////////////
         // GRID PEDIDOS
         $('#searchText').attr('placeholder', 'Filtrar elementos...');
-		$('#pLbpedidosDetalleNuevoPrecio').text("Mostrar precios ");		
-				
-				//////////////////////////////////////////////////////////////////
-	      //BOTONES DEL POPUP DE LOS FILTROS
-	      $('#pBtnPopUpAsc').html('<img src="./images/icno_ascendente.png">'+'Sort in ascending order');
-	      $('#pBtnPopUpDesc').html('<img src="./images/icno_descendente.png">'+'Sort in descending order');
-	      $('#LbPopUpFiltro').text("Filter");
-	      $('#tituloPopUpFiltro').text("Column options: ");
-	      $('#LbpPopUpFiltroFechaD').text("Date from: ");
-	      $('#LbpPopUpFiltroFechaH').text("Date to: ");
-	      $('#pBtnFiltrar').text("Acept");
+        $('#pLbpedidosDetalleNuevoPrecio').text("Mostrar precios ");
+
+        //////////////////////////////////////////////////////////////////
+        //BOTONES DEL POPUP DE LOS FILTROS
+        $('#pBtnPopUpAsc').html('<img src="./images/icno_ascendente.png">' + 'Sort in ascending order');
+        $('#pBtnPopUpDesc').html('<img src="./images/icno_descendente.png">' + 'Sort in descending order');
+        $('#LbPopUpFiltro').text("Filter");
+        $('#tituloPopUpFiltro').text("Column options: ");
+        $('#LbpPopUpFiltroFechaD').text("Date from: ");
+        $('#LbpPopUpFiltroFechaH').text("Date to: ");
+        $('#pBtnFiltrar').text("Acept");
 
         localStorage['num'] = "";
         localStorage['info'] = "";
@@ -47,10 +47,10 @@ function getTraduccionPedidos() {
         localStorage.setItem('ent', 'Entr.');
         localStorage.setItem('ima', 'Estado');
         localStorage.setItem('creacion', 'Creación');
-		localStorage.setItem('str_opciones_de_columna', 'Opciones de columna:');
-		localStorage.setItem('str_selecciona', 'Selecciona');
-		localStorage.setItem('str_nombre', 'Nombre');
-		localStorage.setItem('str_precios', 'Precios');
+        localStorage.setItem('str_opciones_de_columna', 'Opciones de columna:');
+        localStorage.setItem('str_selecciona', 'Selecciona');
+        localStorage.setItem('str_nombre', 'Nombre');
+        localStorage.setItem('str_precios', 'Precios');
 
         /////////////////////////////////////////////////////////////
         // FILTROS GRID
@@ -77,11 +77,11 @@ function getTraduccionPedidos() {
         localStorage.setItem('str_centro', 'Centro de Compra.');
         localStorage.setItem('str_proveedor', 'Proveedor');
         localStorage.setItem('str_fechayhora', 'Fecha y Hora');
-		localStorage.setItem('str_usuario', 'Usuario');
-		$('#pLbNuevoPedidoBorradorProveedor').text("Proveedor");
-		$('#pLbNuevoPedidoBorradorCentro').text("Centro de Compra");
-		$('#pLbNuevoPedidoBorradorValoracion').text("Valoración");
-		$('#pLbNuevoPedidoBorradorFecha').text("Fecha");
+        localStorage.setItem('str_usuario', 'Usuario');
+        $('#pLbNuevoPedidoBorradorProveedor').text("Proveedor");
+        $('#pLbNuevoPedidoBorradorCentro').text("Centro de Compra");
+        $('#pLbNuevoPedidoBorradorValoracion').text("Valoración");
+        $('#pLbNuevoPedidoBorradorFecha').text("Fecha");
 
         /////////////////////////////////////////////////////////////
         // MENU HEADER
@@ -234,37 +234,37 @@ function getTraduccionPedidos() {
         localStorage.setItem('footer_btn_modificar', 'Modificar');
         localStorage.setItem('footer_btn_nuevo_blanco', 'Nuevo (en blanco)');
 
-		// NOTIFICACIONES DE PEDIDO
-			$('#pNotificacionesTxtNinguna').text("No hay notificaciones");
-			$('#pNotificacionesTxtPedidos').text("Pedidos pendientes de enviar");
-			$('#pNotificacionesTxtBorradores').text("Borradores pendientes");
-			$('#pNotificacionesTxtPlantillas').text("Plantillas pendientes de enviar");
-			$('#pNotificacionesBtnCerrar').text("Cerrar");
-			
-			
-			//////////////////////////////////////////////////////////////////
-      //BOTONES DEL POPUP DE LOS FILTROS
-      $('#pBtnPopUpAsc').html('<img src="./images/icno_ascendente.png">'+'Orden ascendente');
-      $('#pBtnPopUpDesc').html('<img src="./images/icno_descendente.png">'+'Orden descendente');
-      $('#LbPopUpFiltro').text("Filtro");
-      $('#tituloPopUpFiltro').text(localStorage["str_opciones_de_columna"]);
-      $('#LbpPopUpFiltroFechaD').text("Fecha desde: ");
-      $('#LbpPopUpFiltroFechaH').text("Fecha hasta: ");
-      $('#pBtnFiltrar').text("Aceptar");
-		
-		// POPUP DE GUARDAR PLANTILLA
-		$('#pedidosPopUpTituloNombrePlantilla').text("Guardar plantilla ");
-		$('#pedidosPopUpTextoNombrePlantilla').text("Nombre de la plantilla ");
-		$('#pedidosPopUpNombrePlantillaCancel').text("Cancelar");
-		$('#pedidosPopUpNombrePlantillaOk').text("Aceptar");
-		
-		// POPUP DE NOTIFICACIONES
-		$('#pNotificacionesTitulo').text("Notificaciones");
-		$('#pNotificacionesBtnCerrar').text("Cerrar");
-		
-		
-    
-      
+        // NOTIFICACIONES DE PEDIDO
+        $('#pNotificacionesTxtNinguna').text("No hay notificaciones");
+        $('#pNotificacionesTxtPedidos').text("Pedidos pendientes de enviar");
+        $('#pNotificacionesTxtBorradores').text("Borradores pendientes");
+        $('#pNotificacionesTxtPlantillas').text("Plantillas pendientes de enviar");
+        $('#pNotificacionesBtnCerrar').text("Cerrar");
+
+
+        //////////////////////////////////////////////////////////////////
+        //BOTONES DEL POPUP DE LOS FILTROS
+        $('#pBtnPopUpAsc').html('<img src="./images/icno_ascendente.png">' + 'Orden ascendente');
+        $('#pBtnPopUpDesc').html('<img src="./images/icno_descendente.png">' + 'Orden descendente');
+        $('#LbPopUpFiltro').text("Filtro");
+        $('#tituloPopUpFiltro').text(localStorage["str_opciones_de_columna"]);
+        $('#LbpPopUpFiltroFechaD').text("Fecha desde: ");
+        $('#LbpPopUpFiltroFechaH').text("Fecha hasta: ");
+        $('#pBtnFiltrar').text("Aceptar");
+
+        // POPUP DE GUARDAR PLANTILLA
+        $('#pedidosPopUpTituloNombrePlantilla').text("Guardar plantilla ");
+        $('#pedidosPopUpTextoNombrePlantilla').text("Nombre de la plantilla ");
+        $('#pedidosPopUpNombrePlantillaCancel').text("Cancelar");
+        $('#pedidosPopUpNombrePlantillaOk').text("Aceptar");
+
+        // POPUP DE NOTIFICACIONES
+        $('#pNotificacionesTitulo').text("Notificaciones");
+        $('#pNotificacionesBtnCerrar').text("Cerrar");
+
+
+
+
 
 
     } else if (lang == "EN") {
@@ -276,8 +276,8 @@ function getTraduccionPedidos() {
         $('#login_password').text("Password");
         $('#loginRemenber').text("Remenber");
         $('#LbUltimaCargaProgress').text("Last Load: ");
-        $('.versionApp').text("Build: "+versionApp); 
-        $('#slogan').text("Managing stock movements from mobile devices"); 
+        $('.versionApp').text("Build: " + versionApp);
+        $('#slogan').text("Managing stock movements from mobile devices");
 
         $("label[for='btnRemember'] span.ui-btn-text").text("Remenber");
 
@@ -286,7 +286,7 @@ function getTraduccionPedidos() {
         /////////////////////////////////////////////////////////////
         // GRID PEDIDOS
         $('#searchText').attr('placeholder', 'Filter items...');
-		$('#pLbpedidosDetalleNuevoPrecio').text("Show prices ");	
+        $('#pLbpedidosDetalleNuevoPrecio').text("Show prices ");
 
 
         localStorage['num'] = "";
@@ -300,10 +300,10 @@ function getTraduccionPedidos() {
         localStorage.setItem('emi', 'Issue date');
         localStorage.setItem('ent', 'Deli. date');
         localStorage.setItem('ima', 'Status');
-		localStorage.setItem('str_opciones_de_columna', 'Column options:');
-		localStorage.setItem('str_selecciona', 'Select');
-		localStorage.setItem('str_nombre', 'Name');
-		localStorage.setItem('str_precios', 'Price');
+        localStorage.setItem('str_opciones_de_columna', 'Column options:');
+        localStorage.setItem('str_selecciona', 'Select');
+        localStorage.setItem('str_nombre', 'Name');
+        localStorage.setItem('str_precios', 'Price');
 
         /////////////////////////////////////////////////////////////
         // FILTROS GRID						
@@ -325,11 +325,11 @@ function getTraduccionPedidos() {
         localStorage.setItem('can', 'Quant.');
         localStorage.setItem('cad', 'UOM/Log. Ch.');
         localStorage.setItem('uni', 'Total Units');
-        
+
         /////////////////////////////////////////////////////////////
         // GRID PLANTILLAS	
-        localStorage.setItem('nomPlan',"Name");
-        
+        localStorage.setItem('nomPlan', "Name");
+
 
         /////////////////////////////////////////////////////////////
         // MENU PEDIDOS
@@ -372,9 +372,9 @@ function getTraduccionPedidos() {
         $('#pBtnlMisPlantillas').text("Templates");
         $('#pLbNuevoPedidoProveedor').text(" > New Order");
         $('#pLbNuevoPedidoSelecioneProveedor').text(" > Select your supplier or warehouse...");
-		
-		
-		
+
+
+
 
         // MENU PEDIDOS DETALLE ANTERIOR
         $('#pLbDetalleNumAnt').text("Number");
@@ -395,7 +395,7 @@ function getTraduccionPedidos() {
         $('#pTbCabDetalleCadenaLogisticaAnt').text("UOM/Log. Ch.");
         $('#pTbCabDetalleUnidadesAnt').text("Units");
 
-				
+
 
         // NUEVO PEDIDO DETALLE
         $('#pLbDetalleNuevoPedido').text("> New Order");
@@ -489,11 +489,11 @@ function getTraduccionPedidos() {
         localStorage.setItem('str_proveedor', 'Vendor');
         localStorage.setItem('str_fechayhora', 'Date and Time');
         localStorage.setItem('str_usuario', 'Username');
-		$('#pLbNuevoPedidoBorradorProveedor').text("Vendor");
-		$('#pLbNuevoPedidoBorradorCentro').text("Stock center");
-		$('#pLbNuevoPedidoBorradorValoracion').text("Total Amount");
-		$('#pLbNuevoPedidoBorradorFecha').text("Date/Time");
-		
+        $('#pLbNuevoPedidoBorradorProveedor').text("Vendor");
+        $('#pLbNuevoPedidoBorradorCentro').text("Stock center");
+        $('#pLbNuevoPedidoBorradorValoracion').text("Total Amount");
+        $('#pLbNuevoPedidoBorradorFecha').text("Date/Time");
+
 
         // MENU PEDIDO EN BASE A ESCANER
         localStorage.setItem('str_filtro', 'Filter');
@@ -506,7 +506,7 @@ function getTraduccionPedidos() {
 
         $('#pBtnPedidosMenuInicio').text("Main Menu");
         $('#mpBtnTitulo').text("Orders Menu");
-        
+
         //////////////////////////////////////////////////////////////////
         //BOTONES DEL POPUP DE LOS FILTROS
         $('#pBtnPopUpAsc').text("Sort ascending");
@@ -516,26 +516,26 @@ function getTraduccionPedidos() {
         $('#LbpPopUpFiltroFechaD').text("Date from: ");
         $('#LbpPopUpFiltroFechaH').text("Date until: ");
         $('#pBtnFiltrar').text("Accept");
-        
-				localStorage.setItem('creacion', 'Date');
-        
 
-		// NOTIFICACIONES DE PEDIDO
-			$('#pNotificacionesTxtNinguna').text("No pending Notifications");
-			$('#pNotificacionesTxtPedidos').text("Orders pending to send");
-			$('#pNotificacionesTxtBorradores').text("Pending Draft");
-			$('#pNotificacionesTxtPlantillas').text("Templates pending to send");
-			$('#pNotificacionesBtnCerrar').text("Cerrar");
-		
-		// POPUP DE GUARDAR PLANTILLA
-		$('#pedidosPopUpTituloNombrePlantilla').text("Save Template ");
-		$('#pedidosPopUpTextoNombrePlantilla').text("Template name ");
-		$('#pedidosPopUpNombrePlantillaCancel').text("Cancel");
-		$('#pedidosPopUpNombrePlantillaOk').text("Accept");
-		
-		// POPUP DE NOTIFICACIONES
-		$('#pNotificacionesTitulo').text("Notifications");
-		$('#pNotificacionesBtnCerrar').text("Close");
+        localStorage.setItem('creacion', 'Date');
+
+
+        // NOTIFICACIONES DE PEDIDO
+        $('#pNotificacionesTxtNinguna').text("No pending Notifications");
+        $('#pNotificacionesTxtPedidos').text("Orders pending to send");
+        $('#pNotificacionesTxtBorradores').text("Pending Draft");
+        $('#pNotificacionesTxtPlantillas').text("Templates pending to send");
+        $('#pNotificacionesBtnCerrar').text("Cerrar");
+
+        // POPUP DE GUARDAR PLANTILLA
+        $('#pedidosPopUpTituloNombrePlantilla').text("Save Template ");
+        $('#pedidosPopUpTextoNombrePlantilla').text("Template name ");
+        $('#pedidosPopUpNombrePlantillaCancel').text("Cancel");
+        $('#pedidosPopUpNombrePlantillaOk').text("Accept");
+
+        // POPUP DE NOTIFICACIONES
+        $('#pNotificacionesTitulo').text("Notifications");
+        $('#pNotificacionesBtnCerrar').text("Close");
 
     } else {
         console.log("PEDIDOS GENERAL Idioma no definido");
@@ -552,123 +552,117 @@ function getPedidosAyuda(pantalla) {
 
     if (lang == "ES") {
         if (pantalla == "emitidos") {
-        		$('#LbTituloAyuda').text("Ayuda Pedidos Emitidos");
+            $('#LbTituloAyuda').text("Ayuda Pedidos Emitidos");
             $('#pLabTituloAyuda').text("Titulo Ayuda Pedidos Emitidos");
             $('#pLabTextoAyuda').text("EMITIDOS: asdfjl aslkdjfas lskjdfsldkf. kalsjdkfajsdlfk. klsjdflkasjd flllksdfjl");
 
         } else if (pantalla == "pedidosDetalle") {
-        		$('#LbTituloAyuda').text("Ayuda Pedidos Emitidos Detalle");
+            $('#LbTituloAyuda').text("Ayuda Pedidos Emitidos Detalle");
             $('#pLabTituloAyuda').text("Titulo Ayuda Pedidos Detalle");
             $('#pLabTextoAyuda').text("DETALLE : asdfjl aslkdjfas lskjdfsldkf. kalsjdkfajsdlfk. klsjdflkasjd flllksdfjl");
 
-        }else if (pantalla == "nuevo_pedido") {
-        		$('#LbTituloAyuda').text("Ayuda Nuevo Pedido");
+        } else if (pantalla == "nuevo_pedido") {
+            $('#LbTituloAyuda').text("Ayuda Nuevo Pedido");
             $('#pLabTituloAyuda').text("Titulo Ayuda Nuevo Pedido");
             $('#pLabTextoAyuda').text("DETALLE (English): asdfjl aslkdjfas lskjdfsldkf. kalsjdkfajsdlfk. klsjdflkasjd flllksdfjl");
 
-        } else if (pantalla == "pedidosBorradores"){borradoresDetalle
-        		$('#LbTituloAyuda').text("Ayuda Borradores");
+        } else if (pantalla == "pedidosBorradores") {
+            borradoresDetalle
+            $('#LbTituloAyuda').text("Ayuda Borradores");
             $('#pLabTituloAyuda').text("Titulo Ayuda Borradores");
             $('#pLabTextoAyuda').text("DETALLE (English): asdfjl aslkdjfas lskjdfsldkf. kalsjdkfajsdlfk. klsjdflkasjd flllksdfjl");
 
-        } else if (pantalla == "borradoresDetalle"){
-        		$('#LbTituloAyuda').text("Ayuda Borradores Detalle");
+        } else if (pantalla == "borradoresDetalle") {
+            $('#LbTituloAyuda').text("Ayuda Borradores Detalle");
             $('#pLabTituloAyuda').text("Titulo Ayuda Borradores Detalle");
             $('#pLabTextoAyuda').text("DETALLE (English): asdfjl aslkdjfas lskjdfsldkf. kalsjdkfajsdlfk. klsjdflkasjd flllksdfjl");
 
-        }else if (pantalla == "pedidoNuevoAnteriores"){
-        		$('#LbTituloAyuda').text("Ayuda Pedido Nuevo Anteriores");
+        } else if (pantalla == "pedidoNuevoAnteriores") {
+            $('#LbTituloAyuda').text("Ayuda Pedido Nuevo Anteriores");
             $('#pLabTituloAyuda').text("Titulo Ayuda Borradores Detalle");
             $('#pLabTextoAyuda').text("DETALLE (English): asdfjl aslkdjfas lskjdfsldkf. kalsjdkfajsdlfk. klsjdflkasjd flllksdfjl");
 
-        }else if (pantalla == "pedidos_plantillas") {
-        		$('#LbTituloAyuda').text("Ayuda Plantillas");
+        } else if (pantalla == "pedidos_plantillas") {
+            $('#LbTituloAyuda').text("Ayuda Plantillas");
             $('#pLabTituloAyuda').text("Titulo Ayuda Borradores");
             $('#pLabTextoAyuda').text("DETALLE (English): asdfjl aslkdjfas lskjdfsldkf. kalsjdkfajsdlfk. klsjdflkasjd flllksdfjl");
 
-        }else if (pantalla == "nuevo_proveedores") {
-        		$('#LbTituloAyuda').text("Ayuda de Proveedores");
+        } else if (pantalla == "nuevo_proveedores") {
+            $('#LbTituloAyuda').text("Ayuda de Proveedores");
             $('#pLabTituloAyuda').text("Titulo Ayuda Borradores");
             $('#pLabTextoAyuda').text("DETALLE (English): asdfjl aslkdjfas lskjdfsldkf. kalsjdkfajsdlfk. klsjdflkasjd flllksdfjl");
 
-        }else if (pantalla == "pedidos_plantillas_detalle") {
-        		$('#LbTituloAyuda').text("Ayuda Plantillas Detalle");
+        } else if (pantalla == "pedidos_plantillas_detalle") {
+            $('#LbTituloAyuda').text("Ayuda Plantillas Detalle");
             $('#pLabTituloAyuda').text("Titulo Ayuda Borradores");
             $('#pLabTextoAyuda').text("DETALLE (English): asdfjl aslkdjfas lskjdfsldkf. kalsjdkfajsdlfk. klsjdflkasjd flllksdfjl");
 
-        }else if (pantalla == "ayudaPrincipal") {
-        		$('#mLbTituloAyuda').text("Pantalla Ayuda menú principal");
+        } else if (pantalla == "ayudaPrincipal") {
+            $('#mLbTituloAyuda').text("Pantalla Ayuda menú principal");
             $('#mLabTituloAyuda').text("Bienvenidos a MAMBO!");
-            $('#mLabTextoAyuda').html("<p>MAMBO Stock (Mobile Areas Management Back Office) es la aplicación de soporte al circuito de reaprovisionamiento de mercancía en el centro, pensada para ser utilizada desde dispositivos móviles con el objetivo de realizar las tareas necesarias en el sistema in situ, sin necesidad de desplazarse al despacho y minimizando el uso del papel.</p>"
-            													+"<p>Con MAMBO Stock se pueden realizar las tareas de pedidos, recepciones, devoluciones, expediciones, mermas e inventario.</p>"
-            													+"<p>Aunque la aplicación está diseñada en modo WEB, conectada a los sistemas centrales mediante conexiones inalámbricas WIFI o 3G, utiliza una base de datos local que permite trabajar en modo offline para poder realizar las tareas en entonos sin buena cobertura como almacenes, neveras,…etc. Los datos generados se enviarán a posteriori cuando las condiciones de cobertura lo permitan.</p>"
-            													+"<p>Por este motivo, se ha incorporado un sistema de notificaciones que informa de aquellos datos que no han sido enviados aun a los sistemas centrales. Es importante estar atento a las notificaciones para garantizar que todas las tareas realizadas han sido tratadas correctamente.</p>"
-            													+"<p>Todas las pantallas de la aplicación incorporan su correspondiente documento de ayuda. Para cualquier incidencia o duda adicional puede utilizar la opción de alta de incidencia que encontrará en el menú sistema.</p>");
+            $('#mLabTextoAyuda').html("<p>MAMBO Stock (Mobile Areas Management Back Office) es la aplicación de soporte al circuito de reaprovisionamiento de mercancía en el centro, pensada para ser utilizada desde dispositivos móviles con el objetivo de realizar las tareas necesarias en el sistema in situ, sin necesidad de desplazarse al despacho y minimizando el uso del papel.</p>" + "<p>Con MAMBO Stock se pueden realizar las tareas de pedidos, recepciones, devoluciones, expediciones, mermas e inventario.</p>" + "<p>Aunque la aplicación está diseñada en modo WEB, conectada a los sistemas centrales mediante conexiones inalámbricas WIFI o 3G, utiliza una base de datos local    que permite trabajar en modo offline para poder realizar las tareas en entonos sin buena cobertura como almacenes, neveras,…etc. Los datos generados se enviarán a posteriori cuando las condiciones de cobertura lo permitan.</p>" + "<p>Por este motivo, se ha incorporado un sistema de notificaciones que informa de aquellos datos que no han sido enviados aun a los sistemas centrales. Es                                                                           importante estar atento a las notificaciones para garantizar que todas las tareas realizadas han sido tratadas correctamente.</p>" + "<p>Todas las pantallas de la aplicación incorporan su correspondiente documento de ayuda. Para cualquier incidencia o duda adicional puede utilizar la opción de alta de incidencia que encontrará en el menú sistema.</p>");
 
         } else {
-        		$('#LbTituloAyuda').text("Ayuda No definida");	
+            $('#LbTituloAyuda').text("Ayuda No definida");
             $('#pLabTituloAyuda').text("Titulo Ayuda No definido");
             $('#pLabTextoAyuda').text("NO DEFINIDO : asdfjl aslkdjfas lskjdfsldkf. kalsjdkfajsdlfk. klsjdflkasjd flllksdfjl");
 
         }
-		
+
     } else if (lang == "EN") {
         if (pantalla == "emitidos") {
-        		$('#LbTituloAyuda').text("Help Orders");
+            $('#LbTituloAyuda').text("Help Orders");
             $('#pLabTituloAyuda').text("Title Help Orders");
             $('#pLabTextoAyuda').text("EMITIDOS (English) : asdfjl aslkdjfas lskjdfsldkf. kalsjdkfajsdlfk. klsjdflkasjd flllksdfjl");
 
         } else if (pantalla == "pedidosDetalle") {
-        		$('#LbTituloAyuda').text("Help Order Detail");
+            $('#LbTituloAyuda').text("Help Order Detail");
             $('#pLabTituloAyuda').text("Title Help  Order Detail");
             $('#pLabTextoAyuda').text("DETALLE (English): asdfjl aslkdjfas lskjdfsldkf. kalsjdkfajsdlfk. klsjdflkasjd flllksdfjl");
 
-        }else if (pantalla == "nuevo_pedido") {
-        		$('#LbTituloAyuda').text("Help New Order");
+        } else if (pantalla == "nuevo_pedido") {
+            $('#LbTituloAyuda').text("Help New Order");
             $('#pLabTituloAyuda').text("Title Help New Order");
             $('#pLabTextoAyuda').text("DETALLE (English): asdfjl aslkdjfas lskjdfsldkf. kalsjdkfajsdlfk. klsjdflkasjd flllksdfjl");
 
-        }else if (pantalla == "pedidosBorradores") {
-        		$('#LbTituloAyuda').text("Help Draft");
+        } else if (pantalla == "pedidosBorradores") {
+            $('#LbTituloAyuda').text("Help Draft");
             $('#pLabTituloAyuda').text("Titulo Ayuda Borradores");
             $('#pLabTextoAyuda').text("DETALLE (English): asdfjl aslkdjfas lskjdfsldkf. kalsjdkfajsdlfk. klsjdflkasjd flllksdfjl");
 
-        }else if (pantalla == "borradoresDetalle"){pedidoNuevoAnteriores
-        		$('#LbTituloAyuda').text("Help Detail Draft");
+        } else if (pantalla == "borradoresDetalle") {
+            pedidoNuevoAnteriores
+            $('#LbTituloAyuda').text("Help Detail Draft");
             $('#pLabTituloAyuda').text("Titulo Ayuda Borradores Detalle");
             $('#pLabTextoAyuda').text("DETALLE (English): asdfjl aslkdjfas lskjdfsldkf. kalsjdkfajsdlfk. klsjdflkasjd flllksdfjl");
 
-        }else if (pantalla == "pedidoNuevoAnteriores"){
-        		$('#LbTituloAyuda').text("Help New Order Anteriores");
+        } else if (pantalla == "pedidoNuevoAnteriores") {
+            $('#LbTituloAyuda').text("Help New Order Anteriores");
             $('#pLabTituloAyuda').text("Titulo Ayuda Borradores Detalle");
             $('#pLabTextoAyuda').text("DETALLE (English): asdfjl aslkdjfas lskjdfsldkf. kalsjdkfajsdlfk. klsjdflkasjd flllksdfjl");
 
-        }else if (pantalla == "pedidos_plantillas") {
-        		$('#LbTituloAyuda').text("Help Templates");
+        } else if (pantalla == "pedidos_plantillas") {
+            $('#LbTituloAyuda').text("Help Templates");
             $('#pLabTituloAyuda').text("Titulo Ayuda Borradores");
             $('#pLabTextoAyuda').text("DETALLE (English): asdfjl aslkdjfas lskjdfsldkf. kalsjdkfajsdlfk. klsjdflkasjd flllksdfjl");
 
-        }else if (pantalla == "nuevo_proveedores") {
-        		$('#LbTituloAyuda').text("Help Providers");
+        } else if (pantalla == "nuevo_proveedores") {
+            $('#LbTituloAyuda').text("Help Providers");
             $('#pLabTituloAyuda').text("Titulo Ayuda Borradores");
             $('#pLabTextoAyuda').text("DETALLE (English): asdfjl aslkdjfas lskjdfsldkf. kalsjdkfajsdlfk. klsjdflkasjd flllksdfjl");
 
-        }else if (pantalla == "pedidos_plantillas_detalle") {
-        		$('#LbTituloAyuda').text("Help Detail Templates");
+        } else if (pantalla == "pedidos_plantillas_detalle") {
+            $('#LbTituloAyuda').text("Help Detail Templates");
             $('#pLabTituloAyuda').text("Titulo Ayuda Borradores");
             $('#pLabTextoAyuda').text("DETALLE (English): asdfjl aslkdjfas lskjdfsldkf. kalsjdkfajsdlfk. klsjdflkasjd flllksdfjl");
 
-        }else if (pantalla == "ayudaPrincipal") {
-        		$('#LbTituloAyuda').text("Main menu help screen");
+        } else if (pantalla == "ayudaPrincipal") {
+            $('#LbTituloAyuda').text("Main menu help screen");
             $('#mLabTituloAyuda').text("Welcome to Mambo!");
-            $('#mLabTextoAyuda').html("<p>MAMBO Stock (Mobile Areas Management Back Office) is the application designed to manage the goods and merchandise replenishment circuit in the centers. This application has been created to be used on mobile devices in order to perform back office tasks on site, so that the user does not have to work in an office, as well as minimizing the use of paper.</p>"
-            													+"<p>MAMBO Stock allows you to enter purchase orders, deliveries, returns, transfers, wastes and inventory counts.</p>"
-            													+"<p>Although the application is web based  and it is connected with the core systems and central database through wireless connections (WiFi/4G), it also has a local database that allows you to work offline in order to perform any task in environments without  a good quality wireless signal, such as freezers, warehouses, basements, etc. In these cases, the data generated will be sent afterwards when the wifi coverage conditions allow.</p>"
-            													+"<p>For this reason, a notifications tool has been implemented. This tool warns the user about the data that has not been sent to the core systems and therefore has not been saved in the central database. It is important to pay special attention to the notifications in order to guarantee that all the tasks performed have been properly processed.</p>"
-            													+"<p>Every application screen has its own help documentation. In case of any issue or additional doubts you can use the “New ticket” option that you will find in the general system menu.</p>");
+            $('#mLabTextoAyuda').html("<p>MAMBO Stock (Mobile Areas Management Back Office) is the application designed to manage the goods and merchandise replenishment circuit in the centers. This application has been created to be used on mobile devices in order to perform back office tasks on site, so that the user does not have to work in an office, as well as minimizing the use of paper.</p>" + "<p>MAMBO Stock allows you to enter purchase orders, deliveries, returns, transfers, wastes and inventory counts.</p>" + "<p>Although the application is web based  and it is connected with the core systems and central database through wireless connections (WiFi/4G), it also has a local database that allows you to work offline in order to perform any task in environments without  a good quality wireless signal, such as freezers, warehouses, basements, etc. In these cases, the data generated will be sent afterwards when the wifi coverage conditions allow.</p>" + "<p>For this reason, a notifications tool has been implemented. This tool warns the user about the data that has not been sent to the core systems and therefore has not been saved in the central database. It is important to pay special attention to the notifications in order to guarantee that all the tasks performed have been properly processed.</p>" + "<p>Every application screen has its own help documentation. In case of any issue or additional doubts you can use the “New ticket” option that you will find in the general system menu.</p>");
 
         } else {
-        		$('#LbTituloAyuda').text("Help Undifined");
+            $('#LbTituloAyuda').text("Help Undifined");
             $('#pLabTituloAyuda').text("Tittle Help  No definido");
             $('#pLabTextoAyuda').text("NO DEFINIDO (English) : asdfjl aslkdjfas lskjdfsldkf. kalsjdkfajsdlfk. klsjdflkasjd flllksdfjl");
 
@@ -680,95 +674,93 @@ function getPedidosAyuda(pantalla) {
 
 function getPedidosTitulo() {
 
-	var lang = localStorage['language'];
-	var pantalla = localStorage['pantalla'];
+    var lang = localStorage['language'];
+    var pantalla = localStorage['pantalla'];
 
-	if (lang == "ES") {
+    if (lang == "ES") {
 
-		if (pantalla == "emitidos") {
-			$("#seccion_title").text("Pedidos Emitidos");
-		} else if (pantalla == "pedidosDetalle") {
-			$("#seccion_title").text("Detalle de pedido");
-			localStorage["pantalla_anterior"] = "pedidosDetalle";
-		} else if (pantalla == "pedidoNuevoPlantillas") {
-			$("#seccion_title").text("Nuevo Pedido de Plantilla");
-		} else if (pantalla == "alta_pedidos_plantillas_detalle") {
-			$("#seccion_title").text("Nuevo Pedido: Detalle plantilla");
+        if (pantalla == "emitidos") {
+            $("#seccion_title").text("Pedidos Emitidos");
+        } else if (pantalla == "pedidosDetalle") {
+            $("#seccion_title").text("Detalle de pedido");
+            localStorage["pantalla_anterior"] = "pedidosDetalle";
+        } else if (pantalla == "pedidoNuevoPlantillas") {
+            $("#seccion_title").text("Nuevo Pedido de Plantilla");
+        } else if (pantalla == "alta_pedidos_plantillas_detalle") {
+            $("#seccion_title").text("Nuevo Pedido: Detalle plantilla");
 
-		} else if (pantalla == "pedidos_plantillas") {
-			$("#seccion_title").text("Plantillas");
-		} else if (pantalla == "pedidos_plantillas_detalle") {
-			$("#seccion_title").text("Detalle de plantilla");
-			localStorage["pantalla_anterior"] = "pedidos_plantillas_detalle";
-		} else if (pantalla == "nuevo_pedido" || pantalla == "nuevo_proveedores" || pantalla == "alta_pedidos" || pantalla == "pedidosDetalleAnterior" || pantalla == "pedidosDetalleNuevo") {
+        } else if (pantalla == "pedidos_plantillas") {
+            $("#seccion_title").text("Plantillas");
+        } else if (pantalla == "pedidos_plantillas_detalle") {
+            $("#seccion_title").text("Detalle de plantilla");
+            localStorage["pantalla_anterior"] = "pedidos_plantillas_detalle";
+        } else if (pantalla == "nuevo_pedido" || pantalla == "nuevo_proveedores" || pantalla == "alta_pedidos" || pantalla == "pedidosDetalleAnterior" || pantalla == "pedidosDetalleNuevo") {
 
-			if (localStorage["pantalla_anterior"] == "pedidos_plantillas_detalle")
-				$("#seccion_title").text("Modificar Plantillas");
-			else if (localStorage["pantalla_anterior"] == "borradoresDetalle")
-				$("#seccion_title").text("Modificar Borrador");
-			else
-				$("#seccion_title").text("Nuevo Pedido");
-		} else if (pantalla == "insertarArticulos") {
-			$("#seccion_title").text("Insertar Articulo");
-		} else if (pantalla == "pFiltroFamilias") {
-			$("#seccion_title").text("Filtro Por Familias");
-		} else if (pantalla == "pedidos_cabecera") {
-			$("#seccion_title").text("Cabecera de Pedido");
-		} else if (pantalla == "pedidosBorradores") {
-			$("#seccion_title").text("Borradores");
-		} else if (pantalla == "borradoresDetalle") { 
-			$("#seccion_title").text("Detalle del Borrador");
-			localStorage["pantalla_anterior"] = "borradoresDetalle";
-		} else if (pantalla == "pedidosDetalleNuevoEscaner") { 
-			$("#seccion_title").text("Pedido Global");
-			localStorage["pantalla_anterior"] = "nuevo_proveedores";
-		} else {
+            if (localStorage["pantalla_anterior"] == "pedidos_plantillas_detalle")
+                $("#seccion_title").text("Modificar Plantillas");
+            else if (localStorage["pantalla_anterior"] == "borradoresDetalle")
+                $("#seccion_title").text("Modificar Borrador");
+            else
+                $("#seccion_title").text("Nuevo Pedido");
+        } else if (pantalla == "insertarArticulos") {
+            $("#seccion_title").text("Insertar Articulo");
+        } else if (pantalla == "pFiltroFamilias") {
+            $("#seccion_title").text("Filtro Por Familias");
+        } else if (pantalla == "pedidos_cabecera") {
+            $("#seccion_title").text("Cabecera de Pedido");
+        } else if (pantalla == "pedidosBorradores") {
+            $("#seccion_title").text("Borradores");
+        } else if (pantalla == "borradoresDetalle") {
+            $("#seccion_title").text("Detalle del Borrador");
+            localStorage["pantalla_anterior"] = "borradoresDetalle";
+        } else if (pantalla == "pedidosDetalleNuevoEscaner") {
+            $("#seccion_title").text("Pedido Global");
+            localStorage["pantalla_anterior"] = "nuevo_proveedores";
+        } else {
 
-		}
-	} else if (lang == "EN") {
-		if (pantalla == "emitidos") {
-			$("#seccion_title").text("Orders");
-		} else if (pantalla == "pedidosDetalle") {
-			$("#seccion_title").text("Order Detail");
-			localStorage["pantalla_anterior"] = "pedidosDetalle";
-		} else if (pantalla == "pedidoNuevoPlantillas") {
-			$("#seccion_title").text("New Order from Template");
-		} else if (pantalla == "pedidos_plantillas") {
-			$("#seccion_title").text("Templates");
-		} else if (pantalla == "pedidos_plantillas_detalle") {
-			$("#seccion_title").text("Template Detail");
-			localStorage["pantalla_anterior"] = "pedidos_plantillas_detalle";
-		} else if (pantalla == "alta_pedidos_plantillas_detalle") {
-			$("#seccion_title").text("New Order: Template detail");
-		} else if (pantalla == "nuevo_pedido" || pantalla == "nuevo_proveedores" || pantalla == "alta_pedidos" || pantalla == "pedidosDetalleAnterior" || pantalla == "pedidosDetalleNuevo") {
+        }
+    } else if (lang == "EN") {
+        if (pantalla == "emitidos") {
+            $("#seccion_title").text("Orders");
+        } else if (pantalla == "pedidosDetalle") {
+            $("#seccion_title").text("Order Detail");
+            localStorage["pantalla_anterior"] = "pedidosDetalle";
+        } else if (pantalla == "pedidoNuevoPlantillas") {
+            $("#seccion_title").text("New Order from Template");
+        } else if (pantalla == "pedidos_plantillas") {
+            $("#seccion_title").text("Templates");
+        } else if (pantalla == "pedidos_plantillas_detalle") {
+            $("#seccion_title").text("Template Detail");
+            localStorage["pantalla_anterior"] = "pedidos_plantillas_detalle";
+        } else if (pantalla == "alta_pedidos_plantillas_detalle") {
+            $("#seccion_title").text("New Order: Template detail");
+        } else if (pantalla == "nuevo_pedido" || pantalla == "nuevo_proveedores" || pantalla == "alta_pedidos" || pantalla == "pedidosDetalleAnterior" || pantalla == "pedidosDetalleNuevo") {
 
-			if (localStorage["pantalla_anterior"] == "pedidos_plantillas_detalle")
-				$("#seccion_title").text("Modify Template");
-			else if (localStorage["pantalla_anterior"] == "borradoresDetalle")
-				$("#seccion_title").text("Modify Draft");
-			else
-				$("#seccion_title").text("New order");
-		} else if (pantalla == "insertarArticulos") {
-			$("#seccion_title").text("Insert Article");
-		} else if (pantalla == "pFiltroFamilias") {
-			$("#seccion_title").text("Filter by Family");
-		} else if (pantalla == "pedidos_cabecera") {
-			$("#seccion_title").text("Order Header");
-		} else if (pantalla == "pedidosBorradores") {
-			$("#seccion_title").text("Drafts");
-		} else if (pantalla == "borradoresDetalle") {
-			$("#seccion_title").text("Draft Detail");
-			localStorage["pantalla_anterior"] = "borradoresDetalle";
-		} else if (pantalla == "pedidosDetalleNuevoEscaner") { 
-			$("#seccion_title").text("GLobal Order");
-			localStorage["pantalla_anterior"] = "nuevo_proveedores";
-		} else {
+            if (localStorage["pantalla_anterior"] == "pedidos_plantillas_detalle")
+                $("#seccion_title").text("Modify Template");
+            else if (localStorage["pantalla_anterior"] == "borradoresDetalle")
+                $("#seccion_title").text("Modify Draft");
+            else
+                $("#seccion_title").text("New order");
+        } else if (pantalla == "insertarArticulos") {
+            $("#seccion_title").text("Insert Article");
+        } else if (pantalla == "pFiltroFamilias") {
+            $("#seccion_title").text("Filter by Family");
+        } else if (pantalla == "pedidos_cabecera") {
+            $("#seccion_title").text("Order Header");
+        } else if (pantalla == "pedidosBorradores") {
+            $("#seccion_title").text("Drafts");
+        } else if (pantalla == "borradoresDetalle") {
+            $("#seccion_title").text("Draft Detail");
+            localStorage["pantalla_anterior"] = "borradoresDetalle";
+        } else if (pantalla == "pedidosDetalleNuevoEscaner") {
+            $("#seccion_title").text("GLobal Order");
+            localStorage["pantalla_anterior"] = "nuevo_proveedores";
+        } else {
 
-		}
-	} else {
-		console.log("PEDIDOS TITULOS Idioma no definido");
-	}
+        }
+    } else {
+        console.log("PEDIDOS TITULOS Idioma no definido");
+    }
 
 }
-
-
