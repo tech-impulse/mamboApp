@@ -61,31 +61,6 @@ function pMostrarPedidos(fEstado) {
 
                 }
                 
-                // RUTINA PARA COMPROVAR PEDIDOS DUPLICADOS CON ERROR
-                /*
-					        db.transaction(function (transaction) {
-					            console.log("RUTINA PARA COMPROVAR PEDIDOS DUPLICADOS CON ERROR");
-								var sql = "";
-					            var idPedido ="";
-					
-													sql = "SELECT * FROM ordersPending WHERE error=1";
-													transaction.executeSql(sql, undefined, function (transaction, result) {
-										                for (var i = 0; i < result.rows.length; i++) {
-										                    var rowDb = result.rows.item(i);
-										                        idPedido = rowDb.idInternalOrder;
-										                        console.log("El pedido con error es " + idPedido);      
-										                      var sql2 = "SELECT * FROM orders as o WHERE o.idPurchaseCenter="+rowDb.idPurchaseCenter+" AND o.idVendor="+rowDb.idVendor+ " AND o.documentDate='"+rowDb.documentDate+"'";  
-										                        console.log("SQL2------>" + sql2);
-										                        transaction.executeSql(sql2, undefined, function (transaciones, result) {
-										                            console.log("Los pedidos a borrar son " + result.rows.item(0).idOrder + " con Id de ordenPendiente " + idPedido);                            
-										                            pEliminarPedidoTemporal(idPedido);                               
-										                        }, error);
-										                    
-										                }
-								}, error);
-							});
-                */
-                
                 var grid = $("#pGridPedidos").data("kendoGrid");
                 if (grid != null) { //destruimos el grid asi cuando cargamos no se duplique botones
                      $("#pGridPedidos").data().kendoGrid.destroy();
