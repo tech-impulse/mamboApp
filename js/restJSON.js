@@ -35,7 +35,8 @@ localStorage['cargaPaso12']=1; //ESTADOS
 localStorage['pModoCargaParcial']="";
 
 var errorCargaInicial=0;
-var maxtime=400000;
+var maxtime=300000;
+localStorage['maxtime']=maxtime;
 
 var tipoLogWS=10;
 var categoriaLogWS=0;
@@ -1497,8 +1498,8 @@ function addOrders(data){
 	
 		var debug=0;
     console.log("JSON de los Pedidos");
-    //if (debug==1) { console.log(JSON.stringify(data)); }
-    
+    if (debug==1) { console.log(JSON.stringify(data)); }
+
     var p = 0;
     var l = 0;
     var q = "";
@@ -1567,27 +1568,17 @@ function addOrders(data){
 					
 					querys[l]=getQueryInsertOrder(pedido); 
 					l++;
-					if (pedido.transactionId != null && pedido.transactionId!= "") {
-            querys[l]="DELETE FROM ordersPendingDetail WHERE EXISTS (SELECT * FROM ordersPending as o WHERE o.idInternalOrder=ordersPendingDetail.idInternalOrder AND o.transactionCode='"+pedido.trasactionId+"')"; 
+					if (this.transactionId != null && this.transactionId!= "") {
+            querys[l]="DELETE FROM ordersPendingDetail WHERE EXISTS (SELECT * FROM ordersPending as o WHERE o.idInternalOrder=ordersPendingDetail.idInternalOrder AND o.transactionCode='"+this.trasactionId+"')";
   					console.log(querys[l]);
             
             l++;
             
-            querys[l]="DELETE FROM ordersPending WHERE transactionCode='"+pedido.transactionId+"' "; 
+            querys[l]="DELETE FROM ordersPending WHERE transactionCode='"+this.transactionId+"' ";
             console.log(querys[l]);
   					l++;
           }
-					
-					//TEMPORAL!!!!!!!
-					/*
-					if (entradas < 20 ) {
-						querys[l]=getQueryInsertOrderDraft(pedido); 
-						l++;
-						
-						entradas++;
-					}
-					*/
-					
+
 					if (this.orderLines !== undefined) {
 						for (var i=0; i < this.orderLines.length ; i++) {
 		        		 
@@ -1621,16 +1612,7 @@ function addOrders(data){
 		
 								querys[l]=getQueryInsertOrderDetail(articulo); 
 								l++;
-                
-                
-                								
-								/*
-								if (entradas < 21 ) {
-									//TEMPORAL!!!!!!!
-									querys[l]=getQueryInsertOrderDraftDetail(articulo); 
-									l++;	
-								}
-								*/
+
 								
 		        }
 	        } else {

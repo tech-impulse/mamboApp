@@ -12,6 +12,50 @@ $(document).keydown(function (e) {
 });
 
 
+/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Barra de progreso del time out.
+*/
+
+$(document).on('pageinit', '#progressPage', function () {
+
+    var tm="";
+    var ts="";
+
+    localStorage['tcarga']=0;
+    
+     $("#progressBarTime").kendoProgressBar({
+                min: 0,
+                max: (localStorage['maxtime'] * 2),
+                type: "percent"
+     });
+
+    var pb = $("#progressBarTime").data("kendoProgressBar");
+    pb.value(0);
+    var interval = setInterval(function () {
+        
+        localStorage['tcarga']=parseInt(localStorage['tcarga']) + 5000;
+        pb.value(localStorage['tcarga'] );
+        //console.log("BARRA TIEMPO ==> " + localStorage['tcarga'] + "MAX == " +  localStorage['maxtime']);
+    }, 5000);
+
+});
+
+               
+function progressTime(percent, clearTimeout) {
+
+    var progressBarWidth = percent * $('#progressBarTime').width() / 100;
+
+    console.log("TIEMPO!!!!! "+percent);
+    
+    $('#progressBarTime').find('div').animate({ width: progressBarWidth }, 500); 
+    $('#progressBarTime').find('div').html(clearTimeout );
+
+
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 $(document).on('pageinit', '#LoginPage', function () {
 
     $('input').focus();
@@ -123,6 +167,7 @@ $(document).on('pageinit', '#LoginPage', function () {
         console.log("-BOTON ACEPTAR--------------------------------->");
         $("#cargaDialogAC").popup("close");
 
+        localStorage['tcarga']=-3000;
         setTimeout('recargaTotal();', 3000);
 
 
@@ -1731,7 +1776,7 @@ $(document).on('pageinit', '#LoginPage', function () {
             var filterPlanDet = {
                 logic: "or",
                 filters: [{
-                    field: 'cod_pedid',
+                    field: 'reference',
                     operator: "contains",
                     value: textSerch
                 }, {
@@ -1757,12 +1802,12 @@ $(document).on('pageinit', '#LoginPage', function () {
             var queryDet = new kendo.data.Query(allDataNuevoPedPlam);
             var dataNuevoPedPlan = queryDet.filter(filtersPlan).data;
 
+            var mr = parseInt(localStorage.getItem("max_row_per_pag") -2); // Una fila menos debido a los labels superiores.
+            localStorage["pedidos_pag_act"] = 1;
+            localStorage["pedidos_pag_max_row"] = parseInt(mr);
+            
+            localStorage["pedidos_pag_last"] = Math.ceil(parseInt(dataNuevoPedPlan.length) / parseInt(mr));
 
-            localStorage["pedidos_detalle_pag_act"] = 1;
-            localStorage["pedidos_detalle_pag_max_row"] = localStorage["max_row_per_pag"] - 2;
-            localStorage["pedidos_detalle_pag_last"] = Math.ceil(dataNuevoPedPlan.length / localStorage["pedidos_detalle_pag_max_row"]);
-
-            var mr = parseInt(localStorage["pedidos_detalle_pag_max_row"]);
 
             displayPedidosAnterioresNuevoPedido();
 
@@ -1914,9 +1959,10 @@ $(document).on('pageinit', '#LoginPage', function () {
             var queryDet = new kendo.data.Query(allDataDet);
             var dataDet = queryDet.filter(filtersDetalle).data;
 
+			var mr = parseInt(localStorage.getItem("max_row_per_pag") - 2); // -1 debido a los labels superiores
             localStorage["pedidos_pag_act"] = 1;
-            localStorage["pedidos_pag_max_row"] = localStorage["max_row_per_pag"];
-            localStorage["pedidos_pag_last"] = Math.ceil(dataDet.length / localStorage["pedidos_pag_max_row"]);
+            localStorage["pedidos_pag_max_row"] = mr;
+            localStorage["pedidos_pag_last"] = Math.ceil(dataDet.length/ mr);
 
             displayProviders();
 
@@ -1928,7 +1974,7 @@ $(document).on('pageinit', '#LoginPage', function () {
 
             console.log("VALOR DEL FILTRO DE DETALLE DE PEDIDO ANTERIOR " + textSerch);
 
-            var gridDet = $("#pGridPedidosAnterioresDetalle").data("kendoGrid");
+            var gridDet = $("#pGridPedidosDet").data("kendoGrid");
 
             var filterDet = {
                 logic: "or",
@@ -1961,15 +2007,17 @@ $(document).on('pageinit', '#LoginPage', function () {
 
             event.stopPropagation();
 
-            var dataSourceDetalle = $("#pGridPedidosAnterioresDetalle").data("kendoGrid").dataSource;
+               var dataSourceDetalle = $("#pGridPedidosDet").data("kendoGrid").dataSource;
             var filtersDetalle = dataSourceDetalle.filter();
             var allDataDet = dataSourceDetalle.data();
             var queryDet = new kendo.data.Query(allDataDet);
             var dataDet = queryDet.filter(filtersDetalle).data;
+            
+             localStorage["pedidos_detalle_pag_act"] = 1;
+            localStorage["pedidos_detalle_pag_max_row"] = parseInt(localStorage["pedidos_detalle_pag_max_row_max"]);
+            
+            localStorage["pedidos_detalle_pag_last"] = Math.ceil(dataDet.length / parseInt(localStorage["pedidos_detalle_pag_max_row"]));
 
-            localStorage["pedidos_detalle_pag_act"] = 1;
-            localStorage["pedidos_detalle_pag_max_row"] = localStorage["max_row_per_pag"] - 2;
-            localStorage["pedidos_detalle_pag_last"] = Math.ceil(dataDet.length / localStorage["pedidos_detalle_pag_max_row"]);
 
             displayDetalleAnterior();
 
@@ -2011,13 +2059,58 @@ $(document).on('pageinit', '#LoginPage', function () {
             displayNuevoPedido();
 
 
+         }else if (localStorage["pantalla"] == "pedidoNuevoPlantillas") {
+
+            console.log("ESTAMOS DENTRO DE LISTA DE CENTROS");
+
+            var textSerch = $('#searchText').val();
+
+            console.log("VALOR DEL FILTRO LISTA DE CENTROS " + textSerch);
+
+            var gridDet = $("#pGridPedidosPlantillas").data("kendoGrid");
+
+            var filterDet = {
+                logic: "or",
+                filters: [{
+                    field: 'cod_centr',
+                    operator: "contains",
+                    value: textSerch
+                },{
+                    field: 'zona',
+                    operator: "contains",
+                    value: textSerch
+                },{
+                    field: 'cod_proveedo',
+                    operator: "contains",
+                    value: textSerch
+                },{
+                    field: 'nombre',
+                    operator: "contains",
+                    value: textSerch
+                }]
+            };
+
+            gridDet.dataSource.filter(filterDet);
+
+            console.log("SEARCH Centros: Pulsado tecla" + textSerch);
+
+            event.stopPropagation();
+
+            var dataSourceDetalle = $("#pGridPedidosPlantillas").data("kendoGrid").dataSource;
+            var filtersDetalle = dataSourceDetalle.filter();
+            var allDataDet = dataSourceDetalle.data();
+            var queryDet = new kendo.data.Query(allDataDet);
+            var dataDet = queryDet.filter(filtersDetalle).data;
+
+            
+            var mr = parseInt(localStorage.getItem("max_row_per_pag") - 2);
+            localStorage["pedidos_pag_act"] = 1;
+            localStorage["pedidos_pag_max_row"] = mr;
+            localStorage["pedidos_pag_last"] = Math.ceil(dataDet.length / parseInt(mr));
+            displayPlantillasNuevoPedido();
         }
 
-
-
-
-
-    });
+});
 
     //evento de cancelar filtro del filtro header
     $(document).on('click', '.ui-input-clear', function () {
@@ -2132,7 +2225,64 @@ $(document).on('pageinit', '#LoginPage', function () {
 
             displayInsertarArticulos();
 
+}else if (localStorage["pantalla"] == "nuevo_proveedores") {
+
+            var grid = $("#pGridProveedores").data("kendoGrid");
+            grid.dataSource.filter([]);
+            var dataSource = $("#pGridProveedores").data("kendoGrid").dataSource;
+            var allData = dataSource.data();
+
+            var mr = parseInt(localStorage.getItem("max_row_per_pag") - 2); // -1 debido a los labels superiores
+            localStorage["pedidos_pag_act"] = 1;
+            localStorage["pedidos_pag_max_row"] = mr;
+            localStorage["pedidos_pag_last"] = Math.ceil(parseInt(allData.length) / mr);
+
+            displayProviders();
+
+        }else if (localStorage["pantalla"] == "pedidoNuevoAnteriores") {
+
+            var grid = $("#pGridPedidosAnteriores").data("kendoGrid");
+            grid.dataSource.filter([]);
+            var dataSource = $("#pGridPedidosAnteriores").data("kendoGrid").dataSource;
+            var allData = dataSource.data();
+            
+            var mr = parseInt(localStorage.getItem("max_row_per_pag") -2); // Una fila menos debido a los labels superiores
+            localStorage["pedidos_pag_act"] = 1;
+            localStorage["pedidos_pag_max_row"] = parseInt(mr);
+            localStorage["pedidos_pag_last"] = Math.ceil(parseInt(allData.length) / parseInt(mr));
+
+            displayPedidosAnterioresNuevoPedido();
+        
+		}else if (localStorage["pantalla"] == "pedidoNuevoPlantillas") {
+
+            var grid = $("#pGridPedidosPlantillas").data("kendoGrid");
+            grid.dataSource.filter([]);
+            var dataSource = $("#pGridPedidosPlantillas").data("kendoGrid").dataSource;
+            var allData = dataSource.data();
+            
+            var mr = parseInt(localStorage.getItem("max_row_per_pag") - 2);
+            localStorage["pedidos_pag_act"] = 1;
+            localStorage["pedidos_pag_max_row"] = mr;
+            localStorage["pedidos_pag_last"] = Math.ceil(allData.length / parseInt(mr));
+            displayPlantillasNuevoPedido();
+            
+        }else if (localStorage["pantalla"] == "pedidosDetalleAnterior") {
+
+            var grid = $("#pGridPedidosDet").data("kendoGrid");
+            grid.dataSource.filter([]);
+            var dataSource = $("#pGridPedidosDet").data("kendoGrid").dataSource;
+            var allData = dataSource.data();
+            
+            localStorage["pedidos_detalle_pag_act"] = 1;
+            localStorage["pedidos_detalle_pag_max_row"] = parseInt(localStorage["pedidos_detalle_pag_max_row_max"]);            
+
+            localStorage["pedidos_detalle_pag_last"] = Math.ceil(parseInt(allData.length) / parseInt(localStorage["pedidos_detalle_pag_max_row_max"]));
+
+            displayDetalleAnterior();
+
         }
+        
+        
     });
 
     $('#btnLoad').unbind('click').bind('click', function () {
@@ -2967,6 +3117,7 @@ $(document).on('pageinit', '#LoginPage', function () {
 
     $('#mBtnDialogACOk').unbind('click').bind('click', function () {
         $('#mDialogAC').popup("close");
+        localStorage['tcarga']=0;
         recargaTotal();
 
     });
@@ -3020,7 +3171,10 @@ $(document).on('pageinit', '#LoginPage', function () {
 
 $(document).on('pageinit', '#menuPrincipal', function () {
 
-    //Rutina para comprobar el estado de la conexi򬞍
+    localStorage["cargaDeDatos"]="completa";
+
+
+    //Rutina para comprobar el estado de la conexi?
     pSincronizar();
     restSecuritySettingsJSON();
 

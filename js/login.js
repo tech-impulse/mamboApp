@@ -108,7 +108,8 @@ function checkInicio()
 
 function loginOnline(res)
 {
-	
+	localStorage["cargaDeDatos"]="";
+
 	if (localStorage.getItem('ultimo_usuario')!=null)
 	{
 		db.transaction (function (transaction) 
@@ -262,10 +263,16 @@ function checkScopes(res){
 						}
 						else
 						{
-                            console.log("Mismos Scopes, tiempo menor a 6h");
-                            localStorage['pantalla'] = "menuPrincipal";
-                            $.mobile.changePage('#menuPrincipal');
-                            //console.log("Todos coinciden! Servicio/DB " + contService + "/" + contDb);
+                            if (localStorage["cargaDeDatos"]=="completa")
+                            {
+                               console.log("Mismos Scopes, tiempo menor a 6h");
+                               localStorage['pantalla'] = "menuPrincipal";
+                               $.mobile.changePage('#menuPrincipal');
+                            }
+                            else
+                            {
+                               loginOnline(res);
+                            }
 						}
                		}
 							

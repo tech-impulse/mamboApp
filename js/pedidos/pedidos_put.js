@@ -171,11 +171,8 @@ function pNuevoPedidoPostOk(data) {
 	var ini = localStorage['transactionId'].length ;
 	var fin = data.body.entity.transactionId.length;
 
-	//var idOrder = data.body.entity.transactionId.substring(ini+4, fin);
-    var idOrder = data.body.entity.transactionId.split('==')[1];
-	
-	
-	
+	var idOrder = data.body.entity.transactionId.substring(ini+4, fin);
+    //var idOrder = data.body.entity.transactionId.split('==')[1];
 
 	//CASO ERROR
 	if (data.body.status == "ERROR") {
@@ -186,12 +183,7 @@ function pNuevoPedidoPostOk(data) {
 			db.transaction ( 
 		  function (transaction) 
 		  {
-		  	
-		  	//TRANSACCION REPETIDA
-		  	console.log("BORRANDO ==> " +data.body.message.substr(0,11) + " de "+idOrder  );
-		  	
-		  	
- 		  	
+
 			  	sql="UPDATE ordersPending SET error=1 , status="+estadoError+" WHERE transactionCode='"+data.body.entity.transactionId+"' ";
 					console.log("-------------------------------------->"+sql+"(" );
 					transaction.executeSql (sql, [],  function ()
@@ -212,9 +204,9 @@ function pNuevoPedidoPostOk(data) {
 		      		 pRefrescarPantallaActual();
 	      		
 	      		});  	
-				  });	
-			  
-			  insertLog(2,5,"Pedido finalizado con ERROR",localStorage['pNuevoPedidoIntenalId']+","+localStorage['pNuevoPedidoIdProveedor']+","+localStorage['pNuevoPedidoIdCentro']+","+localStorage['mensageConError']);
+          });
+
+          insertLog(2,5,"Pedido finalizado con ERROR",localStorage['pNuevoPedidoIntenalId']+","+localStorage['pNuevoPedidoIdProveedor']+","+localStorage['pNuevoPedidoIdCentro']+","+localStorage['mensageConError']);
 			  
 			  			  		  
 			});

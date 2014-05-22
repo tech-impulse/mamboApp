@@ -107,7 +107,7 @@ function pMostrarPlantillasFiltradas() {
                         field: "cod_centr",
                         filterable: false,
                         title: infor,
-                        width: '23%'
+                        width: '25%'
               }, {
                         field: "zona",
                         title: "Zona",
@@ -116,7 +116,7 @@ function pMostrarPlantillasFiltradas() {
                             				 "Zona" + "</a>" +
                                      "</div> <div style='position: relative; float: right'> <a onclick='pPopUpFiltroColumnaPlan(\"pGridPlantillas\",\"cod_proveedo\",\"strings\",\"zona\")' data-role='button' role='button'>" +
                                      "<img id='cod_proveedoPlan5' src='./images/icno_ordenable_filtrable.png' > </a> </div>",*/
-                        width: '10%'
+                        width: '15%'
               }, {
                         field: "cod_proveedo",
                         filterable: false,
@@ -134,7 +134,7 @@ function pMostrarPlantillasFiltradas() {
                         title: emit,
                         format: "{0:dd-MM-yyyy HH:mm}",
                         filterable: false,
-                        width: '25%'
+                        width: '18%'
               }, {
                         field: "estado",
                         filterable: false,
@@ -591,7 +591,7 @@ function pMostrarTodasPlantillas() {
                             infor + "</a>" +
                             "</div> <div style='position: relative; float: right'> <a onclick='pPopUpFiltroColumnaPlan(\"pGridPlantillas\",\"cod_centr\",\"strings\",\"" + infor + "\")' data-role='button' role='button'>" +
                             "<img id='cod_centrPlan' src='./images/icno_ordenable_filtrable.png' > </a> </div>",
-                        width: '23%'
+                        width: '22%'
               }, {
                         field: "zona",
                         title: "Zona",
@@ -600,7 +600,7 @@ function pMostrarTodasPlantillas() {
                             "Zona" + "</a>" +
                             "</div> <div style='position: relative; float: right'> <a onclick='pPopUpFiltroColumnaPlan(\"pGridPlantillas\",\"cod_proveedo\",\"strings\",\"zona\")' data-role='button' role='button'>" +
                             "<img id='cod_proveedoPlan5' src='./images/icno_ordenable_filtrable.png' > </a> </div>",
-                        width: '15%'
+                        width: '13%'
               }, {
                         field: "cod_proveedo",
                         title: prove,
@@ -616,7 +616,7 @@ function pMostrarTodasPlantillas() {
                         title: "Fecha",
                         format: formatoFecha(true),
                         headerTemplate: "<div style='position: relative; float: left'><a onclick='sortPlanFecha()' data-role='button' role='button'> " + "Fecha" + "<img id='sortPedidosPlan3' src='./images/sort_both.png'></a></div>",
-                        width: '12%'
+                        width: '15%'
               }, {
                         field: "nombre",
                         filterable: false,
