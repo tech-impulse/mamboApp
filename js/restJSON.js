@@ -35,7 +35,11 @@ localStorage['cargaPaso12']=1; //ESTADOS
 localStorage['pModoCargaParcial']="";
 
 var errorCargaInicial=0;
+<<<<<<< HEAD
 var maxtime=400000;
+=======
+var maxtime=300000;
+>>>>>>> ed0137b423534e5237137edb26b629dae6505088
 localStorage['maxtime']=maxtime;
 
 var tipoLogWS=10;

@@ -856,11 +856,13 @@ function pMostrarCabeceraPedido() {
                 }, error6);
         });
 
-        kendo.culture("es-ES");
+        var fechaLimite = new Date();
+        fechaLimite.setDate((fechaLimite.getDate()+1));
+        console.log("Fecha minima "+fechaLimite.getDate()+1);
         // LISTA DE FECHAS DE ENTREGA
         $("#ptxtFechaEntregaCabecera").kendoDatePicker({
             value: localStorage["str_selecciona"],
-            min: new Date(),
+            min: fechaLimite,
             format: formatoFecha()
         });
     }

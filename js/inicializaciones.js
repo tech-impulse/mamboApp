@@ -20,8 +20,12 @@ $(document).on('pageinit', '#progressPage', function () {
 
     var tm="";
     var ts="";
+<<<<<<< HEAD
     kendo.culture("es-ES");
     
+=======
+
+>>>>>>> ed0137b423534e5237137edb26b629dae6505088
     localStorage['tcarga']=0;
     
      $("#progressBarTime").kendoProgressBar({
