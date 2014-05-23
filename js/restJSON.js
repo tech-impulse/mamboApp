@@ -36,6 +36,7 @@ localStorage['pModoCargaParcial']="";
 
 var errorCargaInicial=0;
 var maxtime=400000;
+localStorage['maxtime']=maxtime;
 
 var tipoLogWS=10;
 var categoriaLogWS=0;
@@ -245,28 +246,28 @@ function insertUserSecurity(data) {
 function restPurchaseCenterJSON() {
 		
 		
-		
-		var uri = "/purchasecenters/";	
-		var dir = host+uri;
 
-		console.log("URL Purchase Center: " + dir);
-		$.mobile.changePage('#progressPage');		
-		
-		insertLog(tipoLogWS,categoriaLogWS,"Llamar al WS " + uri,"");
-		
-		$.ajax({
-				async: true, timeout: maxtime,
-				url:dir,
-				data: {token:token},
-			  contentType: 'application/json',
-				dataType: "json",
-				//method : 'GET', 
-				type:"GET",
-				success:addPuchaseCenter,
-				error: function(XMLHttpRequest, textStatus, errorThrown ) {   errorDeWS(dir, textStatus );  }
-			
-		});
-	
+        var uri = "/purchasecenters/";
+        var dir = host+uri;
+
+        console.log("URL Purchase Center: " + dir);
+        $.mobile.changePage('#progressPage');
+
+        insertLog(tipoLogWS,categoriaLogWS,"Llamar al WS " + uri,"");
+
+        $.ajax({
+                async: true, timeout: maxtime,
+                url:dir,
+                data: {token:token},
+                contentType: 'application/json',
+                dataType: "json",
+                //method : 'GET',
+                type:"GET",
+                success:addPuchaseCenter,
+                error: function(XMLHttpRequest, textStatus, errorThrown ) {   errorDeWS(dir, textStatus );  }
+
+        });
+
 		
 }
 
@@ -1122,21 +1123,21 @@ function addCatalog(data){
     var rel = {};
     $.each(data.body, function() {
     	
-        error=0;
+
         rel={};
 				
         //if ( this.logisticsChainId === undefined || this.logisticsChainId == 0 || this.logisticsChainId == '' ) {  error=1;  }
 			  //if ( this.vendorId === undefined || this.vendorId == 0 || this.vendorId == '' ) {  error=1; }
 			  //if ( this.itemId === undefined || this.itemId == 0 || this.itemId == '' ) {  error=1;  }
         
-        if (error==0 ) {
+           if ( this.logisticsChainId === undefined || this.logisticsChainId == 0 || this.logisticsChainId == '' ) {  error=1;  }
+     	   if ( this.vendorId === undefined || this.vendorId == 0 || this.vendorId == '' ) {  error=1; }
+     	   if ( this.itemId === undefined || this.itemId == 0 || this.itemId == '' ) {  error=1;  }
+
 
           querys[y]=getQueryInsertCatalog(this); 
 					y++;
-				} else {
-          console.log("Relacion Articulos No valida");
-        }
-        				
+
 		});
             
     // Ejecutar todas las querys en bloque              
@@ -1497,8 +1498,8 @@ function addOrders(data){
 	
 		var debug=0;
     console.log("JSON de los Pedidos");
-    //if (debug==1) { console.log(JSON.stringify(data)); }
-    
+    if (debug==1) { console.log(JSON.stringify(data)); }
+
     var p = 0;
     var l = 0;
     var q = "";
@@ -1567,27 +1568,17 @@ function addOrders(data){
 					
 					querys[l]=getQueryInsertOrder(pedido); 
 					l++;
-					if (pedido.transactionId != null && pedido.transactionId!= "") {
-            querys[l]="DELETE FROM ordersPendingDetail WHERE EXISTS (SELECT * FROM ordersPending as o WHERE o.idInternalOrder=ordersPendingDetail.idInternalOrder AND o.transactionCode='"+pedido.trasactionId+"')"; 
+					if (this.transactionId != null && this.transactionId!= "") {
+            querys[l]="DELETE FROM ordersPendingDetail WHERE EXISTS (SELECT * FROM ordersPending as o WHERE o.idInternalOrder=ordersPendingDetail.idInternalOrder AND o.transactionCode='"+this.trasactionId+"')";
   					console.log(querys[l]);
             
             l++;
             
-            querys[l]="DELETE FROM ordersPending WHERE transactionCode='"+pedido.transactionId+"' "; 
+            querys[l]="DELETE FROM ordersPending WHERE transactionCode='"+this.transactionId+"' ";
             console.log(querys[l]);
   					l++;
           }
-					
-					//TEMPORAL!!!!!!!
-					/*
-					if (entradas < 20 ) {
-						querys[l]=getQueryInsertOrderDraft(pedido); 
-						l++;
-						
-						entradas++;
-					}
-					*/
-					
+
 					if (this.orderLines !== undefined) {
 						for (var i=0; i < this.orderLines.length ; i++) {
 		        		 
@@ -1599,12 +1590,13 @@ function addOrders(data){
 								articulo.quantity=linea.quantity;
 								articulo.idItem=linea.itemId;
                             
-								
+
 								if (linea.itemName==undefined) { articulo.itemName=""; }
-                                else { articulo.itemName=linea.itemName.replace("'","´"); }
+                                else { articulo.itemName=linea.itemName.replace(/""/g,"´"); articulo.itemName=linea.itemName.replace(/''/g,"´"); }
                             
 								articulo.itemStatus=linea.itemStatus;
 								if (linea.itemStatus==undefined) { articulo.itemStatus=0; }
+
 
 								articulo.secondSizeId=linea.secondSizeId;
 								articulo.firstSizeId=linea.firstSizeId;
@@ -1614,23 +1606,14 @@ function addOrders(data){
 								articulo.idLogisticsChain=linea.logisticsChainId;
 								
 								if (linea.logisticsChainName===undefined) { articulo.logisticsChainName=""; }
-								else {  articulo.logisticsChainName=linea.logisticsChainName.replace("'","´"); } 
-                            
+								else {  articulo.logisticsChainName=linea.logisticsChainName.replace(/''/g,"´");  articulo.logisticsChainName=linea.logisticsChainName.replace(/""/g,"´"); }
+
 								articulo.logisticsChainStatus=linea.logisticsChainStatus;
 								if (linea.logisticsChainStatus===undefined) { articulo.logisticsChainStatus=0; }
 		
 								querys[l]=getQueryInsertOrderDetail(articulo); 
 								l++;
-                
-                
-                								
-								/*
-								if (entradas < 21 ) {
-									//TEMPORAL!!!!!!!
-									querys[l]=getQueryInsertOrderDraftDetail(articulo); 
-									l++;	
-								}
-								*/
+
 								
 		        }
 	        } else {
@@ -2266,9 +2249,9 @@ function errorDeWS(uri , error ) {
 		insertLog(tipoLogWS,categoriaLogWSError,"Error al llamar al WS " + uri+ " Motivo: "+ error,"");
 
 		if (errorCargaInicial==0) {
-		
-      $("#cargaDialogErrorText").html("Error al cargar los datos<br> Origen: "+uri+" <br> Motivo: "+ error);
-			$("#cargaDialogError").popup("open");
+		    console.log("ERROR DE WS ");
+            $("#cargaDialogErrorText").html("Error al cargar los datos<br> Origen: "+uri+" <br> Motivo: "+ error);
+			setTimeout('$("#cargaDialogError").popup("open")', 1000) ;
 			errorCargaInicial=1;
             
 		}

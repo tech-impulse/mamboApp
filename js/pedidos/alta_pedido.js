@@ -856,9 +856,11 @@ function pMostrarCabeceraPedido() {
                 }, error6);
         });
 
+        kendo.culture("es-ES");
         // LISTA DE FECHAS DE ENTREGA
         $("#ptxtFechaEntregaCabecera").kendoDatePicker({
             value: localStorage["str_selecciona"],
+            min: new Date(),
             format: formatoFecha()
         });
     }

@@ -786,77 +786,85 @@ function pRellenarGridNuevoPedido(proveedor, tipo) {
                     }]
                 });
 
-				 				console.log("PASO 2" );
-				
-                var gridNuevoPedido = $("#pGridNuevoPedido").data("kendoGrid");
-                
-                	gridNuevoPedido.hideColumn("precios");
-								
-                 if (localStorage["pantalla"]=="pedidosDetalleNuevo" && $('#checkPrecioDetallePedido').attr('src').indexOf("uncheck") > 0) { // Esta des-seleccionado --> No hay que mostrar precios
-							        gridNuevoPedido.hideColumn("precios");
-							        gridNuevoPedido.showColumn("totales");
-							        gridNuevoPedido.showColumn("cad_log");
-							    }
-							    else if(localStorage["pantalla"]=="pedidosDetalleNuevo" && $('#checkPrecioDetallePedido').attr('src').indexOf("uncheck") < 0)
-							    {
-							        gridNuevoPedido.showColumn("precios");
-							        gridNuevoPedido.hideColumn("totales");
-							        gridNuevoPedido.hideColumn("cad_log");
-							    }
 
 
-                gridNuevoPedido.table.on("click", ".checkbox", function (e) {
-																				
-                    grid = $("#pGridNuevoPedido").data("kendoGrid");
-                    var row = $(e.target).closest("tr");
-										var item = grid.dataItem(row);
-                    localStorage['itemCheckGridNuevoPedido']=  item.cod_pedid;
-                    var row2 = $(this).closest("tr");
-                    var rowIdx = $("tr", grid.tbody).index(row2);
-                    localStorage['numFilaSeleccionada']=rowIdx;
-                                        
-                    $("#pDialogEliminarNuevoArticulo").popup("open");
 
-                });
+                console.log("PASO 2");
+
+               var gridNuevoPedido = $("#pGridNuevoPedido").data("kendoGrid");
+
+               gridNuevoPedido.hideColumn("precios");
+
+               gridNuevoPedido.table.on("click", ".checkbox", function (e) {
+
+                   grid = $("#pGridNuevoPedido").data("kendoGrid");
+                   var row = $(e.target).closest("tr");
+                   var item = grid.dataItem(row);
+                   localStorage['itemCheckGridNuevoPedido'] = item.cod_pedid;
+                   var row2 = $(this).closest("tr");
+                   var rowIdx = $("tr", grid.tbody).index(row2);
+                   localStorage['numFilaSeleccionada'] = rowIdx;
+
+                   $("#pDialogEliminarNuevoArticulo").popup("open");
+
+               });
+
+
+
+               $('.k-grid-pager').hide();
+               if (localStorage["plantillas"] == "plantillas" || tipo == "2") {
+                   console.log("Estamos en footer pRellenar pedido tipo 2");
+                   displayModificarPlantilla();
+               } else if (localStorage["pantalla"] == "insertarArticulos" || localStorage["pantalla"] == "emitidos" || localStorage["pantalla"] == "pedidos_cabecera") {
+                   console.log("YYYYYY");
+                   displayDetalleNuevoPedido();
+               } else if (localStorage["pantalla"] == "pedidosDetalleNuevoEscaner") {
+                   console.log("Estamos en footer pRellenar para pedidos Detalle  Nuevo escanner");
+                   $("#pGridNuevoPedido").data("kendoGrid").showColumn("precios");
+                   $("#pGridNuevoPedido").data("kendoGrid").hideColumn("precios");
+                   $("#pGridNuevoPedido").data("kendoGrid").hideColumn("totales");
+                   $("#pGridNuevoPedido").data("kendoGrid").showColumn("totales");
+                   $("#pGridNuevoPedido").data("kendoGrid").hideColumn("cad_log");
+                   $("#pGridNuevoPedido").data("kendoGrid").showColumn("cad_log");
+                   displayDetalleNuevoPedidoEscaner();
+               } else {
+                   console.log("Footer por defecto");
+                   displayDetalleNuevoPedido();
+               }
+
+
 
                 if (localStorage["pedidos_detalle_pag_act"] > 1) {
-                    console.log("HA OCURRIDO ESTO");
-                    var grid = $("#pGridNuevoPedido").data("kendoGrid");
-                    grid.dataSource.page(localStorage['pedidos_detalle_pag_act']);
-                    localStorage["pedidos_detalle_pag_max_row"] = Math.ceil(parseInt(localStorage["pedidos_detalle_pag_max_row_max"] ) - 1 ); 
-                    localStorage["pedidos_detalle_pag_last"] = Math.ceil(n_reg / (parseInt(localStorage["pedidos_detalle_pag_max_row"]) ) );
-                    console.log(" DETALLE ACT +1 OPERACION DE PAGINACION: PAG_LAST " + localStorage["pedidos_detalle_pag_last"] + "RESULTADO DE "  +n_reg+"/"+localStorage["pedidos_detalle_pag_max_row"]+"-1" );
-                } else {
-                    localStorage["pedidos_detalle_pag_act"] = 1;
-                    localStorage["pedidos_detalle_pag_max_row"] = Math.ceil(parseInt(localStorage["pedidos_detalle_pag_max_row_max"] ) - 1 ); 
-                    localStorage["pedidos_detalle_pag_last"] = Math.ceil(n_reg / (parseInt(localStorage["pedidos_detalle_pag_max_row"]) ) );
-                    console.log("OPERACION DE PAGINACION: PAG_LAST " + localStorage["pedidos_detalle_pag_last"] + "RESULTADO DE "  +n_reg+"/"+localStorage["pedidos_detalle_pag_max_row"]+"-1" );
-                }
-							console.log("PAGINANDO ==>  " + localStorage["pedidos_detalle_pag_max_row_min"] + " " + n_reg +" / "+ localStorage["pedidos_detalle_pag_max_row"]);
-                
-                
-                console.log("PASO 3" );
+                   console.log("HA OCURRIDO ESTO");
+                   gridNuevoPedido.dataSource.page(localStorage["pedidos_detalle_pag_act"]);
+                   localStorage["pedidos_detalle_pag_max_row"] = Math.ceil(parseInt(localStorage["pedidos_detalle_pag_max_row_max"]) - 1);
+                   localStorage["pedidos_detalle_pag_last"] = Math.ceil(n_reg / (parseInt(localStorage["pedidos_detalle_pag_max_row"])));
+                   console.log(" DETALLE ACT +1 OPERACION DE PAGINACION: PAG_LAST " + localStorage["pedidos_detalle_pag_last"] + "RESULTADO DE " + n_reg + "/" + localStorage["pedidos_detalle_pag_max_row"] + "-1");
+               } else {
+                   localStorage["pedidos_detalle_pag_act"] = 1;
+                   localStorage["pedidos_detalle_pag_max_row"] = Math.ceil(parseInt(localStorage["pedidos_detalle_pag_max_row_max"]) - 1);
+                   localStorage["pedidos_detalle_pag_last"] = Math.ceil(n_reg / (parseInt(localStorage["pedidos_detalle_pag_max_row"])));
+                   console.log("OPERACION DE PAGINACION: PAG_LAST " + localStorage["pedidos_detalle_pag_last"] + "RESULTADO DE " + n_reg + "/" + localStorage["pedidos_detalle_pag_max_row"] + "-1");
+               }
 
-                $('.k-grid-pager').hide();
-                if (localStorage["plantillas"] == "plantillas" || tipo=="2") {
-                    displayModificarPlantilla();    
-                } else if (localStorage["pantalla"] == "insertarArticulos" || localStorage["pantalla"] == "emitidos" || localStorage["pantalla"] == "pedidos_cabecera") {
-                    console.log("YYYYYY");
-                    displayDetalleNuevoPedido();
-                } else if (localStorage["pantalla"]=="pedidosDetalleNuevoEscaner")
-                {
-                $("#pGridNuevoPedido").data("kendoGrid").showColumn("precios");			
-								$("#pGridNuevoPedido").data("kendoGrid").hideColumn("precios");	
-								$("#pGridNuevoPedido").data("kendoGrid").hideColumn("totales");			
-								$("#pGridNuevoPedido").data("kendoGrid").showColumn("totales");	
-								$("#pGridNuevoPedido").data("kendoGrid").hideColumn("cad_log");			
-								$("#pGridNuevoPedido").data("kendoGrid").showColumn("cad_log");	
-                    displayDetalleNuevoPedidoEscaner();
-                }
-                else {
-                    displayDetalleNuevoPedido();
-                }
+               if (localStorage["pantalla"] == "pedidosDetalleNuevo" && $('#checkPrecioDetallePedido').attr('src').indexOf("uncheck") > 0) { // Esta des-seleccionado --> No hay que mostrar precios
+                   console.log("Escondemos la columna de precios");
+                   gridNuevoPedido.showColumn("precios");
+                   gridNuevoPedido.hideColumn("precios");
+                   gridNuevoPedido.showColumn("totales");
+                   gridNuevoPedido.showColumn("cad_log");
+               } else if (localStorage["pantalla"] == "pedidosDetalleNuevo" && $('#checkPrecioDetallePedido').attr('src').indexOf("uncheck") < 0) {
+                   console.log("Escondemos las columnas de cad_log y totales");
+                   gridNuevoPedido.showColumn("precios");
+                   gridNuevoPedido.showColumn("totales");
+                   gridNuevoPedido.showColumn("cad_log");
+                   gridNuevoPedido.hideColumn("totales");
+                   gridNuevoPedido.hideColumn("cad_log");
+               }
 
+               console.log("PAGINANDO ==>  " + localStorage["pedidos_detalle_pag_max_row_min"] + " " + n_reg + " / " + localStorage["pedidos_detalle_pag_max_row"]);
+
+               console.log("PASO 3");
 
             }, error);
 

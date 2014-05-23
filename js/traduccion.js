@@ -73,6 +73,22 @@ function getDescripcionAviso(codigo, accion) {
             document.getElementById('btnPedidosDialogCancelAC').innerHTML = "Cerrar";
             document.getElementById("pedidosDialogIconoAC").src = "images/amarillo.png";
             break;
+        case "NoSePuedeRecargarNoInternet":
+            document.getElementById('mDialogATitulo').innerHTML = "Aviso";
+            document.getElementById('mDialogAText').innerHTML = "No se puede recargar sin conexión";
+
+            document.getElementById('mDialogAOk').innerHTML = "Aceptar";
+
+            break;
+
+        case "NuncaCargado":
+            document.getElementById('cargaDialogATitulo').innerHTML = "Aviso";
+            document.getElementById('cargaDialogAText').innerHTML = "No hay BD para este usuario. Vuelva a logarse";
+
+            document.getElementById('btnCargaDialogAOk').innerHTML = "Aceptar";
+
+            break;
+
 		case "proveedorManual":
             document.getElementById('pedidosDialogTituloAC').innerHTML = "Aviso";
             document.getElementById('pedidosDialogTextAC').innerHTML = "<center>No se pueden seleccionar artículos del proveedor "+localStorage["proveedor_seleccionado"]+" ya que solo pèrmite el envío de pedidos de forma manual</center>";
@@ -226,7 +242,7 @@ function getDescripcionAviso(codigo, accion) {
 
         case "existenBorradores":
             document.getElementById('pedidosDialogTituloAC').innerHTML = "Información";
-            document.getElementById('pedidosDialogTextAC').innerHTML = "¿Existen otros borradores generados en base a escaner. Desea anadir los nuevos artículos a estos borradoes o generar nuevos borradores?";
+            document.getElementById('pedidosDialogTextAC').innerHTML = "Existen otros borradores generados previamente en base a escáner. ¿Desea añadir los nuevos artículos a estos borradores?";
             document.getElementById('btnPedidosDialogOkAC').innerHTML = "Si";
             document.getElementById('btnPedidosDialogCancelAC').innerHTML = "No";
             document.getElementById("pedidosDialogIconoAC").src = "images/verde.png";
@@ -488,13 +504,28 @@ function getDescripcionAviso(codigo, accion) {
 
         case "existenBorradores":
             document.getElementById('pedidosDialogTituloAC').innerHTML = "Information";
-            document.getElementById('pedidosDialogTextAC').innerHTML = "There Are other drafts generated based on scanner. Want to add new items to these drafts or generate new draft?";
+            document.getElementById('pedidosDialogTextAC').innerHTML = "There are other drafts previously generated based scanner. Want to add new items to these drafts?";
             document.getElementById('btnPedidosDialogOkAC').innerHTML = "Yes";
             document.getElementById('btnPedidosDialogCancelAC').innerHTML = "No";
             document.getElementById("pedidosDialogIconoAC").src = "images/verde.png";
             document.getElementById("pedidosDialogACOrden").innerHTML = "existenBorradores";
             break;
-            
+         case "NoSePuedeRecargarNoInternet":
+                                 document.getElementById('mDialogATitulo').innerHTML = "Warning";
+                                 document.getElementById('mDialogAText').innerHTML = "It is not possible to reload without internet.";
+
+                                 document.getElementById('mDialogAOk').innerHTML = "Accept";
+
+                                 break;
+
+           case "NuncaCargado":
+                      document.getElementById('cargaDialogATitulo').innerHTML = "Warning";
+                      document.getElementById('cargaDialogAText').innerHTML = "There is not DB for this user. Try to login again.";
+
+                      document.getElementById('btnCargaDialogAOk').innerHTML = "Accept";
+
+                      break;
+
          case "guardarBorrador":
             document.getElementById('pedidosDialogTituloAC').innerHTML = "Warning";
             document.getElementById('pedidosDialogTextAC').innerHTML = "Are you sure you want to save as a draft order?";
