@@ -448,7 +448,7 @@ function pEnviarPlantilla(idOrder, reenvio) {
                     var fechaActual = nowBD();
                     fechaActual = formatearFechaWS(fechaActual);
                     res.documentDate = fechaActual;//formatearFechaWS(cab.documentDate); //"2014-03-27T00:00:00+0200";
-                    res.deliveryZoneId = $("#ptxtZonaCabecera").val();//cab.idDeliveryZone;
+                    res.deliveryZoneId = $("#ptxtZonaCabeceraPlantilla").val();//cab.idDeliveryZone;
                     res.isTemplate = 1;
 
                     res.number = cab.number; //?? AL sistema

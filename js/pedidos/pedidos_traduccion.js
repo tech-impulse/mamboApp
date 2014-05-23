@@ -223,7 +223,7 @@ function getTraduccionPedidos() {
         localStorage.setItem('footer_btn_nuevo_pedido', 'Nuevo Pedido por articulos');
         localStorage.setItem('footer_btn_guardar_borrador', 'Guardar Borrador');
         localStorage.setItem('footer_btn_guardar_plantilla', 'Guardar Plantilla');
-        localStorage.setItem('footer_btn_insertar_articulo', 'Insertar articulo');
+        localStorage.setItem('footer_btn_insertar_articulo', 'Insertar Art.');
         localStorage.setItem('footer_btn_codigo_barras', 'Escaner');
         localStorage.setItem('footer_btn_finalizar', 'Finalizar');
         localStorage.setItem('footer_btn_finalizar_insercion', 'Finalizar Inserción');
@@ -676,44 +676,64 @@ function getPedidosTitulo() {
 
     var lang = localStorage['language'];
     var pantalla = localStorage['pantalla'];
-
+    
     if (lang == "ES") {
 
         if (pantalla == "emitidos") {
+            $("#seccion_title").val("");
             $("#seccion_title").text("Pedidos Emitidos");
         } else if (pantalla == "pedidosDetalle") {
+            $("#seccion_title").val("");
             $("#seccion_title").text("Detalle de pedido");
             localStorage["pantalla_anterior"] = "pedidosDetalle";
         } else if (pantalla == "pedidoNuevoPlantillas") {
+            $("#seccion_title").val("");
             $("#seccion_title").text("Nuevo Pedido de Plantilla");
         } else if (pantalla == "alta_pedidos_plantillas_detalle") {
+            $("#seccion_title").val("");
             $("#seccion_title").text("Nuevo Pedido: Detalle plantilla");
 
         } else if (pantalla == "pedidos_plantillas") {
+            $("#seccion_title").val("");
             $("#seccion_title").text("Plantillas");
         } else if (pantalla == "pedidos_plantillas_detalle") {
+            $("#seccion_title").val("");
             $("#seccion_title").text("Detalle de plantilla");
             localStorage["pantalla_anterior"] = "pedidos_plantillas_detalle";
         } else if (pantalla == "nuevo_pedido" || pantalla == "nuevo_proveedores" || pantalla == "alta_pedidos" || pantalla == "pedidosDetalleAnterior" || pantalla == "pedidosDetalleNuevo") {
 
             if (localStorage["pantalla_anterior"] == "pedidos_plantillas_detalle")
+            {
                 $("#seccion_title").text("Modificar Plantillas");
+                $("#seccion_title").val("plantilla");
+            }
             else if (localStorage["pantalla_anterior"] == "borradoresDetalle")
+            {
+                $("#seccion_title").val("");
                 $("#seccion_title").text("Modificar Borrador");
+            }
             else
+            {
+                $("#seccion_title").val("");
                 $("#seccion_title").text("Nuevo Pedido");
+            }
         } else if (pantalla == "insertarArticulos") {
             $("#seccion_title").text("Insertar Articulo");
         } else if (pantalla == "pFiltroFamilias") {
+            $("#seccion_title").val("");
             $("#seccion_title").text("Filtro Por Familias");
         } else if (pantalla == "pedidos_cabecera") {
+            $("#seccion_title").val("");
             $("#seccion_title").text("Cabecera de Pedido");
         } else if (pantalla == "pedidosBorradores") {
+            $("#seccion_title").val("");
             $("#seccion_title").text("Borradores");
         } else if (pantalla == "borradoresDetalle") {
+            $("#seccion_title").val("");
             $("#seccion_title").text("Detalle del Borrador");
             localStorage["pantalla_anterior"] = "borradoresDetalle";
         } else if (pantalla == "pedidosDetalleNuevoEscaner") {
+            $("#seccion_title").val("");
             $("#seccion_title").text("Pedido Global");
             localStorage["pantalla_anterior"] = "nuevo_proveedores";
         } else {
@@ -721,39 +741,54 @@ function getPedidosTitulo() {
         }
     } else if (lang == "EN") {
         if (pantalla == "emitidos") {
+            $("#seccion_title").val("");
             $("#seccion_title").text("Orders");
         } else if (pantalla == "pedidosDetalle") {
+            $("#seccion_title").val("");
             $("#seccion_title").text("Order Detail");
             localStorage["pantalla_anterior"] = "pedidosDetalle";
         } else if (pantalla == "pedidoNuevoPlantillas") {
+            $("#seccion_title").val("");
             $("#seccion_title").text("New Order from Template");
         } else if (pantalla == "pedidos_plantillas") {
+            $("#seccion_title").val("");
             $("#seccion_title").text("Templates");
         } else if (pantalla == "pedidos_plantillas_detalle") {
+            $("#seccion_title").val("");
             $("#seccion_title").text("Template Detail");
             localStorage["pantalla_anterior"] = "pedidos_plantillas_detalle";
         } else if (pantalla == "alta_pedidos_plantillas_detalle") {
             $("#seccion_title").text("New Order: Template detail");
         } else if (pantalla == "nuevo_pedido" || pantalla == "nuevo_proveedores" || pantalla == "alta_pedidos" || pantalla == "pedidosDetalleAnterior" || pantalla == "pedidosDetalleNuevo") {
-
+            $("#seccion_title").val("");
             if (localStorage["pantalla_anterior"] == "pedidos_plantillas_detalle")
+            {
                 $("#seccion_title").text("Modify Template");
+                $("#seccion_title").val("plantilla");
+            }
             else if (localStorage["pantalla_anterior"] == "borradoresDetalle")
+            {
                 $("#seccion_title").text("Modify Draft");
+            }
             else
                 $("#seccion_title").text("New order");
         } else if (pantalla == "insertarArticulos") {
             $("#seccion_title").text("Insert Article");
         } else if (pantalla == "pFiltroFamilias") {
+            $("#seccion_title").val("");
             $("#seccion_title").text("Filter by Family");
         } else if (pantalla == "pedidos_cabecera") {
+            $("#seccion_title").val("");
             $("#seccion_title").text("Order Header");
         } else if (pantalla == "pedidosBorradores") {
+            $("#seccion_title").val("");
             $("#seccion_title").text("Drafts");
         } else if (pantalla == "borradoresDetalle") {
+            $("#seccion_title").val("");
             $("#seccion_title").text("Draft Detail");
             localStorage["pantalla_anterior"] = "borradoresDetalle";
         } else if (pantalla == "pedidosDetalleNuevoEscaner") {
+            $("#seccion_title").val("");
             $("#seccion_title").text("GLobal Order");
             localStorage["pantalla_anterior"] = "nuevo_proveedores";
         } else {

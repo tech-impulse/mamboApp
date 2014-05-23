@@ -872,8 +872,13 @@ $(document).on('pageinit', '#LoginPage', function () {
         } else if (localStorage["pantalla"] == "pedidosDetalleNuevo") {
 
             localStorage["pedidos_detalle_pag_act"] = parseInt(localStorage["pedidos_detalle_pag_act"]) + 1;
-
-            displayDetalleNuevoPedido();
+            if ($("#fbtn5").css("display") == "none" && $("#fbtn1").css("display") == "none") {
+                
+                displayModificarPlantilla();
+            }
+            else {
+                displayDetalleNuevoPedido();
+            }
 
             $('#pGridNuevoPedido .k-i-arrow-e').click();
 
@@ -1049,7 +1054,12 @@ $(document).on('pageinit', '#LoginPage', function () {
 
             localStorage["pedidos_detalle_pag_act"] = parseInt(localStorage["pedidos_detalle_pag_act"]) - 1;
 
-            displayDetalleNuevoPedido();
+            if ($("#fbtn5").css("display") == "none" && $("#fbtn1").css("display") == "none") {
+                displayModificarPlantilla();
+            }
+            else {
+                displayDetalleNuevoPedido();
+            }
 
             $('#pGridNuevoPedido .k-i-arrow-w').click();
 
@@ -1444,9 +1454,15 @@ $(document).on('pageinit', '#LoginPage', function () {
             //$.mobile.changePage('#menuPrincipal');
             pMostrarPedidos();
         } else if (localStorage["pantalla"] == "pedidos_plantillas_detalle") {
+            if(localStorage['pantallaAnterior']== "pedidoNuevoAnteriores")
+            {
+                displayPedidosAnterioresNuevoPedido();
+                localStorage['pantallaAnterior']= "";
+            } else {
             var grid = $("#pGridPlantillas").data("kendoGrid");
             grid.dataSource.page(localStorage['pedidos_pag_act']);
             displayPedidoPlantillas();
+            }
         } else if ((localStorage["pantalla"] == "pedidos_plantillas_detalle") && (localStorage["plantillas"] == "plantillas")) {
             //pRellenarGridNuevoPedido();
             displayDetalleNuevoPedido();

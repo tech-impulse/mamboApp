@@ -35,7 +35,8 @@ localStorage['cargaPaso12']=1; //ESTADOS
 localStorage['pModoCargaParcial']="";
 
 var errorCargaInicial=0;
-var maxtime=400000;
+var maxtime=300000;
+localStorage['maxtime']=maxtime;
 
 var tipoLogWS=10;
 var categoriaLogWS=0;
@@ -263,7 +264,7 @@ function restPurchaseCenterJSON() {
 				//method : 'GET', 
 				type:"GET",
 				success:addPuchaseCenter,
-				error: function (uri) { errorDeWS(uri); }
+				error: function(XMLHttpRequest, textStatus, errorThrown ) {   errorDeWS(dir, textStatus );  }
 			
 		});
 	
@@ -365,7 +366,7 @@ var uri = "/purchasecenters/vendors/items/eans/";			var dir = host+uri;
 				//method : 'GET', 
 				type:"GET",
 				success:addEANs,
-				error: function (uri) { errorDeWS(uri); }
+				error: function(XMLHttpRequest, textStatus, errorThrown ) {   errorDeWS(dir, textStatus );  }
 			
 		});
 		
@@ -473,7 +474,7 @@ function restDeliveryZonesJSON() {
 				dataType: "json",
 				type:"GET",
 				success:addDeliveryZones,
-				error: function (uri) { errorDeWS(uri); }
+				error: function(XMLHttpRequest, textStatus, errorThrown ) {   errorDeWS(dir, textStatus );  }
 			
 		});
 	
@@ -579,7 +580,7 @@ function restPurchaseCentersAllVendorsJSON() {
 		method : 'GET', 
 		type:"GET",
 		success:addPurchaseCentersAllVendors,
-		error: function (uri) { errorDeWS(uri); }
+		error: function(XMLHttpRequest, textStatus, errorThrown ) {   errorDeWS(dir, textStatus );  }
 		
 	});
 
@@ -722,7 +723,7 @@ function restVendorJSON(idPurchaseCenter) {
 		//method : 'GET', 
 		type:"GET",
 		success: addDetailVendors,
-		error: function (uri) { errorDeWS(uri); }
+		error: function(XMLHttpRequest, textStatus, errorThrown ) {   errorDeWS(dir, textStatus );  }
 		
 	});
 
@@ -820,7 +821,7 @@ function restRelItemsJSON() {
 		method : 'GET', 
 		type:"GET",
 		success:addRelItems,
-		error: function (uri) { errorDeWS(uri); }
+		error: function(XMLHttpRequest, textStatus, errorThrown ) {   errorDeWS(dir, textStatus );  }
 		
 	});
 
@@ -954,7 +955,7 @@ function restItemsJSON(idPurchaseCenter, idVendor ){
 		method : 'GET', 
 		type:"GET",
 		success:addItems,
-		error: function (uri) { errorDeWS(uri); }
+		error: function(XMLHttpRequest, textStatus, errorThrown ) {   errorDeWS(dir, textStatus );  }
 		
 	});
 
@@ -1065,7 +1066,7 @@ function addItems(data) {
 			  	
 			
 			  	
-			  	localStorage['cargandoNumTotalItems'] = localStorage['cargandoNumTotalItems'] - 1;
+			  	localStorage['cargandoNumTotalItems'] = parseInt(localStorage['cargandoNumTotalItems']) - 1;
 			  	if (parseInt(localStorage['cargandoNumTotalItems'])== 0 ) {
 			  		localStorage['cargaPaso6']=1;
 			  		console.log("CARGANDO!!!!!!!!!!!!!!!!!!!!! -> NUM TOTAL DE ITEMS CARGADO " );
@@ -1100,7 +1101,7 @@ function restCatalogJSON() {
 		method : 'GET', 
 		type:"GET",
 		success:addCatalog,
-		error: function (uri) { errorDeWS(uri); }
+		error: function(XMLHttpRequest, textStatus, errorThrown ) {   errorDeWS(dir, textStatus );  }
 		
 	});
 
@@ -1194,7 +1195,7 @@ function restLogisticChainsJSON() {
 		method : 'GET', 
 		type:"GET",
 		success:addLogisticChains,
-		error: function (uri) { errorDeWS(uri); }
+		error: function(XMLHttpRequest, textStatus, errorThrown ) {   errorDeWS(dir, textStatus );  }
 		
 	});
 
@@ -1344,7 +1345,7 @@ function restAllOrdersJSON() {
 		method : 'GET', 
 		type:"GET",
 		success:addOrders,
-		error: function (uri) { errorDeWSOrders(uri);  }
+		error: function(XMLHttpRequest, textStatus, errorThrown ) {   errorDeWS(dir, textStatus );  }
 		
 	});
 
@@ -1368,7 +1369,7 @@ function restSecuritySettingsJSON() {
 		method : 'GET', 
 		type:"GET",
 		success:addSecuritySettings,
-		error: function (uri) { errorDeWS(uri); }
+		error: function(XMLHttpRequest, textStatus, errorThrown ) {   errorDeWS(dir, textStatus );  }
 		
 	});
 
@@ -1497,8 +1498,8 @@ function addOrders(data){
 	
 		var debug=0;
     console.log("JSON de los Pedidos");
-    //if (debug==1) { console.log(JSON.stringify(data)); }
-    
+    if (debug==1) { console.log(JSON.stringify(data)); }
+
     var p = 0;
     var l = 0;
     var q = "";
@@ -1567,18 +1568,17 @@ function addOrders(data){
 					
 					querys[l]=getQueryInsertOrder(pedido); 
 					l++;
-					
-					
-					//TEMPORAL!!!!!!!
-					/*
-					if (entradas < 20 ) {
-						querys[l]=getQueryInsertOrderDraft(pedido); 
-						l++;
-						
-						entradas++;
-					}
-					*/
-					
+					if (this.transactionId != null && this.transactionId!= "") {
+            querys[l]="DELETE FROM ordersPendingDetail WHERE EXISTS (SELECT * FROM ordersPending as o WHERE o.idInternalOrder=ordersPendingDetail.idInternalOrder AND o.transactionCode='"+this.trasactionId+"')";
+  					console.log(querys[l]);
+            
+            l++;
+            
+            querys[l]="DELETE FROM ordersPending WHERE transactionCode='"+this.transactionId+"' ";
+            console.log(querys[l]);
+  					l++;
+          }
+
 					if (this.orderLines !== undefined) {
 						for (var i=0; i < this.orderLines.length ; i++) {
 		        		 
@@ -1611,16 +1611,8 @@ function addOrders(data){
 								if (linea.logisticsChainStatus===undefined) { articulo.logisticsChainStatus=0; }
 		
 								querys[l]=getQueryInsertOrderDetail(articulo); 
-								
 								l++;
-								
-								/*
-								if (entradas < 21 ) {
-									//TEMPORAL!!!!!!!
-									querys[l]=getQueryInsertOrderDraftDetail(articulo); 
-									l++;	
-								}
-								*/
+
 								
 		        }
 	        } else {
@@ -1718,7 +1710,7 @@ function restAllTemplatesJSON() {
 		method : 'GET', 
 		type:"GET",
 		success:addTemplates,
-		error: function (uri) { errorDeWS(uri); }
+		error: function(XMLHttpRequest, textStatus, errorThrown ) {   errorDeWS(dir, textStatus );  }
 		
 	});
 
@@ -1894,7 +1886,7 @@ function restFamiliesJSON() {
 		method : 'GET', 
 		type:"GET",
 		success:addFamilies,
-		error: function (uri) { errorDeWS(uri); }
+		error: function(XMLHttpRequest, textStatus, errorThrown ) {   errorDeWS(dir, textStatus );  }
 		
 	});
 
@@ -2003,7 +1995,7 @@ function restStatusJSON() {
 		method : 'GET', 
 		type:"GET",
 		success:addStatus,
-		error: function (uri) { errorDeWS(uri); }
+		error: function(XMLHttpRequest, textStatus, errorThrown ) {   errorDeWS(dir, textStatus );  }
 		
 	});
 
@@ -2253,21 +2245,16 @@ function restData(response){
 
 function errorDeWS(uri , error ) {
 
+		insertLog(tipoLogWS,categoriaLogWSError,"Error al llamar al WS " + uri+ " Motivo: "+ error,"");
 
-	    console.log("ERROR DE WS 13/05");
-	    console.log(uri);
-	    console.log(error);
-
-		insertLog(tipoLogWS,categoriaLogWSError,"Error al llamar al WS " + uri,"");
+		if (errorCargaInicial==0) {
 		
-		//if (errorCargaInicial==0) {
-		
-			//alert("error"+uri);
-			$("#cargaDialogTextAC").html("Error al cargar los datos. <br> Si desea recargar pulse aceptar. <br> Si desea continuar con los datos antiguos pulse cancelar.");
-			$("#cargaDialogAC").popup("open");
+      $("#cargaDialogErrorText").html("Error al cargar los datos<br> Origen: "+uri+" <br> Motivo: "+ error);
+			$("#cargaDialogError").popup("open");
 			errorCargaInicial=1;
+            
+		}
 
-		///}
 }
 
 

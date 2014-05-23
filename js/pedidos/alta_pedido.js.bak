@@ -205,8 +205,8 @@ function pMostrarDetallePedidoAnterior(data, modo) {
     db.transaction(function (transaction) {
         console.log("ALTA-PEDIDO: Inicio pMostrarDetallePedidoAnterior");
         localStorage['pDetalleAnterior'] = data;
-        var sql = "SELECT o.*, v.name as proveedor, p.name as centro , s.name as estado , s.icon as icono FROM orders as o,  vendors as v , purchaseCenters as p, status as s WHERE o.idVendor=v.idVendor AND o.idPurchaseCenter=p.idPurchaseCenter AND o.status=o.status AND o.status=s.id AND  o.idOrder='" + data + "'";
-
+        var sql = "SELECT o.*, v.name as proveedor, p.name as centro , s.name as estado , s.icon as icono, s.id as tipo FROM orders as o,  vendors as v , purchaseCenters as p, status as s WHERE o.idVendor=v.idVendor AND o.idPurchaseCenter=p.idPurchaseCenter AND o.status=o.status AND o.status=s.id AND  o.idOrder='" + data + "'";
+        console.log("SQL ---> " + sql);
         transaction.executeSql(sql, undefined,
             function (transaction, result) {
 
@@ -226,10 +226,10 @@ function pMostrarDetallePedidoAnterior(data, modo) {
                         $("#txtFechaEmision").val(darFormatoSegunWS(rowDb.documentDate.substring(0, 16),true));
                         //$("#txtHoraEmision").val(rowDb.hora_entrega);
                         $("#txtFechaEntrega").val(darFormatoSegunWS(rowDb.deliveryDate.substring(0, 10)));
-                        $("#txtEstadoPedido").val(rowDb.estado);
+                        //$("#txtEstadoPedido").val(rowDb.estado);
                         preu = Math.round(rowDb.amount * 100) / 100
                         $("#txtValorPedido").val(formatearMoneda(preu));
-                        
+                        $("#txtEstadoPedido").text(rowDb.tipo);
                         $("#txtEstadoPedido2").val(rowDb.estado);
                         $("#txtEstadoPedido2").css('display', 'inside');
                         $("#txtEstadoPedido2").css('padding-left', '15px');

@@ -808,18 +808,33 @@ function pRellenarGridNuevoPedido(proveedor, tipo) {
                    $("#pDialogEliminarNuevoArticulo").popup("open");
 
                });
+                
+                
+                if (localStorage["pedidos_detalle_pag_act"] > 1) {
+                   console.log("HA OCURRIDO ESTO");
+                   gridNuevoPedido.dataSource.page(localStorage["pedidos_detalle_pag_act"]);
+                   localStorage["pedidos_detalle_pag_max_row"] = parseInt(localStorage["pedidos_detalle_pag_max_row_max"] - 1);
+                   localStorage["pedidos_detalle_pag_last"] = Math.ceil(n_reg / (parseInt(localStorage["pedidos_detalle_pag_max_row"])));
+                   console.log(" DETALLE ACT +1 OPERACION DE PAGINACION: PAG_LAST " + localStorage["pedidos_detalle_pag_last"] + "RESULTADO DE " + n_reg + "/" + localStorage["pedidos_detalle_pag_max_row"] + "-1");
+               } else {
+                   localStorage["pedidos_detalle_pag_act"] = 1;
+                   localStorage["pedidos_detalle_pag_max_row"] = parseInt(localStorage["pedidos_detalle_pag_max_row_max"] - 1);
+                   localStorage["pedidos_detalle_pag_last"] = Math.ceil(n_reg / (parseInt(localStorage["pedidos_detalle_pag_max_row"])));
+                   console.log("OPERACION DE PAGINACION: PAG_LAST " + localStorage["pedidos_detalle_pag_last"] + "RESULTADO DE " + n_reg + "/" + localStorage["pedidos_detalle_pag_max_row"] + "-1");
+               }
+
 
 
 
                $('.k-grid-pager').hide();
-               if (localStorage["plantillas"] == "plantillas" || tipo == "2") {
-                   console.log("Estamos en footer pRellenar pedido tipo 2");
+                console.log("TIPO DE RELLENO " + tipo);
+               if (tipo == "M" || $("#seccion_title").val()=="plantilla") {
+                   console.log("DISPLAY PLANTILLAS");
                    displayModificarPlantilla();
                } else if (localStorage["pantalla"] == "insertarArticulos" || localStorage["pantalla"] == "emitidos" || localStorage["pantalla"] == "pedidos_cabecera") {
-                   console.log("YYYYYY");
+                   console.log("DISPLAY " + localStorage["pantalla"]);
                    displayDetalleNuevoPedido();
                } else if (localStorage["pantalla"] == "pedidosDetalleNuevoEscaner") {
-                   console.log("Estamos en footer pRellenar para pedidos Detalle  Nuevo escanner");
                    $("#pGridNuevoPedido").data("kendoGrid").showColumn("precios");
                    $("#pGridNuevoPedido").data("kendoGrid").hideColumn("precios");
                    $("#pGridNuevoPedido").data("kendoGrid").hideColumn("totales");
@@ -828,24 +843,11 @@ function pRellenarGridNuevoPedido(proveedor, tipo) {
                    $("#pGridNuevoPedido").data("kendoGrid").showColumn("cad_log");
                    displayDetalleNuevoPedidoEscaner();
                } else {
-                   console.log("Footer por defecto");
-                   displayDetalleNuevoPedido();
+                   console.log("DISPLAY OTRO");
+                   setTimeout('displayDetalleNuevoPedido();',200);
                }
 
 
-
-                if (localStorage["pedidos_detalle_pag_act"] > 1) {
-                   console.log("HA OCURRIDO ESTO");
-                   gridNuevoPedido.dataSource.page(localStorage["pedidos_detalle_pag_act"]);
-                   localStorage["pedidos_detalle_pag_max_row"] = Math.ceil(parseInt(localStorage["pedidos_detalle_pag_max_row_max"]) - 1);
-                   localStorage["pedidos_detalle_pag_last"] = Math.ceil(n_reg / (parseInt(localStorage["pedidos_detalle_pag_max_row"])));
-                   console.log(" DETALLE ACT +1 OPERACION DE PAGINACION: PAG_LAST " + localStorage["pedidos_detalle_pag_last"] + "RESULTADO DE " + n_reg + "/" + localStorage["pedidos_detalle_pag_max_row"] + "-1");
-               } else {
-                   localStorage["pedidos_detalle_pag_act"] = 1;
-                   localStorage["pedidos_detalle_pag_max_row"] = Math.ceil(parseInt(localStorage["pedidos_detalle_pag_max_row_max"]) - 1);
-                   localStorage["pedidos_detalle_pag_last"] = Math.ceil(n_reg / (parseInt(localStorage["pedidos_detalle_pag_max_row"])));
-                   console.log("OPERACION DE PAGINACION: PAG_LAST " + localStorage["pedidos_detalle_pag_last"] + "RESULTADO DE " + n_reg + "/" + localStorage["pedidos_detalle_pag_max_row"] + "-1");
-               }
 
                if (localStorage["pantalla"] == "pedidosDetalleNuevo" && $('#checkPrecioDetallePedido').attr('src').indexOf("uncheck") > 0) { // Esta des-seleccionado --> No hay que mostrar precios
                    console.log("Escondemos la columna de precios");

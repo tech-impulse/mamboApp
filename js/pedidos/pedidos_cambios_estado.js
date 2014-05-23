@@ -798,7 +798,7 @@ function pGuardarPedidoTemporalComoPlantillaExistente(idOrder) {
     db.transaction(function (tx) {
 
 
-				var sql = "SELECT t.idTemplate, o.reference  FROM ordersPending as o, ordersTemplates as t WHERE o.reference=t.idTemplate AND o.idInternalOrder=" + idOrder;
+				var sql = "SELECT t.idTemplate, o.reference  FROM ordersPending as o, ordersTemplates as t WHERE o.reference=t.reference AND o.idInternalOrder=" + idOrder;
                 console.log("SQL--> " + sql)
 
 				tx.executeSql(sql, undefined,
