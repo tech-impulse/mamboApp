@@ -813,19 +813,13 @@ function pRellenarGridNuevoPedido(proveedor, tipo) {
 
                $('.k-grid-pager').hide();
                if (localStorage["plantillas"] == "plantillas" || tipo == "2") {
-<<<<<<< HEAD
                    console.log("Estamos en footer pRellenar pedido tipo 2");
-=======
->>>>>>> ed0137b423534e5237137edb26b629dae6505088
                    displayModificarPlantilla();
                } else if (localStorage["pantalla"] == "insertarArticulos" || localStorage["pantalla"] == "emitidos" || localStorage["pantalla"] == "pedidos_cabecera") {
                    console.log("YYYYYY");
                    displayDetalleNuevoPedido();
                } else if (localStorage["pantalla"] == "pedidosDetalleNuevoEscaner") {
-<<<<<<< HEAD
                    console.log("Estamos en footer pRellenar para pedidos Detalle  Nuevo escanner");
-=======
->>>>>>> ed0137b423534e5237137edb26b629dae6505088
                    $("#pGridNuevoPedido").data("kendoGrid").showColumn("precios");
                    $("#pGridNuevoPedido").data("kendoGrid").hideColumn("precios");
                    $("#pGridNuevoPedido").data("kendoGrid").hideColumn("totales");
@@ -834,10 +828,7 @@ function pRellenarGridNuevoPedido(proveedor, tipo) {
                    $("#pGridNuevoPedido").data("kendoGrid").showColumn("cad_log");
                    displayDetalleNuevoPedidoEscaner();
                } else {
-<<<<<<< HEAD
                    console.log("Footer por defecto");
-=======
->>>>>>> ed0137b423534e5237137edb26b629dae6505088
                    displayDetalleNuevoPedido();
                }
 
