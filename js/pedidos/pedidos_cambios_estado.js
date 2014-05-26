@@ -1472,8 +1472,8 @@ function pConfirmacionNuevaPlantilla(idOrder, json) {
                 //console.log("DOS!!!!!!");
 						
                 $.each(cab.templateLines, function () {
-
-										sql = "INSERT OR IGNORE INTO ordersTemplatesDetail ( idTemplate, lineNumber, idItem , quantity , firstSizeId , secondSizeId, unitType , ordinalType , idLogisticsChain) VALUES (";
+            //        'INSERT OR IGNORE INTO ordersTemplatesDetail (idTemplate, lineNumber, idItem , quantity ,  unitType , idLogisticsChain, firstSizeId, secondSizeId,  ordinalType , itemName, itemStatus, logisticsChainName, logisticsChainStatus )
+										sql = "INSERT OR IGNORE INTO ordersTemplatesDetail ( idTemplate, lineNumber, idItem , quantity , firstSizeId , secondSizeId, unitType , ordinalType , lineNumber, itemName, itemStatus, logisticsChainName, logisticsChainStatus, idLogisticsChain) VALUES (";
 										
 										
 										sql=sql+" '"+ cab.internalId+ "' ,";
@@ -1484,13 +1484,18 @@ function pConfirmacionNuevaPlantilla(idOrder, json) {
 						        sql=sql+" '"+ this.secondSizeId+ "' ,";
 						        sql=sql+" '"+ this.unitType+ "' ,";
 						        sql=sql+" '"+ this.ordinalType+ "' ,";
+                                sql=sql+" '"+ this.lineNumber+ "' ,";
+                                sql=sql+" '"+ this.itemName+ "' ,";
+                                sql=sql+" '"+ this.itemStatus+ "' ,";
+                                sql=sql+" '"+ this.logisticsChainName+ "' ,";
+                                sql=sql+" '"+ this.logisticsChainStatus+ "' ,";                    
 						        sql=sql+" '"+ this.logisticsChainId+ "' );";
 
 										console.log(sql);
 										
 										//GUARDAMOS CADA UNA DE LAS LINEAS 
                     tx.executeSql(sql, [] , function (tx) {} );
-               
+                                    console.log("DONE!!");
 								});
 								
 								

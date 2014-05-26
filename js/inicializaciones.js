@@ -1942,10 +1942,6 @@ $(document).on('pageinit', '#LoginPage', function () {
                     field: 'nombre',
                     operator: "contains",
                     value: textSerch
-                }, {
-                    field: 'stock',
-                    operator: "contains",
-                    value: textSerch
                 }]
             };
 
