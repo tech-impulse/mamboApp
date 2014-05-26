@@ -798,7 +798,7 @@ function pGuardarPedidoTemporalComoPlantillaExistente(idOrder) {
     db.transaction(function (tx) {
 
 
-				var sql = "SELECT t.idTemplate, o.reference  FROM ordersPending as o, ordersTemplates as t WHERE o.reference=t.reference AND o.idInternalOrder=" + idOrder;
+				var sql = "SELECT t.idTemplate, o.reference  FROM ordersPending as o, ordersTemplates as t WHERE o.reference=t.idTemplate AND o.idInternalOrder=" + idOrder;
                 console.log("SQL--> " + sql)
 
 				tx.executeSql(sql, undefined,
@@ -1472,8 +1472,8 @@ function pConfirmacionNuevaPlantilla(idOrder, json) {
                 //console.log("DOS!!!!!!");
 						
                 $.each(cab.templateLines, function () {
-            //        'INSERT OR IGNORE INTO ordersTemplatesDetail (idTemplate, lineNumber, idItem , quantity ,  unitType , idLogisticsChain, firstSizeId, secondSizeId,  ordinalType , itemName, itemStatus, logisticsChainName, logisticsChainStatus )
-										sql = "INSERT OR IGNORE INTO ordersTemplatesDetail ( idTemplate, lineNumber, idItem , quantity , firstSizeId , secondSizeId, unitType , ordinalType , lineNumber, itemName, itemStatus, logisticsChainName, logisticsChainStatus, idLogisticsChain) VALUES (";
+
+										sql = "INSERT OR IGNORE INTO ordersTemplatesDetail ( idTemplate, lineNumber, idItem , quantity , firstSizeId , secondSizeId, unitType , ordinalType , idLogisticsChain) VALUES (";
 										
 										
 										sql=sql+" '"+ cab.internalId+ "' ,";
@@ -1484,18 +1484,13 @@ function pConfirmacionNuevaPlantilla(idOrder, json) {
 						        sql=sql+" '"+ this.secondSizeId+ "' ,";
 						        sql=sql+" '"+ this.unitType+ "' ,";
 						        sql=sql+" '"+ this.ordinalType+ "' ,";
-                                sql=sql+" '"+ this.lineNumber+ "' ,";
-                                sql=sql+" '"+ this.itemName+ "' ,";
-                                sql=sql+" '"+ this.itemStatus+ "' ,";
-                                sql=sql+" '"+ this.logisticsChainName+ "' ,";
-                                sql=sql+" '"+ this.logisticsChainStatus+ "' ,";                    
 						        sql=sql+" '"+ this.logisticsChainId+ "' );";
 
 										console.log(sql);
 										
 										//GUARDAMOS CADA UNA DE LAS LINEAS 
                     tx.executeSql(sql, [] , function (tx) {} );
-                                    console.log("DONE!!");
+               
 								});
 								
 								

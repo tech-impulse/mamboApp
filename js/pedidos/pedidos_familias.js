@@ -128,7 +128,7 @@ function pMostrarArticulos(param) {
                             model: {
                                 fields: {
                                     cod_articulo: {
-                                        type: "integer"
+                                        type: "string"
                                     },
                                     referencia: {
                                         type: "string"
@@ -137,10 +137,10 @@ function pMostrarArticulos(param) {
                                         type: "string"
                                     },
                                     can_pedida: {
-                                        type: "integer"
+                                        type: "string"
                                     },
                                     stock: {
-                                        type: "integer"
+                                        type: "string"
                                     },
                                 }
                             }

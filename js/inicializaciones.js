@@ -12,51 +12,6 @@ $(document).keydown(function (e) {
 });
 
 
-/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-Barra de progreso del time out.
-*/
-
-$(document).on('pageinit', '#progressPage', function () {
-
-    var tm="";
-    var ts="";
-    kendo.culture("es-ES");
-    
-    localStorage['tcarga']=0;
-    
-     $("#progressBarTime").kendoProgressBar({
-                min: 0,
-                max: (localStorage['maxtime'] * 2),
-                type: "percent"
-     });
-
-    var pb = $("#progressBarTime").data("kendoProgressBar");
-    pb.value(0);
-    var interval = setInterval(function () {
-        
-        localStorage['tcarga']=parseInt(localStorage['tcarga']) + 5000;
-        pb.value(localStorage['tcarga'] );
-        //console.log("BARRA TIEMPO ==> " + localStorage['tcarga'] + "MAX == " +  localStorage['maxtime']);
-    }, 5000);
-
-});
-
-               
-function progressTime(percent, clearTimeout) {
-
-    var progressBarWidth = percent * $('#progressBarTime').width() / 100;
-
-    console.log("TIEMPO!!!!! "+percent);
-    
-    $('#progressBarTime').find('div').animate({ width: progressBarWidth }, 500); 
-    $('#progressBarTime').find('div').html(clearTimeout );
-
-
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 $(document).on('pageinit', '#LoginPage', function () {
 
     $('input').focus();
@@ -146,7 +101,6 @@ $(document).on('pageinit', '#LoginPage', function () {
 
     /////////////////////////////////////////////////////////////////////////////////////
     // CARGA DE DATOS INICIAL
-
     $('#btnCargaDialogError').unbind('click').bind('click', function () {
 
         //Recarga total de los datos----------------------------------------------
@@ -154,35 +108,14 @@ $(document).on('pageinit', '#LoginPage', function () {
         $("#cargaDialogError").popup("close");
         restaurarCopia();
 
-        db.transaction(function (transaction) {
-
-                    var sqlS = "SELECT COUNT(*) as n FROM items ";
-
-                    transaction.executeSql(sqlS, undefined,
-                        function (transaction, result) {
-                            if (result.rows.item(0).n > 0) {
-                                 $("#cargaDialogTextAC").html("Si desea recargar los datos pulse Aceptar.<br>Para continuar con los datos anteriores a la carga pulse cancelar.");
-                                 setTimeout('$("#cargaDialogAC").popup("open");', 2000);
-
-                            } else {
-
-                                getDescripcionAviso("NuncaCargado");
-                                setTimeout('$("#cargaDialogA").popup("open");', 2000);
-
-                            }
-
-
-                        });
-                });
+        $("#cargaDialogTextAC").html("Si desea recargar los datos pulse Aceptar.<br>Para continuar con los datos anteriores a la carga pulse cancelar.");
+        setTimeout('$("#cargaDialogAC").popup("open");', 2000);
 
 
     });
 
-    $('#btnCargaDialogAOk').unbind('click').bind('click', function () {
 
-            $("#cargaDialogA").popup("close");
-            window.location.replace('./index.html');
-     });
+
 
     $('#btnCargaDialogOkAC').unbind('click').bind('click', function () {
 
@@ -190,7 +123,6 @@ $(document).on('pageinit', '#LoginPage', function () {
         console.log("-BOTON ACEPTAR--------------------------------->");
         $("#cargaDialogAC").popup("close");
 
-        localStorage['tcarga']=-3000;
         setTimeout('recargaTotal();', 3000);
 
 
@@ -246,7 +178,6 @@ $(document).on('pageinit', '#LoginPage', function () {
                 console.log("Caso desconocido");
         }
     });
-
 
     $("#dialogInsertarPedido").on("popupafterclose", function (event, ui) {
         if (localStorage["ModoEscaner"] == "1") {
@@ -406,8 +337,8 @@ $(document).on('pageinit', '#LoginPage', function () {
         if (localStorage['online'] == 0) {
 
             console.log("No es posible recargar los datos sin conexi�n");
-            getDescripcionAviso("NoSePuedeRecargarNoInternet");
-            $("#mDialogA").popup("open");
+            getDescripcionAviso("NoSePuedeRecargar");
+            $("#pedidosDialogAC").popup("open");
 
         } else {
 
@@ -419,13 +350,6 @@ $(document).on('pageinit', '#LoginPage', function () {
             //restServices();
         }
 
-    });
-
-
-    $('#mDialogAOk').unbind('click').bind('click', function () {
-
-
-                $("#mDialogA").popup("close");
     });
 
 
@@ -872,13 +796,8 @@ $(document).on('pageinit', '#LoginPage', function () {
         } else if (localStorage["pantalla"] == "pedidosDetalleNuevo") {
 
             localStorage["pedidos_detalle_pag_act"] = parseInt(localStorage["pedidos_detalle_pag_act"]) + 1;
-            if ($("#fbtn5").css("display") == "none" && $("#fbtn1").css("display") == "none") {
-                
-                displayModificarPlantilla();
-            }
-            else {
-                displayDetalleNuevoPedido();
-            }
+
+            displayDetalleNuevoPedido();
 
             $('#pGridNuevoPedido .k-i-arrow-e').click();
 
@@ -1054,12 +973,7 @@ $(document).on('pageinit', '#LoginPage', function () {
 
             localStorage["pedidos_detalle_pag_act"] = parseInt(localStorage["pedidos_detalle_pag_act"]) - 1;
 
-            if ($("#fbtn5").css("display") == "none" && $("#fbtn1").css("display") == "none") {
-                displayModificarPlantilla();
-            }
-            else {
-                displayDetalleNuevoPedido();
-            }
+            displayDetalleNuevoPedido();
 
             $('#pGridNuevoPedido .k-i-arrow-w').click();
 
@@ -1454,15 +1368,9 @@ $(document).on('pageinit', '#LoginPage', function () {
             //$.mobile.changePage('#menuPrincipal');
             pMostrarPedidos();
         } else if (localStorage["pantalla"] == "pedidos_plantillas_detalle") {
-            if(localStorage['pantallaAnterior']== "pedidoNuevoAnteriores")
-            {
-                displayPedidosAnterioresNuevoPedido();
-                localStorage['pantallaAnterior']= "";
-            } else {
             var grid = $("#pGridPlantillas").data("kendoGrid");
             grid.dataSource.page(localStorage['pedidos_pag_act']);
             displayPedidoPlantillas();
-            }
         } else if ((localStorage["pantalla"] == "pedidos_plantillas_detalle") && (localStorage["plantillas"] == "plantillas")) {
             //pRellenarGridNuevoPedido();
             displayDetalleNuevoPedido();
@@ -1848,15 +1756,14 @@ $(document).on('pageinit', '#LoginPage', function () {
             var allDataNuevoPedPlam = dataSourceNuevoPedPlan.data();
             var queryDet = new kendo.data.Query(allDataNuevoPedPlam);
             var dataNuevoPedPlan = queryDet.filter(filtersPlan).data;
-
+            
             var mr = parseInt(localStorage.getItem("max_row_per_pag") -2); // Una fila menos debido a los labels superiores.
             localStorage["pedidos_pag_act"] = 1;
             localStorage["pedidos_pag_max_row"] = parseInt(mr);
             
             localStorage["pedidos_pag_last"] = Math.ceil(parseInt(dataNuevoPedPlan.length) / parseInt(mr));
-
-
             displayPedidosAnterioresNuevoPedido();
+
 
         } else if (localStorage["pantalla"] == "pedidosDetalleNuevo") {
 
@@ -1867,7 +1774,6 @@ $(document).on('pageinit', '#LoginPage', function () {
             console.log("VALOR DEL FILTRO NUEVO DETALLE " + textSerch);
 
             var gridDet = $("#pGridNuevoPedido").data("kendoGrid");
-            //var gridDet = $('#pGridNuevoPedido').data('kendoGrid').dataSource.read();
 
             var filterDet = {
                 logic: "or",
@@ -1898,6 +1804,7 @@ $(document).on('pageinit', '#LoginPage', function () {
                 }]
             };
 
+            console.log(filterDet);
             gridDet.dataSource.filter(filterDet);
 
             console.log("SEARCH Pedidos detalle: Pulsado tecla" + textSerch);
@@ -1925,8 +1832,37 @@ $(document).on('pageinit', '#LoginPage', function () {
             var textSerch = $('#searchText').val();
 
             console.log("VALOR DEL FILTRO DETALLE " + textSerch);
+            
+            /*var grid = $("#pGridArticulos").data("kendoGrid");
 
-            var gridDet = $("#pGridArticulos").data("kendoGrid");
+            var fil = {
+                logic: "or",
+                filters: [{
+                    field: 'cod_articulo',
+                    operator: "contains",
+                    value: textSerch
+                }, {
+                    field: 'referencia',
+                    operator: "contains",
+                    value: textSerch
+                }, {
+                    field: 'nombre',
+                    operator: "contains",
+                    value: textSerch
+                },{
+                    field: 'can_pedida',
+                    operator: "contains",
+                    value: textSerch
+                },{
+                    field: 'stock',
+                    operator: "contains",
+                    value: textSerch
+                }]
+            };
+
+            grid.dataSource.filter(fil);*/
+            
+            var gridArt = $("#pGridArticulos").data("kendoGrid");
 
             var filterDet = {
                 logic: "or",
@@ -1942,10 +1878,20 @@ $(document).on('pageinit', '#LoginPage', function () {
                     field: 'nombre',
                     operator: "contains",
                     value: textSerch
-                }]
+                }/*, {
+                    field: 'can_pedida',
+                    operator: "contains",
+                    value: textSerch
+                }, {
+                    field: 'stock',
+                    operator: "contains",
+                    value: textSerch
+                }*/]
             };
 
-            gridDet.dataSource.filter(filterDet);
+            
+            console.log(filterDet);
+            gridArt.dataSource.filter(filterDet);
 
             console.log("SEARCH Pedidos detalle: Pulsado tecla" + textSerch);
 
@@ -2001,8 +1947,8 @@ $(document).on('pageinit', '#LoginPage', function () {
             var allDataDet = dataSourceDetalle.data();
             var queryDet = new kendo.data.Query(allDataDet);
             var dataDet = queryDet.filter(filtersDetalle).data;
-
-			var mr = parseInt(localStorage.getItem("max_row_per_pag") - 2); // -1 debido a los labels superiores
+            
+            var mr = parseInt(localStorage.getItem("max_row_per_pag") - 2); // -1 debido a los labels superiores
             localStorage["pedidos_pag_act"] = 1;
             localStorage["pedidos_pag_max_row"] = mr;
             localStorage["pedidos_pag_last"] = Math.ceil(dataDet.length/ mr);
@@ -2050,7 +1996,7 @@ $(document).on('pageinit', '#LoginPage', function () {
 
             event.stopPropagation();
 
-               var dataSourceDetalle = $("#pGridPedidosDet").data("kendoGrid").dataSource;
+            var dataSourceDetalle = $("#pGridPedidosDet").data("kendoGrid").dataSource;
             var filtersDetalle = dataSourceDetalle.filter();
             var allDataDet = dataSourceDetalle.data();
             var queryDet = new kendo.data.Query(allDataDet);
@@ -2060,7 +2006,6 @@ $(document).on('pageinit', '#LoginPage', function () {
             localStorage["pedidos_detalle_pag_max_row"] = parseInt(localStorage["pedidos_detalle_pag_max_row_max"]);
             
             localStorage["pedidos_detalle_pag_last"] = Math.ceil(dataDet.length / parseInt(localStorage["pedidos_detalle_pag_max_row"]));
-
 
             displayDetalleAnterior();
 
@@ -2102,7 +2047,7 @@ $(document).on('pageinit', '#LoginPage', function () {
             displayNuevoPedido();
 
 
-         }else if (localStorage["pantalla"] == "pedidoNuevoPlantillas") {
+        }else if (localStorage["pantalla"] == "pedidoNuevoPlantillas") {
 
             console.log("ESTAMOS DENTRO DE LISTA DE CENTROS");
 
@@ -2155,6 +2100,7 @@ $(document).on('pageinit', '#LoginPage', function () {
 
 });
 
+    
     //evento de cancelar filtro del filtro header
     $(document).on('click', '.ui-input-clear', function () {
 
@@ -2268,7 +2214,7 @@ $(document).on('pageinit', '#LoginPage', function () {
 
             displayInsertarArticulos();
 
-}else if (localStorage["pantalla"] == "nuevo_proveedores") {
+        }else if (localStorage["pantalla"] == "nuevo_proveedores") {
 
             var grid = $("#pGridProveedores").data("kendoGrid");
             grid.dataSource.filter([]);
@@ -2295,8 +2241,7 @@ $(document).on('pageinit', '#LoginPage', function () {
             localStorage["pedidos_pag_last"] = Math.ceil(parseInt(allData.length) / parseInt(mr));
 
             displayPedidosAnterioresNuevoPedido();
-        
-		}else if (localStorage["pantalla"] == "pedidoNuevoPlantillas") {
+        }else if (localStorage["pantalla"] == "pedidoNuevoPlantillas") {
 
             var grid = $("#pGridPedidosPlantillas").data("kendoGrid");
             grid.dataSource.filter([]);
@@ -3160,7 +3105,6 @@ $(document).on('pageinit', '#LoginPage', function () {
 
     $('#mBtnDialogACOk').unbind('click').bind('click', function () {
         $('#mDialogAC').popup("close");
-        localStorage['tcarga']=0;
         recargaTotal();
 
     });
@@ -3214,10 +3158,7 @@ $(document).on('pageinit', '#LoginPage', function () {
 
 $(document).on('pageinit', '#menuPrincipal', function () {
 
-    localStorage["cargaDeDatos"]="completa";
-
-
-    //Rutina para comprobar el estado de la conexi?
+    //Rutina para comprobar el estado de la conexi򬞍
     pSincronizar();
     restSecuritySettingsJSON();
 

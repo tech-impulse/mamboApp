@@ -1126,11 +1126,11 @@ function pMostrarDetallePedido(data, modo, show) {
 
         if (data.substr(0, 3) == "Tmp") {
 
-            var sql = "SELECT o.*, v.name as proveedor, p.name as centro , s.name as estado,s.icon as icono, s.id as tipo o.idInternalOrder as idOrder, message as error_men FROM ordersPending as o,  vendors as v , purchaseCenters as p,  status as s LEFT OUTER JOIN ordersPendingErrors as e ON e.idOrder=o.idInternalOrder  WHERE o.idVendor=v.idVendor AND o.idPurchaseCenter=p.idPurchaseCenter AND o.status=s.id AND o.reference='" + data + "' AND o.tipoInterno="+TIPO_TEMPORAL_ORDER+" AND o.username='" + localStorage['usuario'] + "' ";
+            var sql = "SELECT o.*, v.name as proveedor, p.name as centro , s.name as estado,s.icon as icono, o.idInternalOrder as idOrder, message as error_men FROM ordersPending as o,  vendors as v , purchaseCenters as p,  status as s LEFT OUTER JOIN ordersPendingErrors as e ON e.idOrder=o.idInternalOrder  WHERE o.idVendor=v.idVendor AND o.idPurchaseCenter=p.idPurchaseCenter AND o.status=s.id AND o.reference='" + data + "' AND o.tipoInterno="+TIPO_TEMPORAL_ORDER+" AND o.username='" + localStorage['usuario'] + "' ";
 
         } else {
 
-            var sql = "SELECT o.*, v.name as proveedor, p.name as centro , s.name as estado,s.icon as icono, s.id as tipo, '' as error_men FROM orders as o,  vendors as v , purchaseCenters as p,  status as s WHERE o.idVendor=v.idVendor AND o.idPurchaseCenter=p.idPurchaseCenter AND o.status=s.id AND o.reference='" + data + "' ";
+            var sql = "SELECT o.*, v.name as proveedor, p.name as centro , s.name as estado,s.icon as icono, '' as error_men FROM orders as o,  vendors as v , purchaseCenters as p,  status as s WHERE o.idVendor=v.idVendor AND o.idPurchaseCenter=p.idPurchaseCenter AND o.status=s.id AND o.reference='" + data + "' ";
 
         }
 
@@ -1170,8 +1170,8 @@ function pMostrarDetallePedido(data, modo, show) {
 						}
                         
                         //$("#txtEstadoPedido2").css('background', 'url(./images/'+rowDb.icono+') no-repeat scroll 20px 20px').val();
-                                                    estadoPedido = rowDb.tipo;
-                        $("#txtEstadoPedido").text(rowDb.tipo);
+                                                    estadoPedido = rowDb.icono;
+                        
                         $("#txtEstadoPedido2").val(rowDb.estado);
                         $("#txtEstadoPedido2").css('display', 'inside');
                         $("#txtEstadoPedido2").css('padding-left', '15px');

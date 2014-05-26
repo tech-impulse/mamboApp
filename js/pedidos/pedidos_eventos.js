@@ -80,87 +80,12 @@ function getControlEventosPedidos() {
     $('#fbtn1').unbind('click').bind('click', function () {
         console.log("CLICKKKKKKKKKKKKKKKKKKKKKKKKK");
 
-        if (localStorage["pantalla"] == "pedidoNuevoAnteriores" ||
+        if (localStorage["pantalla"] == "pedidoNuevoAnteriores" || localStorage["pantalla"] == "pedidosDetalleNuevo" ||
             localStorage["pantalla"] == "pedidos_cabecera" || localStorage["pantalla"] == "pedidoNuevoPlantillas" || localStorage["pantalla"] == "pedidosAyuda" || localStorage["pantalla"] == "plantillas") {
             // CANCELAR 
             getDescripcionAviso("cancelarPedido");
             $("#pedidosDialogAC").popup("open");
-        } else if (localStorage["pantalla"] == "pedidosDetalleNuevo") { // GUARDAR COMO PLANTILLA
-            
-                	if(localStorage['pantalla_anterior']=="pedidos_plantillas_detalle"){
-        		var provider = localStorage["pNuevoPedidoIdProveedor"];
-						var center = localStorage["pNuevoPedidoIdCentro"];
-						var refer = localStorage['pNuevoPedidoPlantillaRef'];
-						
-						db.transaction(function (transaction) {
-			
-			        var sql = "SELECT o.name as nombre FROM ordersTemplates as o WHERE o.reference='"+refer+"'";
-			
-			        console.log("CONSULTA MOSTRAR PEDIDOS " + sql);
-			
-			        transaction.executeSql(sql, undefined,
-			            function (transaction, result) {
-			            	
-			            	var rowDb = result.rows.item (0);
-			            	
-			            	if (rowDb.nombre==undefined) { 	$("#pedidosPopUpInputNombrePlantilla").val(""); }
-			            	else { $("#pedidosPopUpInputNombrePlantilla").val(rowDb.nombre); }
-			            	
-				            $("#pedidosPopUpNombrePlantilla").popup("open");
-				            
-				            //pGuardarPedidoTemporalComoPlantillaNueva(localStorage['pNuevoPedidoIntenalId']);
-				            //pRellenarGridNuevoPedido();	
-				            
-				          });
-				    });
-                        
-				  } else {
-                            // LISTA DE ZONAS
-                    db.transaction(function (transaction) {
-                        var sql = "SELECT distinct z.name as nom, z.idDeliveryZone as id FROM deliveryZones as z WHERE z.idPurchaseCenter=" + localStorage["pNuevoPedidoIdCentro"] + " ORDER BY z.name DESC ";
-                        console.log("LISTA DE ZONAS 1 " + sql);
-                        transaction.executeSql(sql, undefined,
-                            function (transaction, result) {
-                                console.log("LISTA DE ZONAS 2");
-                                var i = 0;
-                                var listaZonas = [];
-
-                                for (i = 0; i < result.rows.length; i++) {
-                                    var zone = result.rows.item(i);
-
-                                    listaZonas.push({
-                                        id_zona: zone.id,
-                                        nombre_zona: zone.nom,
-                                    });
-
-                                }
-                                if (i == 1) {
-                                    $('#ptxtZonaCabeceraPlantilla').kendoDropDownList({
-                                        dataSource: {
-                                            data: listaZonas
-                                        },
-                                        dataTextField: 'nombre_zona',
-                                        dataValueField: 'id_zona',
-                                    }).data("kendoDropDownList");
-                                } else {
-                                    $('#ptxtZonaCabeceraPlantilla').kendoDropDownList({
-                                        dataSource: {
-                                            data: listaZonas
-                                        },
-                                        dataTextField: 'nombre_zona',
-                                        dataValueField: 'id_zona',
-                                        optionLabel: "Seleccionar",
-                                    }).data("kendoDropDownList");
-                                }
-
-                            }, error6);
-                    });
-				  	$("#pedidosPopUpInputNombrePlantilla").val("");
-				    $("#pedidosPopUpNombrePlantilla").popup("open");				  	
-				  }
-
-        } 
-        else if (localStorage["pantalla"] == "pedidosDetalle" || localStorage["pantalla"] == "pedidos_plantillas_detalle") {
+        } else if (localStorage["pantalla"] == "pedidosDetalle" || localStorage["pantalla"] == "pedidos_plantillas_detalle") {
             // ELIMINAR
             getDescripcionAviso("eliminarPedido");
             $("#pedidosDialogAC").popup("open");
@@ -281,7 +206,7 @@ function getControlEventosPedidos() {
             // MODIFICAR
             
             console.log(" PLANTILLA A MODIFICAR  => "+$("#pTxtNuevoPedidoPlantillaRef").val());
-            pGuardarPlantillaComoPedidoTemporal($("#pTxtNuevoPedidoPlantillaRef").val(),"2");
+            pGuardarPlantillaComoPedidoTemporal($("#pTxtNuevoPedidoPlantillaRef").val(),"1");
             
         } else if (localStorage["pantalla"] == "pedidosDetalleNuevoEscaner") {
             // GUARDAR BORRADOR 
@@ -304,29 +229,6 @@ function getControlEventosPedidos() {
             localStorage['proveedor_seleccionado']=$("#pTxtNuevoPedidoBorradorProveedor").val();
             localStorage['centro_seleccionado']=$("#pTxtNuevoPedidoBorradorCentro").val();
 
-            //checkPedidoACero();
-            
-            
-        } else if (localStorage["pantalla"] == "pedidosDetalle") {
-            // MODIFICAR PEDIDO
-            db.transaction(function (transaction) {
-
-            var sql = "SELECT idInternalOrder, idVendor, idPurchaseCenter FROM ordersPending WHERE reference='"+$("#txtCodPedido").val()+"'";
-
-            transaction.executeSql(sql, undefined,
-                function (transaction, result) {
-
-                    var rowDb = result.rows.item (0);
-                    
-                     localStorage['pNuevoPedidoIntenalId'] = rowDb.idInternalOrder;
-                     localStorage['pNuevoPedidoIdProveedor'] = rowDb.idVendor;
-                     localStorage['pNuevoPedidoIdCentro'] = rowDb.idPurchaseCenter;
-
-                  });
-            });
-          
-           
-            pRellenarGridNuevoPedido();
             //checkPedidoACero();
             
             
@@ -822,7 +724,7 @@ function getControlEventosPedidos() {
       	$( "#pedidosPopUpNombrePlantilla" ).popup( "close");
       	
       	
-      	pCerrarPlantilla(localStorage['pNuevoPedidoIntenalId'], $( "#pedidosPopUpInputNombrePlantilla").val(),$("#ptxtZonaCabeceraPlantilla").val());
+      	pCerrarPlantilla(localStorage['pNuevoPedidoIntenalId'], $( "#pedidosPopUpInputNombrePlantilla").val(),$("#ptxtZonaCabecera").val());
       	
       	setTimeout(pEnviarPlantilla(localStorage['pNuevoPedidoIntenalId']),300);
       	

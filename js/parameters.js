@@ -1,15 +1,14 @@
-
 var host = "http://bus.grupoareas.com:8084/v0.1";
 //var port = "8086";
 var token = "";
-var versionApp = "1.1.2"; //  22/05/2014
+var versionApp = "1.1.0"; //  16/05/2014
 var tiempoRecargaBD = 360; // Horas en minutos para recargar la base de datos
 var transactionId = "";
-var tiempoSincronismo= 400000;
+var tiempoSincronismo = 400000;
 
-var TIPO_TEMPORAL_ORDER=0;
-var TIPO_TEMPORAL_TEMPLATE=1;
-var TIPO_TEMPORAL_DRAFT=2;
+var TIPO_TEMPORAL_ORDER = 0;
+var TIPO_TEMPORAL_TEMPLATE = 1;
+var TIPO_TEMPORAL_DRAFT = 2;
 
 /*
 //var host = "http://bus.grupoareas.com:8084/v0.1";
@@ -20,18 +19,18 @@ var token = "token=dGhsbG9icmU6MTM3NzY0MDIyMDY5NDo3OGQ0MWE4NTE4ZDNlMmM5MzJkNjczY
 
 // PERMISOS DE USUARIO 
 
-var READ_PURCHASE_CENTER="";
-var READ_VENDOR="";
-var READ_ITEM="";
-var READ_ORDER_STATUS="";
-var READ_TEMPLATE="";
-var DELETE_ORDER="";
-var DELETE_DRAFT="";
-var DELETE_TEMPLATE="";
-var UPDATE_TEMPLATE="";
+var READ_PURCHASE_CENTER = "";
+var READ_VENDOR = "";
+var READ_ITEM = "";
+var READ_ORDER_STATUS = "";
+var READ_TEMPLATE = "";
+var DELETE_ORDER = "";
+var DELETE_DRAFT = "";
+var DELETE_TEMPLATE = "";
+var UPDATE_TEMPLATE = "";
 
 //POP UP TAM
-var TIME_OUT="";
+var TIME_OUT = "";
 
 // SETTINGS
 /*

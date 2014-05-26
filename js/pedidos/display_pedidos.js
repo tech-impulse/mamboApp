@@ -22,7 +22,6 @@ localStorage.setItem('seccion_title_pedidos_cabecera', 'Cabecera de Pedido');
 localStorage.getItem('seccion_title_pedidosDetalleNuevo');
 
 function displayPedidosEmitidos() { // Pantalla de pedidos Emitidos
-    console.log("--------------   DISPLAY ACTUAL  ------------------ " + localStorage["pantalla"]);
 	if (localStorage['pantalla'] != "emitidos")
 		$('#searchText').val("");
 		
@@ -73,19 +72,13 @@ function displayDetail(estado) // Pantalla con Alta Pedido, contiene Pedidos ant
     $('#pMostrarBorradores').hide();
     $('#pBorradoresDetalle').hide();
     ajustarFooter(true);
-    console.log("ESTADO " + estado);
-    
-    var estado = $("#txtEstadoPedido").text();
-	if(estado==9 || estado==8 || DELETE_ORDER!="1") {
-		 activate_buttons_footer("", localStorage["footer_btn_pedido_base"], "", "", ""); // NO TIENE PERMISOS PARA ELIMINAR
-	}else if(estado==3){
-		activate_buttons_footer("", "", "", "", ""); // PEDIDO ENVIANDO
-	} else if(estado==4){
-        activate_buttons_footer(localStorage["footer_btn_eliminar"], "", localStorage["footer_btn_modificar"], "", ""); // PEDIDO CON ERROR MODIFICAR?
-    }else if(estado==7){
-        activate_buttons_footer("", localStorage["footer_btn_pedido_base"], "", "", ""); // EMITIDO Y CONFIRMADO NO SE PUEDE ELIMINAR
-    } else {
-        console.log("ESTADO " + estado);
+
+	if(estado=="status_anulado.png"||estado=="status_entregado.png"||DELETE_ORDER!="1") {
+		 activate_buttons_footer("", localStorage["footer_btn_pedido_base"], "", "", "");
+	}else if(estado=="status_enviando.png"){
+		activate_buttons_footer("", "", "", "", "");
+	}
+	else {
 		 activate_buttons_footer(localStorage["footer_btn_eliminar"], localStorage["footer_btn_pedido_base"], "", "", "");
 	}
     
@@ -227,7 +220,6 @@ function displayPedidosAnterioresNuevoPedido() // Pantalla con Alta Pedido, cont
 
 function displayPlantillasNuevoPedido() // Pantalla con Alta Pedido, contiene Pedidos anteriores y Mis Plantillas
 {
-    localStorage['pantallaAnterior']= "pedidoNuevoAnteriores";
 	if (localStorage['pantalla'] != "pedidoNuevoPlantillas")
 		$('#searchText').val("");
 	
@@ -281,20 +273,12 @@ function displayDetalleAnterior() // Contiene el detalle de un pedido anterior
     $('#pMostrarBorradores').hide();
     $('#pBorradoresDetalle').hide();
     ajustarFooter(true);
-    
-        var estado = $("#txtEstadoPedido").text();
-	if(estado==9 || estado==8 || DELETE_ORDER!="1") {
-		 activate_buttons_footer("", localStorage["footer_btn_pedido_base"], "", "", ""); // NO TIENE PERMISOS PARA ELIMINAR
-	}else if(estado==3){
-		activate_buttons_footer("", "", "", "", ""); // PEDIDO ENVIANDO
-	} else if(estado==4){
-        activate_buttons_footer(localStorage["footer_btn_eliminar"], "", localStorage["footer_btn_modificar"], "", ""); // PEDIDO CON ERROR MODIFICAR?
-    }else if(estado==7){
-        activate_buttons_footer("", localStorage["footer_btn_pedido_base"], "", "", ""); // EMITIDO Y CONFIRMADO NO SE PUEDE ELIMINAR
-    } else {
+	if(DELETE_ORDER!="1") {
+		 activate_buttons_footer("", localStorage["footer_btn_pedido_base"], "", "", "");
+	}
+	else {
 		 activate_buttons_footer(localStorage["footer_btn_eliminar"], localStorage["footer_btn_pedido_base"], "", "", "");
 	}
-
 
 }
 
@@ -332,7 +316,7 @@ function displayDetalleNuevoPedido() // Pantalla que contiene los articulos del 
     console.log("KAKA 11111");
     if (localStorage["pantalla_anterior"] != "pedidos_plantillas_detalle"){
     		console.log("ESTAMOS AQUI EN DISPLAY FOOTER NUEVO PEDIDO ");
-        activate_buttons_footer(localStorage["footer_btn_guardar_plantilla"], localStorage["footer_btn_guardar_borrador"], localStorage["footer_btn_insertar_articulo"], localStorage["footer_btn_codigo_barras"], localStorage["footer_btn_finalizar"]);
+        activate_buttons_footer(localStorage["footer_btn_cancelar"], localStorage["footer_btn_guardar_borrador"], localStorage["footer_btn_insertar_articulo"], localStorage["footer_btn_codigo_barras"], localStorage["footer_btn_finalizar"]);
     }else if (localStorage["pantalla_anterior"] == "pedidos_plantillas_detalle"){
     	activate_buttons_footer(localStorage["footer_btn_cancelar"], localStorage["footer_btn_guardar_borrador"], localStorage["footer_btn_insertar_articulo"], localStorage["footer_btn_codigo_barras"], localStorage["footer_btn_finalizar"]);
     }
@@ -446,7 +430,7 @@ function displayFiltroFamilias()
 		$('#searchText').val("");
 	
     localStorage["pantalla"] = "pFiltroFamilias";
-    console.log("--------------   FAMILIAS DISPLAY ACTUAL  ------------------ " + localStorage["pantalla"]);
+    console.log("--------------   FAMILIEAS DISPLAY ACTUAL  ------------------ " + localStorage["pantalla"]);
     activate_buttons_header(1, localStorage.getItem('seccion_title_filtroArticulos'), 1)
     $('#emitidos').hide();
     $('#nuevo_centros').hide();
@@ -626,13 +610,12 @@ function displayCabeceraPedido()
     $('#pMostrarBorradores').hide();
     $('#pBorradoresDetalle').hide();
     ajustarFooter(true); // Activar/Desactivar Envio
-    activate_buttons_footer(localStorage["footer_btn_cancelar"], localStorage["footer_btn_resumen"], localStorage["footer_btn_guardar_borrador"],"", localStorage["footer_btn_enviar"]);
+    activate_buttons_footer(localStorage["footer_btn_cancelar"], localStorage["footer_btn_resumen"], localStorage["footer_btn_guardar_borrador"], localStorage["footer_btn_guardar_plantilla"], localStorage["footer_btn_enviar"]);
    
 }
 
 function displayModificarPlantilla() // Pantalla que contiene los articulos del nuevo pedido y botones para añadirlos.
 {
-    console.log("MODIFICAR PLANTILLA");
 	if (localStorage['pantalla'] != "pedidosDetalleNuevo")
 		$('#searchText').val("");
 	
@@ -658,7 +641,7 @@ function displayModificarPlantilla() // Pantalla que contiene los articulos del 
     $('#pBorradoresDetalle').hide();
     ajustarFooter(true);
 
-    activate_buttons_footer("", localStorage["footer_btn_guardar_plantilla"], localStorage["footer_btn_insertar_articulo"], localStorage["footer_btn_codigo_barras"], "");
+    activate_buttons_footer(localStorage["footer_btn_cancelar"], localStorage["footer_btn_guardar_plantilla"], localStorage["footer_btn_insertar_articulo"], localStorage["footer_btn_codigo_barras"], "");
    
 }
 
@@ -787,7 +770,7 @@ function ajustarFooter(permiso) {
         break;
 
 	case "pedidosDetalleNuevo":
-        //$('#divBoton1').hide(); // Cancelar Oculto
+        $('#divBoton1').hide(); // Cancelar Oculto
         break;
 
     case "pedidos_cabecera":

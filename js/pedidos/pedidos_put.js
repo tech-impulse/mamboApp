@@ -171,8 +171,11 @@ function pNuevoPedidoPostOk(data) {
 	var ini = localStorage['transactionId'].length ;
 	var fin = data.body.entity.transactionId.length;
 
-	var idOrder = data.body.entity.transactionId.substring(ini+4, fin);
-    //var idOrder = data.body.entity.transactionId.split('==')[1];
+	//var idOrder = data.body.entity.transactionId.substring(ini+4, fin);
+    var idOrder = data.body.entity.transactionId.split('==')[1];
+	
+	
+	
 
 	//CASO ERROR
 	if (data.body.status == "ERROR") {
@@ -183,7 +186,12 @@ function pNuevoPedidoPostOk(data) {
 			db.transaction ( 
 		  function (transaction) 
 		  {
-
+		  	
+		  	//TRANSACCION REPETIDA
+		  	console.log("BORRANDO ==> " +data.body.message.substr(0,11) + " de "+idOrder  );
+		  	
+		  	
+ 		  	
 			  	sql="UPDATE ordersPending SET error=1 , status="+estadoError+" WHERE transactionCode='"+data.body.entity.transactionId+"' ";
 					console.log("-------------------------------------->"+sql+"(" );
 					transaction.executeSql (sql, [],  function ()
@@ -204,9 +212,9 @@ function pNuevoPedidoPostOk(data) {
 		      		 pRefrescarPantallaActual();
 	      		
 	      		});  	
-          });
-
-          insertLog(2,5,"Pedido finalizado con ERROR",localStorage['pNuevoPedidoIntenalId']+","+localStorage['pNuevoPedidoIdProveedor']+","+localStorage['pNuevoPedidoIdCentro']+","+localStorage['mensageConError']);
+				  });	
+			  
+			  insertLog(2,5,"Pedido finalizado con ERROR",localStorage['pNuevoPedidoIntenalId']+","+localStorage['pNuevoPedidoIdProveedor']+","+localStorage['pNuevoPedidoIdCentro']+","+localStorage['mensageConError']);
 			  
 			  			  		  
 			});
@@ -448,7 +456,7 @@ function pEnviarPlantilla(idOrder, reenvio) {
                     var fechaActual = nowBD();
                     fechaActual = formatearFechaWS(fechaActual);
                     res.documentDate = fechaActual;//formatearFechaWS(cab.documentDate); //"2014-03-27T00:00:00+0200";
-                    res.deliveryZoneId = $("#ptxtZonaCabeceraPlantilla").val();//cab.idDeliveryZone;
+                    res.deliveryZoneId = $("#ptxtZonaCabecera").val();//cab.idDeliveryZone;
                     res.isTemplate = 1;
 
                     res.number = cab.number; //?? AL sistema

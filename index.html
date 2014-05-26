@@ -15,7 +15,6 @@
     <link rel="stylesheet" type="text/css" href="css/Kendostyles/kendo.common.min.css">
     <link rel="stylesheet" type="text/css" href="css/Kendostyles/kendo.default.min.css">
     <link rel="stylesheet" type="text/css" href="css/Kendostyles/kendo.dataviz.min.css">
-    <script type="text/javascript" src="js/KendoJS/cultures/kendo.culture.es-ES.min.js"></script>
     
     <script src="js/KendoJS/kendo.all.min.js"></script>
     
@@ -655,7 +654,7 @@ select {
     <div data-role="content">
         <center>
             <div id="progressBar" class="default" style="text-align: left"><div></div></div>
-            <div id="progressBarTime" style="width: 500px; height: 25px;"></div>
+        
             <div style="text-align: left; width: 500px"><h4><label id="progress-msg" > t </label></h4></div>
 				</center>
         
@@ -742,39 +741,7 @@ select {
   				</div>   
   			</center> 
   		</div>
-  </div>
-
-
-    <!-- POP CARGA DATOS QUE HACER con el error -->
-    <div data-role="popup" data-theme="a" data-dismissible="false" id="cargaDialogA" class="" data-overlay-theme="a" data-transition="flip" style="width:600px;">
-        <label id="pedidosDialogACOrden" style="display:none"></label>
-        <div data-role="header" style="background-color:#FFFFFF;">
-            <center>
-                <div class="ui-grid-b" style="width:95%">
-                    <div class="ui-block-a" style="width:15%"><img src="images/logoMambo.png" style="height: 65px;"></div>
-                    <div class="ui-block-b" style="width:70%; text-align:center"><h2><label id="cargaDialogATitulo" style="color: #231f20; font-size: x-large ">Error</label></h2></div>
-                    <div class="ui-block-c" style="width:15%; text-align:right"><img id="cargaDialogAIcono" src="images/rojo.png" style="margin-top:20%"></div>
-                </div>
-            </center>
-        </div>
-        <div data-role="content" style="margin:5%">
-
-            <div>
-                <label id="cargaDialogAText" style="font-size:18px;">Pregunta</label>
-            </div>
-            <br>
-
-        </div>
-        <div style="background-color:#e6e7e9;">
-            <center>
-                <div class="ui-grid-b" style="width:95%;">
-                    <div class="ui-block-a"></div>
-                    <div class="ui-block-b"><button type="button" data-role="button" id="btnCargaDialogAOk" data-theme="a"  > Aceptar </button></div>
-                    <div class="ui-block-c"></div>
-                </div>
-            </center>
-        </div>
-    </div>
+  </div>    
 
 </div>
 
@@ -909,7 +876,7 @@ select {
 
 
 <!--  -->
-<div data-role="popup" data-theme="a" data-dismissible="false" id="pedidosPopUpNombrePlantilla" data-tap-toggle="false" class="" data-overlay-theme="a" data-transition="flip" style="width:600px;">
+<div data-role="popup" data-theme="a" data-dismissible="false" id="pedidosPopUpNombrePlantilla" data-tap-toggle="false" class="" data-overlay-theme="a" data-transition="flip">
     <div data-role="header" style="background-color:#FFFFFF;">
     	<center>
      	<div class="ui-grid-b" style="width:95%">
@@ -921,25 +888,19 @@ select {
     </div>
     <div data-role="content" style="margin:5%">
         <center>
-            <div style="margin: 10px">
+            <div style="min-width:400px;">
                 <label id="pedidosPopUpTextoNombrePlantilla" style="font-size:18px;">Nombre de la plantilla</label>
             </div>
             
             
-            <div style="margin: 10px">
-                <input type="text" name="pedidosPopUpInputNombrePlantilla" id="pedidosPopUpInputNombrePlantilla" value="" class="text ui-widget-content ui-corner-all" /> 
+            <div style="min-width:400px;">
+                <input type="text" name="pedidosPopUpInputNombrePlantilla" id="pedidosPopUpInputNombrePlantilla" style="margin: 0px;" value="" width="40" class="text ui-widget-content ui-corner-all" /> 
             </div>
-             <div style="margin: 10px; margin-top:10%">
-                <label id="pedidosPopUpTextoZonaPlantilla" style="font-size:18px;">Seleccione una Zona</label>
-            </div>
-            <div style="margin: 10px"><label id="ptxtZonaCabeceraPlantilla"></label></div>
-            <div style="margin: 10px">
+            <div style="min-width:400px;">
             		<br>
-                <label id="pedidosPopUpErrorNombrePlantilla" style="font-size:22px; display: none; color:red ">Debe introducir un nombre</label>
+                <label id="pedidosPopUpErrorNombrePlantilla" style="font-size:22px; display: none; ">Debe introducir un nombre</label>
+                <br>
             </div>
-            
-            
-            
         </center>
     </div>
  		<div style="background-color:#e6e7e9;">
@@ -1728,11 +1689,9 @@ select {
                       <img id="imagenEstado" src="" style="margin:15px">
                   </div>
                   <div class="ui-block-b" style="width:92%">
-                      
                       <input type="text" name="NomCentro" id="txtEstadoPedido2" value="" class="text ui-widget-content ui-corner-all" readonly />
                   </div>
               </div>
-              <label type="text" name="NomCentro" id="txtEstadoPedido" style="display:none"/>
             </div>
 				
 						<div class="ui-block-e" style="width:20%; padding-right: 15px; padding-left: 15px; margin: 0px">
@@ -1902,80 +1861,33 @@ select {
 
 <!-- MENU PRINCIPAL -->
 <div data-role="page" id="menuPrincipal" data-title="Mambo Panel">
-
-
-
-
-<div data-role="popup" data-theme="a" data-dismissible="false" id="loginDialogAC" class="" data-overlay-theme="a" data-transition="flip">
-    <div data-role="header" style="background-color:#FFFFFF;">
-        <center>
-            <div class="ui-grid-b"  style="width:95%;">
-                <div class="ui-block-a" style="width:15%"><img src="images/logoMambo.png" style="height: 65px;"></div>
-                <div class="ui-block-b" style="width:70%; text-align:center"><h2><label id="loginDialogTituloAC" style="color: #231f20; font-size: x-large ">Aviso</label></h2></div>
-                <div class="ui-block-c" style="width:15%; text-align:right"><img id="loginDialogIconoAC" src="images/verde.png" style="margin-top:20%"></div>
-            </div>
-        </center>
-    </div>
-    <div data-role="content" style="margin:5%">
-        <center>
-            <div>
-                <label id="loginDialogTextAC">  </label>
-            </div>
-            <div id="div_pass" style="width:300px;">
-                <br>
-                <div class="ui-grid-a" style="margin-top:10px;">
-                    <div class="ui-block-a"><br><label>Password:</label></div>
-                    <div class="ui-block-b" style="margin-top:10px;"><input type="password" id="loginDialogPassAC" name="clave" ></div>
-                </div>
-                <br>
-                <label id="loginDialogACmsg" style="font-size:18px;"></label>
-            </div>
-            <br>
-        </center>
-
-    </div>
-    <div style="background-color:#e6e7e9;">
-        <center>
-            <div  class="ui-grid-b"  style="width:95%;">
-                <div class="ui-block-a"><button type="button" id="btnloginDialogOkAC" data-theme="a" > Aceptar </button></div>
-                <div class="ui-block-b"></div>
-                <div class="ui-block-c"><button type="button" id="btnloginDialogCancelAC" data-theme="a" > Cancelar </button></div>
-            </div>
-        </center>
-    </div>
-</div>
-
-
-
-      <div data-role="popup" data-theme="a" data-dismissible="false" id="mDialogA" class="" data-overlay-theme="a" data-transition="flip">
-
-		    <div data-role="header" style="background-color:#FFFFFF;" >
+      <div data-role="popup" id="pedidosDialogA">
+		    <div data-role="header"  style="background-color:#e6e7e9; color: #231f20; font-size: x-large">
 		         <center>
 					     	<div class="ui-grid-b" style="width:95%">
 					        <div class="ui-block-a" style="width:15%"><img src="images/logoMambo.png" style="height: 65px;"></div>
-					        <div class="ui-block-b" style="width:70%; text-align:center"><h2><label id="mDialogATitulo"></label></h2></div>
-					        <div class="ui-block-c" style="width:15%; text-align:right"><img src="images/amarillo.png" style="margin-top:20%"></div>
+					        <div class="ui-block-b" style="width:70%; text-align:center"><h2><label id="A2title_text"></label></h2></div>
+					        <div class="ui-block-c" style="width:15%; text-align:right"><img src="images/verde.png" style="margin-top:20%"></div>
 							  </div>
 						</center>
 		    </div>
 		    <div data-role="content">
 		        <center>
 		            <div>
-		                <label id="mDialogAText">  </label>
+		                <label id="pedidosDialogAText">  </label>
 		            </div>
+		            <div>
+		            </div>
+		            <div class="ui-grid-b">
+			            <div class="ui-block-a"></div>
+			            <div class="ui-block-b"></div>
+			            <div class="ui-block-c"><button type="button" id="btnA2DialogOk" data-theme="a"  style="background: #fcb814; border-color: #fcb814;margin-top:15px" > Aceptar </button></div>
+			          </div>
+		            
+		            
 		        </center>
 		    </div>
-
-          <div style="background-color:#e6e7e9;">
-              <center>
-                  <div  class="ui-grid-b"  style="width:95%;">
-                      <div class="ui-block-a"></div>
-                      <div class="ui-block-b"><button type="button"  id="mDialogAOk" data-theme="a" data-role="button"  > Aceptar </button></div>
-                      <div class="ui-block-c"></div>
-                  </div>
-              </center>
-          </div>
-	  </div>
+			</div>
 		
 		<!-- POP-UP CARGA DE DATOS -->
 		<div data-role="popup" data-theme="a" data-dismissible="false" id="mDialogAC" class="" data-overlay-theme="a" data-transition="flip">
